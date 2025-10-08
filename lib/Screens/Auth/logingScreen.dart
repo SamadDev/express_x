@@ -8,17 +8,19 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+
 class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
   PhoneController phoneController = PhoneController(
     PhoneNumber.parse('+964'),
   );
 
+
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<Auth>(context, listen: false);
     final language = Provider.of<Language>(context, listen: false).getWords;
-
+//test
     return GestureDetector(
       onTap: () {
         SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
