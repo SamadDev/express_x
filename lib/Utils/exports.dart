@@ -27,6 +27,7 @@ export 'package:x_express/Screens/Shipment/ShipmentState/shipment_list.dart';
 export 'package:x_express/Widgets/pdf_viwer.dart';
 export 'package:x_express/Screens/Activity/Widgets/activity_list_card.dart';
 export 'package:x_express/Widgets/global_text.dart';
+export 'package:x_express/Services/Bag/bag_service.dart';
 
 export 'package:x_express/Services/UsrForm/Receive/open_orders.dart';
 export 'package:x_express/Services/UsrForm/Receive/revceive_list.dart';

@@ -1,5 +1,6 @@
 import 'package:x_express/Utils/exports.dart';
 import '../Services/Promotion/promotion.dart';
+import '../Services/Bag/bag_service.dart';
 
 List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => OrderServices()),
@@ -37,4 +38,5 @@ List<SingleChildWidget> providers = [
   ChangeNotifierProvider(create: (_) => AgreementService()),
   ChangeNotifierProvider(create: (_) => LeadersService()),
   ChangeNotifierProvider(create: (_) => PromotionService()),
+  ChangeNotifierProvider(create: (_) => BagService()),
 ];

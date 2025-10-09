@@ -1,0 +1,179 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:x_express/Utils/exports.dart';
+import 'package:x_express/Screens/Store/add_to_bag_dialog.dart';
+import 'package:x_express/Screens/Store/bag_screen.dart';
+
+class StoreWebViewScreen extends StatefulWidget {
+  final String storeUrl;
+  final String storeName;
+
+  const StoreWebViewScreen({
+    Key? key,
+    required this.storeUrl,
+    required this.storeName,
+  }) : super(key: key);
+
+  @override
+  State<StoreWebViewScreen> createState() => _StoreWebViewScreenState();
+}
+
+class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
+  InAppWebViewController? webViewController;
+  bool isLoading = true;
+  bool canGoBack = false;
+  bool canGoForward = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.storeName),
+        backgroundColor: Colors.white,
+        foregroundColor: Colors.black,
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.shopping_bag_outlined),
+            onPressed: () {
+              // Navigate to bag screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BagScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+      body: Stack(
+        children: [
+          InAppWebView(
+            initialUrlRequest: URLRequest(url: WebUri(widget.storeUrl)),
+            onWebViewCreated: (controller) {
+              webViewController = controller;
+            },
+            onLoadStart: (controller, url) {
+              setState(() {
+                isLoading = true;
+              });
+            },
+            onLoadStop: (controller, url) {
+              setState(() {
+                isLoading = false;
+              });
+            },
+            onUpdateVisitedHistory: (controller, url, androidIsReload) {
+              controller.canGoBack().then((value) {
+                setState(() {
+                  canGoBack = value;
+                });
+              });
+              controller.canGoForward().then((value) {
+                setState(() {
+                  canGoForward = value;
+                });
+              });
+            },
+            onReceivedServerTrustAuthRequest: (controller, challenge) async {
+              return ServerTrustAuthResponse(action: ServerTrustAuthResponseAction.PROCEED);
+            },
+            onPermissionRequest: (controller, request) async {
+              return PermissionResponse(
+                resources: request.resources,
+                action: PermissionResponseAction.GRANT,
+              );
+            },
+            onConsoleMessage: (controller, consoleMessage) {
+              print("Console: ${consoleMessage.message}");
+            },
+            onReceivedError: (controller, request, error) {
+              print("Error: ${error.description}");
+            },
+          ),
+          if (isLoading)
+            Container(
+              color: Colors.white,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppTheme.primary,
+                ),
+              ),
+            ),
+          // Floating Add to Bag Button
+          Positioned(
+            bottom: 20,
+            right: 20,
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                _showAddToBagDialog();
+              },
+              backgroundColor: Color(0xFFE91E63), // Pink color like Amazon
+              foregroundColor: Colors.white,
+              icon: Icon(Icons.shopping_bag),
+              label: Text(
+                'Add to Bag',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      bottomNavigationBar: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, -2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            IconButton(
+              onPressed: canGoBack ? () => webViewController?.goBack() : null,
+              icon: Icon(Icons.arrow_back_ios),
+              color: canGoBack ? Colors.black : Colors.grey,
+            ),
+            IconButton(
+              onPressed: () => webViewController?.reload(),
+              icon: Icon(Icons.refresh),
+              color: Colors.black,
+            ),
+            IconButton(
+              onPressed: canGoForward ? () => webViewController?.goForward() : null,
+              icon: Icon(Icons.arrow_forward_ios),
+              color: canGoForward ? Colors.black : Colors.grey,
+            ),
+            IconButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BagScreen()),
+                );
+              },
+              icon: Icon(Icons.shopping_bag),
+              color: Colors.black,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAddToBagDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AddToBagDialog();
+      },
+    );
+  }
+}

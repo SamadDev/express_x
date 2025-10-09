@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:x_express/pages/home/address/pages/address_home.dart';
 import 'package:x_express/pages/home/advertisement/advertisement.dart';
 import 'package:x_express/pages/home/logistic/pages/logistic_list.dart';
+import 'package:x_express/Screens/Store/store_webview.dart';
+import 'package:x_express/Screens/Store/bag_screen.dart';
+import 'package:x_express/Utils/exports.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -266,16 +269,54 @@ class _AppBarWidget extends StatelessWidget {
       backgroundColor: const Color(0xFF5C3A9E),
       title: Image.asset("assets/images/logo.png", height: 30),
       actions: [
-        Container(
-          margin: const EdgeInsets.only(right: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const IconButton(
-            icon: Icon(Icons.shopping_basket_outlined, color: Color(0xFF5C3A9E)),
-            onPressed: null,
-          ),
+        Consumer<BagService>(
+          builder: (context, bagService, child) {
+            return Stack(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(right: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: IconButton(
+                    icon: Icon(Icons.shopping_basket_outlined, color: Color(0xFF5C3A9E)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => BagScreen()),
+                      );
+                    },
+                  ),
+                ),
+                if (bagService.itemCount > 0)
+                  Positioned(
+                    right: 8,
+                    top: 8,
+                    child: Container(
+                      padding: EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE91E63),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      constraints: BoxConstraints(
+                        minWidth: 16,
+                        minHeight: 16,
+                      ),
+                      child: Text(
+                        '${bagService.itemCount}',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+              ],
+            );
+          },
         ),
       ],
     );
@@ -292,30 +333,70 @@ class _BrandLogo extends StatelessWidget {
     required this.image,
   });
 
+  String _getStoreUrl(String name) {
+    switch (name.toLowerCase()) {
+      case 'amazon':
+        return 'https://www.amazon.com';
+      case 'ebay':
+        return 'https://www.ebay.com';
+      case 'zara':
+        return 'https://www.zara.com';
+      default:
+        return 'https://www.amazon.com';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4),
-      width: 70,
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/images/$image",
-            height: 60,
-            width: 60,
-            fit: BoxFit.fill,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => StoreWebViewScreen(
+              storeUrl: _getStoreUrl(name),
+              storeName: name,
+            ),
           ),
-          Text(
-            name,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-          ),
-        ],
+        );
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 4),
+        width: 70,
+        height: 70,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 3,
+              offset: Offset(0, 1),
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/images/$image",
+              height: 40,
+              width: 40,
+              fit: BoxFit.contain,
+            ),
+            SizedBox(height: 4),
+            Text(
+              name,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ],
+        ),
       ),
     );
   }

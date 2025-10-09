@@ -2,6 +2,7 @@ import 'package:x_express/Screens/Auth/register_screen.dart';
 import 'package:x_express/Utils/exports.dart';
 import 'package:phone_form_field/phone_form_field.dart';
 import 'package:x_express/pages/home/home.dart';
+import 'package:x_express/pages/home/home.dart';
 
 class LoginPage extends StatefulWidget {
   @override
