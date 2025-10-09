@@ -54,8 +54,10 @@ dev_dependencies:
   syncfusion_flutter_core:
   dotted_line: ^3.2.3
   in_app_update:
+  google_fonts:
+  flutter_widget_from_html:
   flutter_launcher_icons:
-  phone_form_field: ^8.1.0
+  phone_form_field:
 
 
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:x_express/Widgets/global_text.dart';
+import 'package:x_express/core/config/widgets/globalText.dart';
 import 'package:x_express/custom_text_form_field.dart';
 
 class Address {
@@ -102,7 +102,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
         centerTitle: false,
         iconTheme: IconThemeData(color: Colors.white),
         title: GlobalText(
-          text: 'Addresses',
+          'Addresses',
           color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.w600,
@@ -196,13 +196,13 @@ class AddressCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GlobalText(
-              text: address.streetAddress ?? "",
+               address.streetAddress ?? "",
               fontWeight: FontWeight.w600,
               color: Colors.grey.shade900,
               fontSize: 16,
             ),
             GlobalText(
-              text: address.country,
+               address.country,
               fontSize: 14,
               fontWeight: FontWeight.normal,
               color: Colors.grey,
@@ -270,7 +270,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
         iconTheme: IconThemeData(color: Colors.white),
         backgroundColor: Color(0xFF5C3A9E),
         title: GlobalText(
-          text: isEditing ? 'Edit Address' : 'Add New Address',
+           isEditing ? 'Edit Address' : 'Add New Address',
           color: Colors.white,
           fontWeight: FontWeight.w600,
           fontSize: 20,
@@ -368,7 +368,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               child: GlobalText(
-                text: isEditing ? 'Update Address' : 'Add Address',
+                 isEditing ? 'Update Address' : 'Add Address',
                 color: Colors.white,
               ),
             ),

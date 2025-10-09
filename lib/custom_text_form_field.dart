@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:x_express/Widgets/global_text.dart';
+import 'package:x_express/core/config/widgets/globalText.dart';
 
 
 class CustomTextFormField extends StatelessWidget {
@@ -114,7 +114,7 @@ class CustomTextFormField extends StatelessWidget {
                   child: Row(
                     children: [
                       GlobalText(
-                        text: title ?? "",
+                         title ?? "",
                         maxLines: 1,
                         fontSize: 13,
                         fontFamily: 'nrt-reg',
