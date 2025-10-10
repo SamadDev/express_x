@@ -16,17 +16,15 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-
 class _LoginPageState extends State<LoginPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: false);
-    final language = Provider.of<Language>(context, listen: false).getWords;
-//test
+    // final language = Provider.of<Language>(context, listen: false).getWords;
+
     return GestureDetector(
       onTap: () {
         SystemChannels.textInput.invokeMethod<void>('TextInput.hide');
@@ -47,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 20),
                 GlobalText(
-                   ' ${dotenv.env['NAME']}',
+                  ' ${dotenv.env['NAME']}',
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
@@ -55,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    language['phoneNumber'] ?? 'Phone Number',
+                    'Phone Number',
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -63,14 +61,14 @@ class _LoginPageState extends State<LoginPage> {
                 CustomTextFormField(
                   borderType: true,
                   controller: usernameController,
-                  hintText: language['phoneNumber'] ?? 'Phone Number',
+                  hintText: 'Phone Number',
                   textInputType: TextInputType.phone,
                 ),
                 SizedBox(height: 20),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    language["password"],
+                    "Password",
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -80,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                     borderType: true,
                     controller: passwordController,
                     obscureText: authService.isObscure,
-                    hintText: language['password'] ?? 'Password',
+                    hintText: 'Password',
                     suffix: IconButton(
                       icon: Icon(authService.isObscure ? Icons.visibility_off : Icons.visibility),
                       onPressed: () => authService.setObscure(),
@@ -94,8 +92,8 @@ class _LoginPageState extends State<LoginPage> {
                     minimumSize: Size(double.infinity, 50),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                   ),
-                  onPressed: () => _submitLogin(authService, language),
-                  child: Text(language['login'], style: TextStyle(color: Colors.white, fontSize: 16)),
+                  onPressed: () => _submitLogin(authService),
+                  child: GlobalText("Login", color: Colors.white, fontSize: 16),
                 ),
                 SizedBox(height: 25),
                 // Register link - commented out until register page is created
@@ -111,7 +109,7 @@ class _LoginPageState extends State<LoginPage> {
                 //             style: TextStyle(color: Colors.black, fontSize: 14)),
                 //         TextSpan(text: " "),
                 //         TextSpan(
-                //             text: language["create_account"] ?? "Create Account", 
+                //             text: language["create_account"] ?? "Create Account",
                 //             style: TextStyle(fontSize: 15, color: kLightPrimary)),
                 //       ],
                 //     ),
@@ -125,22 +123,22 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _submitLogin(AuthService authService, language) async {
+  void _submitLogin(AuthService authService) async {
     // Validate fields
     if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
       var snackBar = SnackBar(
-        content: Text(language['pleaseFillAllFields'] ?? 'Please fill all fields'),
+        content: Text('Please fill all fields'),
         backgroundColor: Colors.orange,
       );
+
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     }
 
-    // Attempt login
     final success = await authService.login(
       username: usernameController.text.trim(),
       password: passwordController.text,
-      rememberMe: false, // or add a checkbox for remember me
+      rememberMe: false,
     );
 
     if (success) {
@@ -155,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
-  
+
   @override
   void dispose() {
     usernameController.dispose();

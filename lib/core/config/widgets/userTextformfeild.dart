@@ -3,8 +3,7 @@ import 'package:x_express/core/config/theme/color.dart';
 import 'package:x_express/core/config/widgets/globalText.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
-class CustomUserTextFormField extends StatelessWidget {
+class CustomUserTextFormField extends StatefulWidget {
   final String? hintText;
   final String? type;
   final double? verticalPadding;
@@ -17,7 +16,7 @@ class CustomUserTextFormField extends StatelessWidget {
   final bool obscureText;
   final bool isReadOnly;
   final Function()? onTap;
-  final  validator;
+  final validator;
   final Color? fillColor;
   final Function(dynamic value)? onChange;
   final Widget? prefix;
@@ -34,7 +33,7 @@ class CustomUserTextFormField extends StatelessWidget {
     this.title = '',
     this.maxLine,
     this.onTap,
-    this.isReadOnly=false,
+    this.isReadOnly = false,
     this.verticalPadding,
     this.validator,
     this.fillColor,
@@ -50,70 +49,83 @@ class CustomUserTextFormField extends StatelessWidget {
   });
 
   @override
+  State<CustomUserTextFormField> createState() => _CustomUserTextFormFieldState();
+}
+
+class _CustomUserTextFormFieldState extends State<CustomUserTextFormField> {
+  final FocusNode _focusNode = FocusNode();
+  bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    setState(() {
+      _isFocused = _focusNode.hasFocus;
+    });
+  }
+
+  @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: verticalPadding ?? 0.0),
+      padding: EdgeInsets.symmetric(vertical: widget.verticalPadding ?? 0.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (title != null) ...[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5.0),
-              child: Row(
-                children: [
-                  GlobalText(
-                    title ?? "",
-                    fontWeight: FontWeight.w500,
-                    color: kLightTitle,
-                  ),
-                  SizedBox(width: 6),
-                  isRequired ? Icon(Icons.star, color: kLightError, size: 10) : SizedBox.shrink()
-                ],
-              ),
+          if (widget.title != null) ...[
+            GlobalText(
+              widget.title ?? "",
+              fontSize: 14,
+              fontWeight: FontWeight.w500,
+              color: kLightPlatinum300,
             ),
-            SizedBox(height: 6),
+            const SizedBox(height: 8),
           ],
           TextFormField(
-            validator: validator,
-            onTap: onTap,
-            controller: controller,
-            textInputAction: action,
+            validator: widget.validator,
+            onTap: widget.onTap,
+            controller: widget.controller,
+            focusNode: _focusNode,
+            textInputAction: widget.action,
             keyboardAppearance: Brightness.light,
-            readOnly: isReadOnly ?? false,
+            readOnly: widget.isReadOnly ?? false,
             style: TextTheme.of(context).bodyLarge,
-            minLines: minLine ?? 1,
-            maxLines: maxLine ?? 1,
-            onChanged: onChange,
-            keyboardType: keyboard,
-            obscureText: obscureText,
+            minLines: widget.minLine ?? 1,
+            maxLines: widget.maxLine ?? 1,
+            onChanged: widget.onChange,
+            keyboardType: widget.keyboard,
+            obscureText: widget.obscureText,
             decoration: InputDecoration(
-              prefix: prefix,
-              isDense: dense,
-              suffixIcon: suffix,
-              hintText: hintText,
-              hintStyle: GoogleFonts.inter(
-                fontSize: 12,
-                color: kLightPlatinum300,
-                fontWeight: FontWeight.w400,
-              ),
+              prefix: widget.prefix,
+              isDense: widget.dense,
+              suffixIcon: widget.suffix,
+              hintText: widget.hintText,
+              hintStyle: TextStyle(color: kLightPlatinum300, fontSize: 14, fontWeight: FontWeight.w400),
               filled: true,
-              fillColor: fillColor ?? kLightFill,
-              focusedBorder:isReadOnly?OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: kLightStroke),
-                borderRadius: BorderRadius.circular(12),
-              ): OutlineInputBorder(
+              fillColor: widget.fillColor ?? (_isFocused ? Colors.white : const Color(0xFFF2F5FF)),
+              focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 1, color: kLightPrimary),
                 borderRadius: BorderRadius.circular(12),
               ),
               enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: kLightStroke),
+                borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(12),
               ),
               border: OutlineInputBorder(
-                borderSide: BorderSide(width: 1, color: kLightStroke),
+                borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(12),
               ),
+              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             ),
           ),
         ],

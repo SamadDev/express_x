@@ -8,7 +8,6 @@ import 'package:x_express/pages/Auth/data/service/auth_service.dart';
 import 'package:x_express/pages/Bag/bag_service.dart';
 import 'package:x_express/pages/wellcom/splash.dart';
 
-
 class MyApps extends StatefulWidget {
   State<MyApps> createState() => _MyAppsState();
 }
@@ -47,32 +46,24 @@ class _MyAppsState extends State<MyApps> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => Language()),
+        // ChangeNotifierProvider(create: (_) => Language()),
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => BagService()),
       ],
-      child: Builder(
-        builder: (context) {
-          return Consumer<Language>(
-            builder: (context, language, _) {
-              return MaterialApp(
-                navigatorKey: navigatorKey,
-                builder: (context, child) {
-                  return Directionality(
-                    textDirection: language.languageDirection == 'ltr' 
-                        ? TextDirection.ltr 
-                        : TextDirection.rtl,
-                    child: child!,
-                  );
-                },
-                debugShowCheckedModeBanner: false,
-                title: "Futian",
-                theme: AppTheme.lightTheme,
-                home: SplashScreen(),
-              );
-            },
+      child: MaterialApp(
+        navigatorKey: navigatorKey,
+        builder: (context, child) {
+          return Directionality(
+            textDirection:
+                TextDirection.ltr,
+
+            child: child!,
           );
         },
+        debugShowCheckedModeBanner: false,
+        title: "X_Express",
+        theme: AppTheme.lightTheme,
+        home: SplashScreen(),
       ),
     );
   }

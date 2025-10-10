@@ -7,7 +7,6 @@ import 'package:x_express/pages/Auth/data/repository/local_storage.dart';
 import 'package:x_express/pages/Auth/logingScreen.dart';
 import 'package:x_express/pages/home/home.dart';
 
-
 class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +17,7 @@ class SplashScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: SplashWidget());
           }
-          
+
           // Check for errors
           if (snapshot.hasError) {
             print('Splash Error: ${snapshot.error}');
@@ -34,7 +33,7 @@ class SplashScreen extends StatelessWidget {
                     onPressed: () {
                       // Force reload by navigating to login
                       Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (_) => LoginPage()),
+                        MaterialPageRoute(builder: (_) => HomePageNew()),
                       );
                     },
                     child: Text('Go to Login'),
@@ -43,35 +42,35 @@ class SplashScreen extends StatelessWidget {
               ),
             );
           }
-          
+
           // Navigate based on login status
           final isLoggedIn = snapshot.data ?? false;
           print('Is logged in: $isLoggedIn');
-          
-          return isLoggedIn ? HomePageNew() : LoginPage();
+
+          return isLoggedIn ? HomePageNew() : HomePageNew();
         },
       ),
     );
   }
-  
+
   Future<bool> _initializeApp(BuildContext context) async {
     try {
       print('Initializing app...');
-      
+
       // Load language settings
-      final language = Provider.of<Language>(context, listen: false);
-      await language.getLanguageDataInLocal();
+      // final language = Provider.of<Language>(context, listen: false);
+      // await language.getLanguageDataInLocal();
       print('Language loaded');
-      
+
       // Load saved credentials
       final authService = Provider.of<AuthService>(context, listen: false);
       await authService.loadSavedCredentials();
       print('Credentials loaded');
-      
+
       // Check login status
       final isLoggedIn = await LocalStorage.isLoggedIn();
       print('Login check complete: $isLoggedIn');
-      
+
       return isLoggedIn;
     } catch (e) {
       print('Error initializing app: $e');
@@ -85,10 +84,9 @@ class SplashWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0,horizontal: 24),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 24),
         child: Image.asset(
           'assets/images/${dotenv.env['LOGO']}',
-
           fit: BoxFit.fill,
         ),
       ),

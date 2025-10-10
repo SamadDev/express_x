@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:x_express/pages/Auth/data/model/auth_model.dart';
-import 'package:x_express/pages/Auth/data/repository/auth_repository.dart';
-import 'package:x_express/pages/Auth/data/repository/change_password_repository.dart';
-import 'package:x_express/pages/Auth/data/repository/local_storage.dart';
+import 'package:x_express/features/auth/data/model/auth_model.dart';
+import 'package:x_express/features/auth/data/repository/auth_repository.dart';
+import 'package:x_express/features/auth/data/repository/change_password_repository.dart';
+import 'package:x_express/features/auth/data/repository/check_user_type_repository.dart';
+import 'package:x_express/features/auth/data/repository/local_storage.dart';
 
 class AuthService extends ChangeNotifier {
   LoginResponse? _loginResponse;
@@ -40,6 +42,8 @@ class AuthService extends ChangeNotifier {
 
   bool get isAuthenticated => _loginResponse != null;
 
+  // Get current user's username
+  String? get currentUsername => _loginResponse?.user?.userName;
 
   Future<bool> login({
     required String username,
@@ -51,6 +55,15 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
 
     try {
+
+      // final isDeleted = await LocalStorage.isAccountDeleted();
+      // if (isDeleted) {
+      //   _error = "Username or password does not exist";
+      //   _isLoading = false;
+      //   notifyListeners();
+      //   return false;
+      // }
+
       _loginResponse = await AuthRepository().login(
         username: username,
         password: password,
@@ -58,18 +71,22 @@ class AuthService extends ChangeNotifier {
 
       print("check for response is: ${_loginResponse!.toJson()}");
       if (_loginResponse != null) {
-        // Save token
-        if (_loginResponse!.accessToken != null) {
-          await LocalStorage.saveToken(_loginResponse!.accessToken!);
-        }
+        final jsonStr = json.encode(_loginResponse!.toJson());
+        final credentialData = rememberMe
+            ? json.encode({
+                'username': username,
+                'password': password,
+              })
+            : null;
 
-        // Save credentials if remember me is enabled
-        await LocalStorage.saveCredentials(
-          username: username,
-          password: password,
+
+        await LocalStorage.saveUserData(
+          jsonData: jsonStr,
           rememberMe: rememberMe,
+          credentialData: credentialData,
         );
       }
+      await FetchUserType();
       _isLoading = false;
       notifyListeners();
       return true;
@@ -109,7 +126,30 @@ class AuthService extends ChangeNotifier {
     }
   }
 
+  Future<void> loadUserFromLocal() async {
+    try {
+      final jsonStr = await LocalStorage.getUserData();
+      await LocalStorage.getUserData();
+      if (jsonStr != null) {
+        _loginResponse = LoginResponse.fromJson(json.decode(jsonStr));
+        notifyListeners();
+      }
+    } catch (e) {
+      print("error is: $e");
+    }
+  }
 
+  Future<void> FetchUserType() async {
+    try {
+      final userTypeData = await CheckUserTypeRepository().fetchCheckUserType();
+
+      _userType = userTypeData;
+      print("check for userTypedata is: $userTypeData");
+      print("check for userType is: $_userType");
+    } catch (e) {
+      print("error is: $e");
+    }
+  }
 
   Future<Map<String, String>?> getSavedCredentials() async {
     return await LocalStorage.getCredentials();
@@ -131,6 +171,73 @@ class AuthService extends ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  Future<bool> sendPasswordRecoverySMS(String phoneNumber) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      // TODO: Implement API call to send password recovery SMS
+      // For now, simulate API call
+      await Future.delayed(const Duration(seconds: 2));
+      
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> verifyOTP(String phoneNumber, String otp) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      // TODO: Implement API call to verify OTP
+      // For now, simulate API call (accept any 6-digit code)
+      await Future.delayed(const Duration(seconds: 1));
+      
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> resetPassword({
+    required String email,
+    required String newPassword,
+    required String confirmPassword,
+  }) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      // TODO: Implement API call to reset password
+      // For now, simulate API call
+      await Future.delayed(const Duration(seconds: 2));
+      
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _error = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
   }
 
 
@@ -169,9 +276,9 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Delete account - clear all local data and reset service
+  // Delete account - mark as deleted and reset service
   Future<void> deleteAccount() async {
-    await LocalStorage.clearAll();
+    await LocalStorage.deleteAccount();
     _loginResponse = null;
     _userType = null;
     _isEligible = false;

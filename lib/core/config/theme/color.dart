@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const Color kLightPrimary = Color(0xFF114993);
+const Color kLightPrimary = Color(0xFF6F9676);
 const Color kLightSecondary = Color(0xFF6ACEDE);
 const Color kLightStroke = Color(0xFFEAECF0);
 const Color kLightText = Color(0xff374151);
@@ -9,6 +9,7 @@ const Color kLightBackground = Color(0xFFFAFAFA);
 const Color kLightFill = Color(0xFFF9FAFB);
 const Color kLightTertiary = Color(0xFF3B82F6);
 const Color kLightError = Color(0xFFE23A3A);
+const Color kLightAuthText = Color(0xFFD86885);
 const Color kLightGrayText = Color(0xFF475467);
 const Color kLightTitle = Color(0xFF101828);
 const Color kLightAppBar = Color(0xFFFFFFFF);

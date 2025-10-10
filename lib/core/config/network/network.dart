@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:x_express/core/config/constant/api.dart';
 import 'package:x_express/core/config/widgets/global_snakbar.dart';
-import 'package:x_express/pages/Auth/data/repository/local_storage.dart';
+import 'package:x_express/features/auth/data/repository/local_storage.dart';
 import 'package:x_express/main.dart';
 import 'package:http/http.dart' as http;
 
@@ -146,8 +146,8 @@ class Request {
         break;
     }
 
-    // Show snackbar for the error
-    SnackBarHelper.show(errorMessage);
+    // // Show snackbar for the error
+    // SnackBarHelper.show(errorMessage);
 
     return RequestException(
       errorMessage,
@@ -159,7 +159,7 @@ class Request {
   // Method to handle status -1 responses
   static void _handleStatusMinusOne(dynamic responseData) {
     String message = responseData?['msg'] ?? responseData?['message'] ?? 'Something went wrong';
-    SnackBarHelper.show(message);
+    // SnackBarHelper.show(message);
   }
 
   // GET request with Dio
@@ -195,7 +195,7 @@ class Request {
       throw _handleDioError(e, route);
     } catch (e) {
       if (e is! RequestException) {
-        SnackBarHelper.show('Unexpected error occurred');
+        // SnackBarHelper.show('Unexpected error occurred');
       }
       throw e is RequestException ? e : RequestException('Unexpected error for GET $route: $e');
     }
@@ -301,7 +301,7 @@ class Request {
     } catch (e) {
       if (e is! RequestException) {
         print('Unexpected POST error: $e');
-        SnackBarHelper.show('Unexpected error occurred');
+        // SnackBarHelper.show('Unexpected error occurred');
       }
       throw e is RequestException ? e : RequestException('Unexpected error for POST $route: $e');
     }
@@ -402,7 +402,7 @@ class Request {
     } catch (e) {
       if (e is! RequestException) {
         print('Unexpected PUT error: $e');
-        SnackBarHelper.show('Unexpected error occurred');
+        // SnackBarHelper.show('Unexpected error occurred');
       }
       throw e is RequestException
           ? e
