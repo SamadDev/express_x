@@ -17,8 +17,8 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
 
   final List<Widget> _screens = [
     NewHomeScreen(),
-    BagScreen(),
     ExploreScreen(),
+    BagScreen(),
     SubscriptionScreen(),
     ProfileScreen(),
   ];
@@ -30,14 +30,14 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
       label: 'Home',
     ),
     NavigationItem(
-      icon: Icons.shopping_bag_outlined,
-      activeIcon: Icons.shopping_bag,
-      label: 'Bag',
-    ),
-    NavigationItem(
       icon: Icons.explore_outlined,
       activeIcon: Icons.explore,
       label: 'Explore',
+    ),
+    NavigationItem(
+      icon: Icons.shopping_bag_outlined,
+      activeIcon: Icons.shopping_bag,
+      label: 'Bag',
     ),
     NavigationItem(
       icon: Icons.card_membership_outlined,

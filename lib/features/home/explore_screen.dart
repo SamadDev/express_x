@@ -221,10 +221,9 @@ class _ExploreScreenState extends State<ExploreScreen> {
     return GridView.builder(
       padding: const EdgeInsets.all(16),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        mainAxisSpacing: 16,
-        crossAxisSpacing: 16,
-        childAspectRatio: 0.8,
+        crossAxisCount: 4,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 4,
       ),
       itemCount: _filteredStores.length,
       itemBuilder: (context, index) {
@@ -249,104 +248,42 @@ class _ExploreScreenState extends State<ExploreScreen> {
         );
       },
       child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 4),
+        width: 70,
+        height: 70,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: Offset(0, 2),
-            ),
-          ],
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Expanded(
-              flex: 3,
-              child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                  color: Colors.grey[100],
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
-                  child: store.image.startsWith('http')
-                      ? CachedNetworkImage(
-                          imageUrl: store.image,
-                          fit: BoxFit.cover,
-                          placeholder: (context, url) => Container(
-                            color: Colors.grey[200],
-                            child: Icon(Icons.store, color: Colors.grey[400], size: 40),
-                          ),
-                          errorWidget: (context, url, error) => Container(
-                            color: Colors.grey[200],
-                            child: Icon(Icons.store, color: Colors.grey[400], size: 40),
-                          ),
-                        )
-                      : Image.asset(
-                          "assets/images/${store.image}",
-                          fit: BoxFit.cover,
-                        ),
-                ),
-              ),
+            Container(
+              height: 60,
+              width: 60,
+              child: store.image.startsWith('http')
+                  ? CachedNetworkImage(
+                      imageUrl: store.image,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey[200],
+                        child: Icon(Icons.store, color: Colors.grey[400]),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey[200],
+                        child: Icon(Icons.store, color: Colors.grey[400]),
+                      ),
+                    )
+                  : Image.asset(
+                      "assets/images/${store.image}",
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
+                    ),
             ),
-            Expanded(
-              flex: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(12),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      store.name,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'Tap to explore',
-                      style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    Spacer(),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.language,
-                          size: 14,
-                          color: Colors.grey[500],
-                        ),
-                        SizedBox(width: 4),
-                        Expanded(
-                          child: Text(
-                            'Visit Store',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: Colors.grey[500],
-                            ),
-                          ),
-                        ),
-                        Icon(
-                          Icons.arrow_forward_ios,
-                          size: 12,
-                          color: Colors.grey[400],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+            Text(
+              store.name,
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
             ),
           ],
         ),

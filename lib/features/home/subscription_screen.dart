@@ -12,44 +12,45 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
 
   final List<SubscriptionPlan> _plans = [
     SubscriptionPlan(
-      name: 'Basic',
-      price: '\$9.99',
-      period: '/month',
+      name: 'Starter',
+      price: '\$9',
+      period: '/mo',
       features: [
-        'Up to 5 orders per month',
+        '5 orders per month',
         'Standard delivery',
         'Basic support',
-        'Track your orders',
       ],
       isPopular: false,
+      color: Colors.blue,
+      icon: Icons.star_outline,
     ),
     SubscriptionPlan(
-      name: 'Premium',
-      price: '\$19.99',
-      period: '/month',
+      name: 'Pro',
+      price: '\$19',
+      period: '/mo',
       features: [
         'Unlimited orders',
         'Express delivery',
         'Priority support',
-        'Advanced tracking',
         'Exclusive deals',
-        'Free returns',
       ],
       isPopular: true,
+      color: Colors.purple,
+      icon: Icons.diamond_outlined,
     ),
     SubscriptionPlan(
-      name: 'Enterprise',
-      price: '\$49.99',
-      period: '/month',
+      name: 'Business',
+      price: '\$49',
+      period: '/mo',
       features: [
-        'Everything in Premium',
-        'Dedicated account manager',
-        'Custom delivery options',
-        'API access',
-        'White-label solutions',
-        '24/7 phone support',
+        'Everything in Pro',
+        'Dedicated manager',
+        'Custom options',
+        '24/7 support',
       ],
       isPopular: false,
+      color: Colors.orange,
+      icon: Icons.business,
     ),
   ];
 
@@ -134,17 +135,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
           border: Border.all(
-            color: isSelected ? Color(0xFF5C3A9E) : Colors.grey[300]!,
-            width: isSelected ? 2 : 1,
+            color: isSelected ? plan.color : Colors.grey[200]!,
+            width: isSelected ? 3 : 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 10,
-              offset: Offset(0, 2),
+              color: isSelected ? plan.color.withOpacity(0.2) : Colors.grey.withOpacity(0.1),
+              spreadRadius: isSelected ? 2 : 1,
+              blurRadius: isSelected ? 15 : 10,
+              offset: Offset(0, 4),
             ),
           ],
         ),
@@ -152,48 +153,101 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           children: [
             if (isPopular)
               Positioned(
-                top: 0,
-                right: 0,
+                top: -1,
+                right: 20,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
-                    color: Color(0xFF5C3A9E),
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(16),
-                      bottomLeft: Radius.circular(8),
+                    gradient: LinearGradient(
+                      colors: [Color(0xFF5C3A9E), Color(0xFF8B66FD)],
                     ),
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xFF5C3A9E).withOpacity(0.3),
+                        blurRadius: 8,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    'POPULAR',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.star, color: Colors.white, size: 16),
+                      SizedBox(width: 4),
+                      Text(
+                        'POPULAR',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        plan.name,
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          color: plan.color.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Icon(
+                          plan.icon,
+                          color: plan.color,
+                          size: 28,
+                        ),
+                      ),
+                      SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              plan.name,
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  plan.price,
+                                  style: TextStyle(
+                                    fontSize: 32,
+                                    fontWeight: FontWeight.bold,
+                                    color: plan.color,
+                                  ),
+                                ),
+                                Text(
+                                  plan.period,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[600],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: isSelected ? Color(0xFF5C3A9E) : Colors.grey[200],
-                          borderRadius: BorderRadius.circular(20),
+                          color: isSelected ? plan.color : Colors.grey[200],
+                          borderRadius: BorderRadius.circular(12),
                         ),
                         child: Icon(
                           isSelected ? Icons.check : Icons.circle_outlined,
@@ -203,44 +257,31 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 8),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        plan.price,
-                        style: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF5C3A9E),
-                        ),
-                      ),
-                      Text(
-                        plan.period,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.grey[600],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 24),
                   ...plan.features.map((feature) => Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
+                    padding: const EdgeInsets.only(bottom: 12),
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.check_circle,
-                          color: Color(0xFF5C3A9E),
-                          size: 20,
+                        Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: plan.color.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: Icon(
+                            Icons.check,
+                            color: plan.color,
+                            size: 16,
+                          ),
                         ),
                         SizedBox(width: 12),
                         Expanded(
                           child: Text(
                             feature,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 15,
                               color: Colors.grey[700],
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
@@ -391,6 +432,8 @@ class SubscriptionPlan {
   final String period;
   final List<String> features;
   final bool isPopular;
+  final Color color;
+  final IconData icon;
 
   SubscriptionPlan({
     required this.name,
@@ -398,5 +441,7 @@ class SubscriptionPlan {
     required this.period,
     required this.features,
     required this.isPopular,
+    required this.color,
+    required this.icon,
   });
 }
