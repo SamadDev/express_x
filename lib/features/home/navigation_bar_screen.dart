@@ -4,7 +4,6 @@ import 'package:x_express/features/home/explore_screen.dart';
 import 'package:x_express/features/home/bag_screen.dart';
 import 'package:x_express/features/home/subscription_screen.dart';
 import 'package:x_express/features/home/profile_screen.dart';
-import 'package:x_express/features/home/widgets/button_notch_painter.dart';
 
 class NavigationBarScreen extends StatefulWidget {
   const NavigationBarScreen({super.key});
@@ -26,29 +25,24 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
 
   final List<NavigationItem> _navigationItems = [
     NavigationItem(
-      icon: Icons.home_outlined,
-      activeIcon: Icons.home,
+      icon: Icons.home,
       label: 'Home',
     ),
     NavigationItem(
-      icon: Icons.explore_outlined,
-      activeIcon: Icons.explore,
-      label: 'Explore',
+      icon: Icons.explore,
+      label: 'Stores',
     ),
     NavigationItem(
-      icon: Icons.shopping_bag_outlined,
-      activeIcon: Icons.shopping_bag,
-      label: 'Bag',
+      icon: Icons.shopping_bag,
+      label: 'My Bag',
     ),
     NavigationItem(
-      icon: Icons.card_membership_outlined,
-      activeIcon: Icons.card_membership,
-      label: 'Plans',
+      icon: Icons.shopping_cart,
+      label: 'My Orders',
     ),
     NavigationItem(
-      icon: Icons.person_outline,
-      activeIcon: Icons.person,
-      label: 'Profile',
+      icon: Icons.person,
+      label: 'Account',
     ),
   ];
 
@@ -56,93 +50,106 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Stack(
-          children: [
-            _screens[_selectedIndex],
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: _buildAnimatedNavigationBar(),
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: Container(
+        color: Colors.white,
+        child: SafeArea(
+          child: Container(
+            height: 60,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                for (int i = 0; i < _navigationItems.length; i++)
+                  _buildNavigationItem(i),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildAnimatedNavigationBar() {
-    return AnimatedContainer(
-      height: 70.0,
-      duration: const Duration(milliseconds: 400),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            spreadRadius: 1,
-            blurRadius: 10,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          for (int i = 0; i < _navigationItems.length; i++)
-            GestureDetector(
-              onTap: () => setState(() => _selectedIndex = i),
-              child: _buildIconButton(i),
-            ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildIconButton(int index) {
-    bool isActive = _selectedIndex == index;
-    var height = isActive ? 60.0 : 0.0;
-    var width = isActive ? 50.0 : 0.0;
+  Widget _buildNavigationItem(int index) {
     final item = _navigationItems[index];
+    final isSelected = _selectedIndex == index;
 
-    return SizedBox(
-      width: 75.0,
-      child: Stack(
-        children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: AnimatedContainer(
-              height: height,
-              width: width,
-              duration: const Duration(milliseconds: 600),
-              child: isActive
-                  ? CustomPaint(
-                      painter: ButtonNotchPainter(),
-                    )
-                  : const SizedBox(),
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _selectedIndex = index;
+        });
+      },
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Stack(
+              children: [
+                Icon(
+                  item.icon,
+                  color: isSelected ? Colors.black : Colors.grey[600],
+                  size: 24,
+                ),
+                if (index == 2) // My Bag - red badge with "1"
+                  Positioned(
+                    right: -2,
+                    top: -2,
+                    child: Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '1',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                if (index == 3) // My Orders - red badge with "4"
+                  Positioned(
+                    right: -2,
+                    top: -2,
+                    child: Container(
+                      width: 16,
+                      height: 16,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: Text(
+                          '4',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Icon(
-              isActive ? item.activeIcon : item.icon,
-              color: isActive ? Color(0xFF5C3A9E) : Colors.grey[600],
-              size: 24,
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Text(
+            const SizedBox(height: 4),
+            Text(
               item.label,
               style: TextStyle(
-                color: isActive ? Color(0xFF5C3A9E) : Colors.grey[600],
+                color: isSelected ? Colors.black : Colors.grey[600],
                 fontSize: 12,
-                fontWeight: isActive ? FontWeight.w600 : FontWeight.normal,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -150,12 +157,10 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
 
 class NavigationItem {
   final IconData icon;
-  final IconData activeIcon;
   final String label;
 
   NavigationItem({
     required this.icon,
-    required this.activeIcon,
     required this.label,
   });
 }
