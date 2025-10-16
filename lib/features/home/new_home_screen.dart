@@ -4,6 +4,7 @@ import 'package:x_express/features/home/advertisement/advertisement.dart';
 import 'package:x_express/features/home/logistic/pages/logistic_list.dart';
 import 'package:x_express/features/StoreFeatures/store_webview.dart';
 import 'package:x_express/features/home/services/data_cache_service.dart';
+import 'package:x_express/features/home/services/tab_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class NewHomeScreen extends StatefulWidget {
