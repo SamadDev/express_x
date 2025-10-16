@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:x_express/features/home/address/pages/address_home.dart';
 import 'package:x_express/features/home/advertisement/advertisement.dart';
 import 'package:x_express/features/home/logistic/pages/logistic_list.dart';
+import 'package:x_express/features/home/services/store_service.dart';
+import 'package:x_express/features/home/services/tab_service.dart';
+import 'package:x_express/features/StoreFeatures/store_webview.dart';
 
 class HomePageNew extends StatefulWidget {
   const HomePageNew({super.key});
@@ -13,17 +16,17 @@ class HomePageNew extends StatefulWidget {
 class _HomePageNewState extends State<HomePageNew> {
   final PageController _pageController = PageController();
   int _selectedIndex = 0;
+  List<Tab> _tabs = [];
+  List<Store> _stores = [];
+  bool _isLoadingTabs = true;
+  bool _isLoadingStores = true;
 
-  final List<String> _tabs = [
-    'US-A',
-    'Dubai',
-    'US-A',
-    'Turkey',
-    'Dubai',
-    'US-A',
-    'Canada',
-    'UK',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    _loadTabs();
+    _loadStores();
+  }
 
   @override
   void dispose() {
@@ -31,7 +34,60 @@ class _HomePageNewState extends State<HomePageNew> {
     super.dispose();
   }
 
+  Future<void> _loadTabs() async {
+    try {
+      final tabs = await TabService.fetchTabs();
+      setState(() {
+        _tabs = tabs;
+        _isLoadingTabs = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoadingTabs = false;
+      });
+      print('Error loading tabs: $e');
+    }
+  }
+
+  Future<void> _loadStores() async {
+    try {
+      final stores = await StoreService.fetchStores();
+      setState(() {
+        _stores = stores;
+        _isLoadingStores = false;
+      });
+    } catch (e) {
+      setState(() {
+        _isLoadingStores = false;
+      });
+      print('Error loading stores: $e');
+    }
+  }
+
   Widget customTabWidget() {
+    if (_isLoadingTabs) {
+      return Container(
+        height: 48,
+        child: Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFF5C3A9E),
+          ),
+        ),
+      );
+    }
+
+    if (_tabs.isEmpty) {
+      return Container(
+        height: 48,
+        child: Center(
+          child: Text(
+            'No tabs available',
+            style: TextStyle(color: Colors.grey[600]),
+          ),
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
       child: Column(
@@ -61,7 +117,7 @@ class _HomePageNewState extends State<HomePageNew> {
                         ),
                       )),
                       child: Text(
-                        _tabs[index],
+                        _tabs[index].name,
                         style: TextStyle(
                           color: _selectedIndex == index ? Color(0xff5d3ebd) : Colors.grey,
                           fontSize: 16,
@@ -80,55 +136,56 @@ class _HomePageNewState extends State<HomePageNew> {
   }
 
   Widget getSelectedTabContent() {
-    switch (_selectedIndex) {
-      case 0:
-        return GridView(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(16),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 4,
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 4,
-          ),
-          children: const [
-            _BrandLogo(name: 'Amazon', image: "amazon.png"),
-            _BrandLogo(name: 'Zara', image: "ebay.png"),
-            _BrandLogo(name: 'Ebay', image: "zara.png"),
-            _BrandLogo(name: 'Amazon', image: "amazon.png"),
-            _BrandLogo(name: 'Zara', image: "zara.png"),
-            _BrandLogo(name: 'Ebay', image: "ebay.png"),
-            _BrandLogo(name: 'Amazon', image: "amazon.png"),
-            _BrandLogo(name: 'Zara', image: "zara.png"),
-            _BrandLogo(name: 'Ebay', image: "ebay.png"),
-          ],
-        );
-      case 1:
-        return Center(
-          child: Container(
-            alignment: Alignment.center,
-            height: 300,
-            child: Text('Dubai content'),
-          ),
-        );
-      case 2:
-        return Center(
-          child: Container(
-            alignment: Alignment.center,
-            height: 300,
-            child: Text('US-A content'),
-          ),
-        );
-      // Add cases for other tabs
-      default:
-        return Center(
-          child: Container(
-            alignment: Alignment.center,
-            height: 300,
-            child: Text('Content for ${_tabs[_selectedIndex]}'),
-          ),
-        );
+    if (_isLoadingStores) {
+      return Center(
+        child: CircularProgressIndicator(
+          color: Color(0xFF5C3A9E),
+        ),
+      );
     }
+
+    if (_stores.isEmpty) {
+      return Center(
+        child: Text(
+          'No stores available',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[600],
+          ),
+        ),
+      );
+    }
+
+    return GridView.builder(
+      shrinkWrap: true,
+      physics: NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 4,
+        mainAxisSpacing: 12,
+        crossAxisSpacing: 4,
+      ),
+      itemCount: _stores.length,
+      itemBuilder: (context, index) {
+        final store = _stores[index];
+        return _BrandLogo(
+          name: store.name,
+          image: store.image,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => StoreWebViewScreen(
+                  storeUrl: store.url,
+                  storeName: store.name,
+                  baseUrl: store.baseUrl,
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -279,37 +336,42 @@ class _AppBarWidget extends StatelessWidget {
 class _BrandLogo extends StatelessWidget {
   final String name;
   final String image;
+  final VoidCallback? onTap;
 
   const _BrandLogo({
     super.key,
     required this.name,
     required this.image,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: 4),
-      width: 70,
-      height: 70,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(
-            "assets/images/$image",
-            height: 60,
-            width: 60,
-            fit: BoxFit.fill,
-          ),
-          Text(
-            name,
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
-          ),
-        ],
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: EdgeInsets.symmetric(horizontal: 4),
+        width: 70,
+        height: 70,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              "assets/images/$image",
+              height: 60,
+              width: 60,
+              fit: BoxFit.fill,
+            ),
+            Text(
+              name,
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ),
       ),
     );
   }
