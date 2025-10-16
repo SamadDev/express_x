@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:x_express/features/home/address/pages/address_home.dart';
 import 'package:x_express/features/home/advertisement/advertisement.dart';
 import 'package:x_express/features/home/logistic/pages/logistic_list.dart';
-import 'package:x_express/features/home/services/store_service.dart';
 import 'package:x_express/features/home/services/tab_service.dart';
 import 'package:x_express/features/StoreFeatures/store_webview.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class HomePageNew extends StatefulWidget {
   const HomePageNew({super.key});
@@ -17,15 +17,12 @@ class _HomePageNewState extends State<HomePageNew> {
   final PageController _pageController = PageController();
   int _selectedIndex = 0;
   List<TabItem> _tabs = [];
-  List<Store> _stores = [];
-  bool _isLoadingTabs = true;
-  bool _isLoadingStores = true;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _loadTabs();
-    _loadStores();
   }
 
   @override
@@ -39,33 +36,18 @@ class _HomePageNewState extends State<HomePageNew> {
       final tabs = await TabService.fetchTabs();
       setState(() {
         _tabs = tabs;
-        _isLoadingTabs = false;
+        _isLoading = false;
       });
     } catch (e) {
       setState(() {
-        _isLoadingTabs = false;
+        _isLoading = false;
       });
       print('Error loading tabs: $e');
     }
   }
 
-  Future<void> _loadStores() async {
-    try {
-      final stores = await StoreService.fetchStores();
-      setState(() {
-        _stores = stores;
-        _isLoadingStores = false;
-      });
-    } catch (e) {
-      setState(() {
-        _isLoadingStores = false;
-      });
-      print('Error loading stores: $e');
-    }
-  }
-
   Widget customTabWidget() {
-    if (_isLoadingTabs) {
+    if (_isLoading) {
       return Container(
         height: 48,
         child: Center(
@@ -136,7 +118,7 @@ class _HomePageNewState extends State<HomePageNew> {
   }
 
   Widget getSelectedTabContent() {
-    if (_isLoadingStores) {
+    if (_isLoading) {
       return Center(
         child: CircularProgressIndicator(
           color: Color(0xFF5C3A9E),
@@ -144,10 +126,25 @@ class _HomePageNewState extends State<HomePageNew> {
       );
     }
 
-    if (_stores.isEmpty) {
+    if (_tabs.isEmpty || _selectedIndex >= _tabs.length) {
       return Center(
         child: Text(
           'No stores available',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[600],
+          ),
+        ),
+      );
+    }
+
+    final selectedTab = _tabs[_selectedIndex];
+    final stores = selectedTab.stores;
+
+    if (stores.isEmpty) {
+      return Center(
+        child: Text(
+          'No stores available for ${selectedTab.name}',
           style: TextStyle(
             fontSize: 16,
             color: Colors.grey[600],
@@ -165,9 +162,9 @@ class _HomePageNewState extends State<HomePageNew> {
         mainAxisSpacing: 12,
         crossAxisSpacing: 4,
       ),
-      itemCount: _stores.length,
+      itemCount: stores.length,
       itemBuilder: (context, index) {
-        final store = _stores[index];
+        final store = stores[index];
         return _BrandLogo(
           name: store.name,
           image: store.image,
@@ -176,9 +173,9 @@ class _HomePageNewState extends State<HomePageNew> {
               context,
               MaterialPageRoute(
                 builder: (context) => StoreWebViewScreen(
-                  storeUrl: store.url,
+                  storeUrl: store.websiteUrl,
                   storeName: store.name,
-                  baseUrl: store.baseUrl,
+                  baseUrl: store.websiteUrl,
                 ),
               ),
             );
@@ -360,11 +357,28 @@ class _BrandLogo extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              "assets/images/$image",
+            Container(
               height: 60,
               width: 60,
-              fit: BoxFit.fill,
+              child: image.startsWith('http')
+                  ? CachedNetworkImage(
+                      imageUrl: image,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey[200],
+                        child: Icon(Icons.store, color: Colors.grey[400]),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey[200],
+                        child: Icon(Icons.store, color: Colors.grey[400]),
+                      ),
+                    )
+                  : Image.asset(
+                      "assets/images/$image",
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
+                    ),
             ),
             Text(
               name,
