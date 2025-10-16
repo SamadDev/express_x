@@ -24,7 +24,6 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
     ProfileScreen(),
   ];
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,7 +49,7 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
         elevation: 0,
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xFFE8738F),
+        selectedItemColor: Color(0xff5d3ebd),
         unselectedItemColor: Color(0xFFBBBBBB),
         selectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
         unselectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
@@ -71,12 +70,12 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
             label: 'Stores',
           ),
           BottomNavigationBarItem(
-            icon: _buildBadgeIcon(FontAwesomeIcons.bagShopping),
+            icon: FaIcon(FontAwesomeIcons.bagShopping, size: 20),
             label: 'My Bag',
           ),
           BottomNavigationBarItem(
-            icon: _buildBadgeIcon(FontAwesomeIcons.cartShopping),
-            label: 'My Orders',
+            icon: FaIcon(FontAwesomeIcons.creditCard, size: 20),
+            label: 'Subscription',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.user, size: 20),
@@ -87,36 +86,4 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
       ),
     );
   }
-
-  Widget _buildBadgeIcon(IconData icon) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        FaIcon(icon, size: 20),
-        Positioned(
-          right: -6,
-          top: -6,
-          child: Container(
-            width: 16,
-            height: 16,
-            decoration: BoxDecoration(
-              color: Color(0xFFFF5555),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                '1',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
 }
-
