@@ -8,122 +8,210 @@ class SubscriptionScreen extends StatefulWidget {
 }
 
 class _SubscriptionScreenState extends State<SubscriptionScreen> {
-  int _selectedPlan = 1; // Default to middle plan
+  bool _isMonthly = true; // Toggle between monthly and yearly
+  int _selectedPlan = 1; // Default to middle plan (Standard)
 
   final List<SubscriptionPlan> _plans = [
     SubscriptionPlan(
-      name: 'Starter',
-      price: '\$9',
-      period: '/mo',
+      name: 'Basic Plan',
+      monthlyPrice: '\$4.99',
+      yearlyPrice: '\$49.99',
       features: [
-        '5 orders per month',
-        'Standard delivery',
-        'Basic support',
+        '2TB additional storage',
+        'Up to 1GB file size',
+        'Up to 5 projects',
       ],
       isPopular: false,
-      color: Colors.blue,
-      icon: Icons.star_outline,
+      color: Colors.purple,
     ),
     SubscriptionPlan(
-      name: 'Pro',
-      price: '\$19',
-      period: '/mo',
+      name: 'Standard Plan',
+      monthlyPrice: '\$9.99',
+      yearlyPrice: '\$99.99',
       features: [
-        'Unlimited orders',
-        'Express delivery',
-        'Priority support',
-        'Exclusive deals',
+        '10TB additional storage',
+        'Unlimited file size',
+        'Up to 10 projects',
       ],
       isPopular: true,
-      color: Colors.purple,
-      icon: Icons.diamond_outlined,
+      color: Colors.green,
     ),
     SubscriptionPlan(
-      name: 'Business',
-      price: '\$49',
-      period: '/mo',
+      name: 'Premium Plan',
+      monthlyPrice: '\$19.99',
+      yearlyPrice: '\$199.99',
       features: [
-        'Everything in Pro',
-        'Dedicated manager',
-        'Custom options',
-        '24/7 support',
+        'Unlimited storage',
+        'Unlimited file size',
+        'Permanent Membership',
       ],
       isPopular: false,
-      color: Colors.orange,
-      icon: Icons.business,
+      color: Colors.purple,
     ),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
-      appBar: AppBar(
-        title: Text(
-          'Subscription Plans',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        backgroundColor: Color(0xFF5C3A9E),
-        elevation: 0,
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          _buildHeader(),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _plans.length,
-              itemBuilder: (context, index) {
-                return _buildPlanCard(_plans[index], index);
-              },
+      backgroundColor: Colors.grey.shade100,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 1,
+                  blurRadius: 10,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildHeader(),
+                SizedBox(height: 24),
+                _buildPricingToggle(),
+                SizedBox(height: 32),
+                _buildPlansGrid(),
+                SizedBox(height: 24),
+              ],
             ),
           ),
-          _buildSubscribeButton(),
-        ],
+        ),
       ),
     );
   }
 
   Widget _buildHeader() {
-    return Container(
-      padding: const EdgeInsets.all(24),
-      child: Column(
-        children: [
-          Icon(
-            Icons.card_membership,
-            size: 64,
-            color: Color(0xFF5C3A9E),
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Choose your plan',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
+              ),
+              SizedBox(height: 8),
+              Row(
+                children: [
+                  Text(
+                    '14 days free trial',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.local_offer,
+                      color: Colors.white,
+                      size: 16,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Get the right plan for your business. Plans can be upgraded in the future.',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
           ),
-          SizedBox(height: 16),
-          Text(
-            'Choose Your Plan',
-            style: TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-              color: Colors.black87,
-            ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPricingToggle() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(25),
           ),
-          SizedBox(height: 8),
-          Text(
-            'Select the perfect plan for your shopping needs',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.grey[600],
-            ),
-            textAlign: TextAlign.center,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              GestureDetector(
+                onTap: () => setState(() => _isMonthly = true),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: _isMonthly ? Colors.green : Colors.transparent,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Text(
+                    'Monthly',
+                    style: TextStyle(
+                      color: _isMonthly ? Colors.white : Colors.grey[700],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () => setState(() => _isMonthly = false),
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  decoration: BoxDecoration(
+                    color: !_isMonthly ? Colors.green : Colors.transparent,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
+                  child: Text(
+                    'Yearly',
+                    style: TextStyle(
+                      color: !_isMonthly ? Colors.white : Colors.grey[700],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPlansGrid() {
+    return Row(
+      children: _plans.asMap().entries.map((entry) {
+        final index = entry.key;
+        final plan = entry.value;
+        return Expanded(
+          child: _buildPlanCard(plan, index),
+        );
+      }).toList(),
     );
   }
 
   Widget _buildPlanCard(SubscriptionPlan plan, int index) {
     final isSelected = _selectedPlan == index;
     final isPopular = plan.isPopular;
+    final price = _isMonthly ? plan.monthlyPrice : plan.yearlyPrice;
 
     return GestureDetector(
       onTap: () {
@@ -132,164 +220,121 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         });
       },
       child: Container(
-        margin: const EdgeInsets.only(bottom: 16),
+        margin: EdgeInsets.only(right: index < _plans.length - 1 ? 16 : 0),
+        padding: EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? plan.color : Colors.grey[200]!,
-            width: isSelected ? 3 : 1,
+            color: isSelected ? Colors.green : Colors.grey[200]!,
+            width: isSelected ? 2 : 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: isSelected ? plan.color.withOpacity(0.2) : Colors.grey.withOpacity(0.1),
-              spreadRadius: isSelected ? 2 : 1,
-              blurRadius: isSelected ? 15 : 10,
-              offset: Offset(0, 4),
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, 2),
             ),
           ],
         ),
-        child: Stack(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (isPopular)
-              Positioned(
-                top: -1,
-                right: 20,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            Row(
+              children: [
+                Container(
+                  width: 8,
+                  height: 8,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF5C3A9E), Color(0xFF8B66FD)],
-                    ),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color(0xFF5C3A9E).withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.star, color: Colors.white, size: 16),
-                      SizedBox(width: 4),
-                      Text(
-                        'POPULAR',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ],
+                    color: plan.color,
+                    shape: BoxShape.circle,
                   ),
                 ),
-              ),
-            Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: plan.color.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Icon(
-                          plan.icon,
-                          color: plan.color,
-                          size: 28,
-                        ),
-                      ),
-                      SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              plan.name,
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black87,
-                              ),
-                            ),
-                            SizedBox(height: 4),
-                            Row(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  plan.price,
-                                  style: TextStyle(
-                                    fontSize: 32,
-                                    fontWeight: FontWeight.bold,
-                                    color: plan.color,
-                                  ),
-                                ),
-                                Text(
-                                  plan.period,
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey[600],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                          color: isSelected ? plan.color : Colors.grey[200],
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Icon(
-                          isSelected ? Icons.check : Icons.circle_outlined,
-                          color: isSelected ? Colors.white : Colors.grey[600],
-                          size: 20,
-                        ),
-                      ),
-                    ],
+                SizedBox(width: 8),
+                Text(
+                  plan.name,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
                   ),
-                  SizedBox(height: 24),
-                  ...plan.features.map((feature) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Row(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                            color: plan.color.withOpacity(0.1),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Icon(
-                            Icons.check,
-                            color: plan.color,
-                            size: 16,
-                          ),
-                        ),
-                        SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            feature,
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey[700],
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ],
+                ),
+              ],
+            ),
+            SizedBox(height: 16),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  price,
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  _isMonthly ? '/ month' : '/ year',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 20),
+            ...plan.features.map((feature) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.add,
+                    color: Colors.orange,
+                    size: 16,
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      feature,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[700],
+                      ),
                     ),
-                  )),
+                  ),
                 ],
               ),
+            )),
+            SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _selectedPlan = index;
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: isSelected ? Colors.green : Colors.white,
+                  foregroundColor: isSelected ? Colors.white : Colors.green,
+                  side: BorderSide(
+                    color: Colors.green,
+                    width: isSelected ? 0 : 1,
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  'Get Plan',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
             ),
           ],
         ),
@@ -297,151 +342,22 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
     );
   }
 
-  Widget _buildSubscribeButton() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 10,
-            offset: Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Selected Plan:',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[700],
-                ),
-              ),
-              Text(
-                _plans[_selectedPlan].name,
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF5C3A9E),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 16),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                _showSubscriptionDialog();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF5C3A9E),
-                foregroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(vertical: 16),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: Text(
-                'Subscribe to ${_plans[_selectedPlan].name}',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showSubscriptionDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Subscribe to ${_plans[_selectedPlan].name}'),
-          content: Text(
-            'You are about to subscribe to the ${_plans[_selectedPlan].name} plan for ${_plans[_selectedPlan].price}${_plans[_selectedPlan].period}. '
-            'This will be charged to your account.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-                _showSuccessDialog();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF5C3A9E),
-                foregroundColor: Colors.white,
-              ),
-              child: Text('Confirm'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Row(
-            children: [
-              Icon(Icons.check_circle, color: Colors.green, size: 28),
-              SizedBox(width: 8),
-              Text('Success!'),
-            ],
-          ),
-          content: Text(
-            'You have successfully subscribed to the ${_plans[_selectedPlan].name} plan. '
-            'Enjoy your new benefits!',
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF5C3A9E),
-                foregroundColor: Colors.white,
-              ),
-              child: Text('Great!'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }
 
 class SubscriptionPlan {
   final String name;
-  final String price;
-  final String period;
+  final String monthlyPrice;
+  final String yearlyPrice;
   final List<String> features;
   final bool isPopular;
   final Color color;
-  final IconData icon;
 
   SubscriptionPlan({
     required this.name,
-    required this.price,
-    required this.period,
+    required this.monthlyPrice,
+    required this.yearlyPrice,
     required this.features,
     required this.isPopular,
     required this.color,
-    required this.icon,
   });
 }
