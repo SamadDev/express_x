@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
-import 'package:x_express/features/Store/bag_screen.dart';
-import 'package:x_express/features/Store/store_webview.dart';
+import 'package:x_express/features/StoreFeatures/bag_screen.dart';
+import 'package:x_express/features/StoreFeatures/store_webview.dart';
 
 
 class StoreListScreen extends StatelessWidget {

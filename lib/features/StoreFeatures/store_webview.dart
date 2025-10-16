@@ -3,18 +3,20 @@ import 'package:provider/provider.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:x_express/core/config/theme/color.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
-import 'package:x_express/features/Store/add_to_bag_dialog.dart';
-import 'package:x_express/features/Store/bag_screen.dart';
+import 'package:x_express/features/StoreFeatures/add_to_bag_dialog.dart';
+import 'package:x_express/features/StoreFeatures/bag_screen.dart';
 
 
 class StoreWebViewScreen extends StatefulWidget {
   final String storeUrl;
   final String storeName;
+  final String? baseUrl;
 
   const StoreWebViewScreen({
     Key? key,
     required this.storeUrl,
     required this.storeName,
+    this.baseUrl,
   }) : super(key: key);
 
   @override
@@ -84,7 +86,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
       body: Stack(
         children: [
           InAppWebView(
-            initialUrlRequest: URLRequest(url: WebUri(widget.storeUrl)),
+            initialUrlRequest: URLRequest(url: WebUri(widget.baseUrl ?? widget.storeUrl)),
             onWebViewCreated: (controller) {
               webViewController = controller;
             },
@@ -135,24 +137,47 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
                 ),
               ),
             ),
-          // Floating Add to Bag Button
+          // Floating Action Buttons
           Positioned(
             bottom: 20,
             right: 20,
-            child: FloatingActionButton.extended(
-              onPressed: () {
-                _showAddToBagDialog();
-              },
-              backgroundColor: Color(0xFFE91E63), // Pink color like Amazon
-              foregroundColor: Colors.white,
-              icon: Icon(Icons.shopping_bag),
-              label: Text(
-                'Add to Bag',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                // Add Order Button
+                FloatingActionButton.extended(
+                  onPressed: () {
+                    _showAddOrderDialog();
+                  },
+                  backgroundColor: Color(0xFF5C3A9E), // Purple color
+                  foregroundColor: Colors.white,
+                  icon: Icon(Icons.add_shopping_cart),
+                  label: Text(
+                    'Add Order',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
                 ),
-              ),
+                SizedBox(height: 10),
+                // Add to Bag Button
+                FloatingActionButton.extended(
+                  onPressed: () {
+                    _showAddToBagDialog();
+                  },
+                  backgroundColor: Color(0xFFE91E63), // Pink color like Amazon
+                  foregroundColor: Colors.white,
+                  icon: Icon(Icons.shopping_bag),
+                  label: Text(
+                    'Add to Bag',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ],
@@ -209,6 +234,54 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
       context: context,
       builder: (BuildContext context) {
         return AddToBagDialog(storeName: widget.storeName);
+      },
+    );
+  }
+
+  void _showAddOrderDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add Order'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Add order from ${widget.storeName}?'),
+              SizedBox(height: 16),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Order Description',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                decoration: InputDecoration(
+                  labelText: 'Order URL',
+                  border: OutlineInputBorder(),
+                ),
+                controller: TextEditingController(text: widget.baseUrl ?? widget.storeUrl),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // TODO: Implement order creation logic
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Order added successfully!')),
+                );
+              },
+              child: Text('Add Order'),
+            ),
+          ],
+        );
       },
     );
   }

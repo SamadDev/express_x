@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:x_express/pages/home/logistic/pages/logistic_detail.dart';
+import 'package:x_express/features/home/logistic/pages/logistic_detail.dart';
 
 class Logistic extends StatelessWidget {
   const Logistic({super.key});

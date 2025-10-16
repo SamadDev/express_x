@@ -2,20 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:x_express/features/auth/view/changePassword/chengePassword.dart';
 import 'package:x_express/features/auth/view/login/login.dart';
 import 'package:x_express/features/auth/view/register/register.dart';
-import 'package:x_express/features/language/language.dart';
-import 'package:x_express/features/navigationBar/view/navigationBar.dart';
-import 'package:x_express/features/notification/data/model/notification.dart';
-import 'package:x_express/features/notification/view/notification_detail.dart';
-import 'package:x_express/features/notification/view/notification.dart';
-import 'package:x_express/features/splash/view/splashPage.dart';
-import 'package:x_express/features/onboarding/view/onboarding_page.dart';
 import 'package:x_express/features/auth/view/forgot_password/forgot_password_page.dart';
 import 'package:x_express/features/auth/view/password_recovery/password_recovery_page.dart';
 import 'package:x_express/features/auth/view/reset_password/reset_password_page.dart';
 import 'package:x_express/features/auth/view/success/success_page.dart';
 import 'package:x_express/features/auth/view/otp_verification/otp_verification_page.dart';
-import 'package:x_express/features/language/location_selection_page.dart';
-import 'package:x_express/features/language/initial_language_selection_page.dart';
+import 'package:x_express/features/wellcom/splash.dart';
 
 class AppRoute {
   static const String splash = '/';
@@ -75,11 +67,7 @@ class AppRoute {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
-        return MaterialPageRoute(builder: (_) => const SplashPage());
-      case onboarding:
-        return MaterialPageRoute(builder: (_) => const OnboardingPage());
-      case navigationBar:
-        return MaterialPageRoute(builder: (_) => BottomNavigationBarPage());
+        return MaterialPageRoute(builder: (_) =>  SplashScreen());
 
       case login:
         return MaterialPageRoute(builder: (_) => const LoginPage());
@@ -95,8 +83,6 @@ class AppRoute {
       case otpVerification:
         final phoneNumber = settings.arguments as String? ?? '';
         return MaterialPageRoute(builder: (_) => OtpVerificationPage(phoneNumber: phoneNumber));
-      case initialLanguageSelection:
-        return MaterialPageRoute(builder: (_) => const InitialLanguageSelectionPage());
       case success:
         final args = settings.arguments as Map<String, dynamic>? ?? {};
         return MaterialPageRoute(
@@ -108,16 +94,11 @@ class AppRoute {
             isPasswordReset: args['isPasswordReset'] ?? false,
           ),
         );
-      case locationSelection:
-        return MaterialPageRoute(builder: (_) => const LocationSelectionPage());
+
       case changePassword:
         return MaterialPageRoute(builder: (_) => const ChangePasswordPage());
 
-      case notification:
-        return MaterialPageRoute(builder: (_) => const NotificationPage());
 
-      case language:
-        return MaterialPageRoute(builder: (_) => LanguageScreen());
 
       default:
         throw const Scaffold();

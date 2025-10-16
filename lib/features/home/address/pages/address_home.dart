@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:x_express/pages/home/address/pages/address_list.dart';
+import 'package:x_express/features/home/address/pages/address_list.dart';
 
 class AddressHome extends StatelessWidget {
   const AddressHome({super.key});
