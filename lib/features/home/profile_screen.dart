@@ -9,11 +9,12 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   bool _isDarkMode = false;
+  int _selectedNavIndex = 4;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Color(0xFFF5F5F5),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -22,23 +23,26 @@ class _ProfileScreenState extends State<ProfileScreen> {
               _buildMyAccountSection(),
               _buildAppSettingsSection(),
               _buildShoppingHelpSection(),
+              SizedBox(height: 100),
             ],
           ),
         ),
       ),
+      bottomNavigationBar: _buildBottomNav(),
     );
   }
 
   Widget _buildProfileHeader() {
     return Container(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.all(20.0),
+      color: Color(0xFFF5F5F5),
       child: Row(
         children: [
           CircleAvatar(
-            radius: 30,
-            backgroundColor: Colors.pink,
+            radius: 35,
+            backgroundColor: Color(0xFFE8738F),
             child: Text(
-              'BonLili',
+              'BL',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 16,
@@ -54,7 +58,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(
                   'Hello razed',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
@@ -63,18 +67,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 Text(
                   '0751 434 4915',
                   style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey[600],
+                    fontSize: 14,
+                    color: Color(0xFF999999),
                   ),
                 ),
               ],
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.edit, color: Colors.grey[600]),
-            onPressed: () {
-              _showEditProfileDialog(context);
-            },
+          Icon(
+            Icons.edit,
+            color: Color(0xFF999999),
+            size: 20,
           ),
         ],
       ),
@@ -82,44 +85,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildMyAccountSection() {
-    return Container(
-      margin: const EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'My Account',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
+            child: Text(
+              'My Account',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
-          SizedBox(height: 16),
-          _buildMenuItem(
-            icon: Icons.account_balance_wallet,
-            title: 'Wallet',
-            onTap: () => _showFeatureDialog(context, 'Wallet', 'Manage your wallet and payment methods.'),
-          ),
-          _buildMenuItem(
-            icon: Icons.receipt_long,
-            title: 'Invoices',
-            onTap: () => _showFeatureDialog(context, 'Invoices', 'View your order invoices and receipts.'),
-          ),
-          _buildMenuItem(
-            icon: Icons.location_on,
-            title: 'Delivery Addresses',
-            onTap: () => _showFeatureDialog(context, 'Delivery Addresses', 'Manage your delivery addresses.'),
-          ),
-          _buildMenuItem(
-            icon: Icons.notifications,
-            title: 'Notifications',
-            onTap: () => _showFeatureDialog(context, 'Notifications', 'Manage your notification preferences.'),
-          ),
-          _buildMenuItem(
-            icon: Icons.favorite,
-            title: 'Wishlist',
-            onTap: () => _showFeatureDialog(context, 'Wishlist', 'View your saved items and wishlist.'),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Column(
+              children: [
+                _buildMenuItemSimple(
+                  icon: Icons.account_balance_wallet_outlined,
+                  title: 'Wallet',
+                ),
+                _buildMenuItemSimple(
+                  icon: Icons.receipt_long_outlined,
+                  title: 'Invoices',
+                ),
+                _buildMenuItemSimple(
+                  icon: Icons.location_on_outlined,
+                  title: 'Delivery Addresses',
+                ),
+                _buildMenuItemSimple(
+                  icon: Icons.notifications_none_outlined,
+                  title: 'Notifications',
+                ),
+                _buildMenuItemSimple(
+                  icon: Icons.favorite_outline,
+                  title: 'Wishlist',
+                  isLast: true,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -127,37 +138,80 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildAppSettingsSection() {
-    return Container(
-      margin: const EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'App Settings',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
+            child: Text(
+              'App Settings',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
-          SizedBox(height: 16),
-          _buildMenuItem(
-            icon: Icons.dark_mode,
-            title: 'Dark Mode',
-            trailing: Switch(
-              value: _isDarkMode,
-              onChanged: (value) {
-                setState(() {
-                  _isDarkMode = value;
-                });
-              },
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6),
             ),
-            onTap: null,
-          ),
-          _buildMenuItem(
-            icon: Icons.language,
-            title: 'Languages',
-            onTap: () => _showFeatureDialog(context, 'Languages', 'Change your app language.'),
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+                  decoration: BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Color(0xFFF0F0F0),
+                        width: 1,
+                      ),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.dark_mode_outlined,
+                        color: Color(0xFF999999),
+                        size: 20,
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Dark Mode',
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 50,
+                        child: Switch(
+                          value: _isDarkMode,
+                          activeColor: Color(0xFFE8738F),
+                          onChanged: (value) {
+                            setState(() {
+                              _isDarkMode = value;
+                            });
+                          },
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                _buildMenuItemSimple(
+                  icon: Icons.language_outlined,
+                  title: 'Languages',
+                  isLast: true,
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -165,222 +219,185 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Widget _buildShoppingHelpSection() {
-    return Container(
-      margin: const EdgeInsets.all(16),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Shopping Help',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0, bottom: 12.0),
+            child: Text(
+              'Shopping Help',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.black,
+              ),
             ),
           ),
-          SizedBox(height: 16),
-          _buildMenuItem(
-            icon: Icons.policy,
-            title: 'Shopping Policy',
-            onTap: () => _showFeatureDialog(context, 'Shopping Policy', 'View our shopping policies and terms.'),
-          ),
-          _buildMenuItem(
-            icon: Icons.info,
-            title: 'About BonLili',
-            onTap: () => _showFeatureDialog(context, 'About BonLili', 'Learn more about our app and company.'),
-          ),
-          _buildMenuItem(
-            icon: Icons.play_circle,
-            title: 'How to order',
-            onTap: () => _showFeatureDialog(context, 'How to order', 'Learn how to place orders on our platform.'),
-          ),
-          _buildMenuItem(
-            icon: Icons.chat,
-            title: 'Chat with us',
-            onTap: () => _showFeatureDialog(context, 'Chat with us', 'Get instant help through our chat support.'),
-          ),
-          _buildMenuItem(
-            icon: Icons.contact_support,
-            title: 'Contact Us',
-            onTap: () => _showFeatureDialog(context, 'Contact Us', 'Get in touch with our support team.'),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Column(
+              children: [
+                _buildMenuItemSimple(
+                  icon: Icons.description_outlined,
+                  title: 'Shopping Policy',
+                ),
+                _buildMenuItemSimple(
+                  icon: Icons.info_outline,
+                  title: 'About BonLili',
+                ),
+                _buildMenuItemSimple(
+                  icon: Icons.play_circle_outline,
+                  title: 'How to order',
+                ),
+                _buildMenuItemSimple(
+                  icon: Icons.chat_bubble_outline,
+                  title: 'Chat with us',
+                ),
+                _buildMenuItemSimple(
+                  icon: Icons.contact_support_outlined,
+                  title: 'Contact Us',
+                  isLast: true,
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildMenuItem({
+  Widget _buildMenuItemSimple({
     required IconData icon,
     required String title,
-    Widget? trailing,
-    VoidCallback? onTap,
+    bool isLast = false,
   }) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+      decoration: BoxDecoration(
+        border: isLast
+            ? null
+            : Border(
+          bottom: BorderSide(
+            color: Color(0xFFF0F0F0),
+            width: 1,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            color: Color(0xFF999999),
+            size: 20,
+          ),
+          SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              title,
+              style: TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w400,
+                color: Colors.black,
+              ),
+            ),
+          ),
+          Icon(
+            Icons.arrow_forward_ios,
+            size: 14,
+            color: Color(0xFFCCCCCC),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomNav() {
+    return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 3,
-            offset: Offset(0, 1),
+        border: Border(
+          top: BorderSide(
+            color: Color(0xFFEEEEEE),
+            width: 1,
+          ),
+        ),
+      ),
+      child: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedNavIndex,
+        selectedItemColor: Color(0xFFE8738F),
+        unselectedItemColor: Color(0xFFBBBBBB),
+        selectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+        unselectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
+        onTap: (index) {
+          setState(() {
+            _selectedNavIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home_outlined),
+            activeIcon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.store_outlined),
+            activeIcon: Icon(Icons.store),
+            label: 'Stores',
+          ),
+          BottomNavigationBarItem(
+            icon: _buildBadgeIcon(Icons.shopping_bag_outlined),
+            label: 'My Bag',
+          ),
+          BottomNavigationBarItem(
+            icon: _buildBadgeIcon(Icons.shopping_cart_outlined),
+            label: 'My Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outline),
+            activeIcon: Icon(Icons.person),
+            label: 'Account',
           ),
         ],
-      ),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: Colors.grey[600],
-          size: 24,
-        ),
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
-          ),
-        ),
-        trailing: trailing ?? Icon(
-          Icons.arrow_forward_ios,
-          size: 16,
-          color: Colors.grey[400],
-        ),
-        onTap: onTap,
       ),
     );
   }
 
-
-  void _showSettingsDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Settings'),
-        content: Text('Settings functionality will be implemented here.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showPersonalInfoDialog(BuildContext context) {
-    _showFeatureDialog(context, 'Personal Information', 'Update your profile details, name, email, and other personal information.');
-  }
-
-  void _showAddressesDialog(BuildContext context) {
-    _showFeatureDialog(context, 'Addresses', 'Manage your delivery addresses for faster checkout.');
-  }
-
-  void _showPaymentDialog(BuildContext context) {
-    _showFeatureDialog(context, 'Payment Methods', 'Add, edit, or remove your payment methods.');
-  }
-
-  void _showNotificationsDialog(BuildContext context) {
-    _showFeatureDialog(context, 'Notifications', 'Customize your notification preferences.');
-  }
-
-  void _showHelpDialog(BuildContext context) {
-    _showFeatureDialog(context, 'Help & Support', 'Get help with your account or contact our support team.');
-  }
-
-  void _showAboutDialog(BuildContext context) {
-    _showFeatureDialog(context, 'About', 'X Express v1.0.0\nBuilt with Flutter');
-  }
-
-  void _showSignOutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Sign Out'),
-        content: Text('Are you sure you want to sign out of your account?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              // Handle sign out logic here
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red,
-              foregroundColor: Colors.white,
+  Widget _buildBadgeIcon(IconData icon) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Icon(icon),
+        Positioned(
+          right: -6,
+          top: -6,
+          child: Container(
+            width: 16,
+            height: 16,
+            decoration: BoxDecoration(
+              color: Color(0xFFFF5555),
+              shape: BoxShape.circle,
             ),
-            child: Text('Sign Out'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showEditProfileDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Edit Profile'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Name',
-                border: OutlineInputBorder(),
+            child: Center(
+              child: Text(
+                '1',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-            SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                labelText: 'Phone Number',
-                border: OutlineInputBorder(),
-              ),
-            ),
-          ],
+          ),
         ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Profile updated successfully!')),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF5C3A9E),
-              foregroundColor: Colors.white,
-            ),
-            child: Text('Save'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showFeatureDialog(BuildContext context, String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('OK'),
-          ),
-        ],
-      ),
+      ],
     );
   }
 }
-

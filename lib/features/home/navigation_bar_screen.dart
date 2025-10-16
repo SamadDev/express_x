@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:x_express/features/home/new_home_screen.dart';
 import 'package:x_express/features/home/explore_screen.dart';
 import 'package:x_express/features/home/bag_screen.dart';
@@ -23,144 +24,99 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
     ProfileScreen(),
   ];
 
-  final List<NavigationItem> _navigationItems = [
-    NavigationItem(
-      icon: Icons.home,
-      label: 'Home',
-    ),
-    NavigationItem(
-      icon: Icons.explore,
-      label: 'Stores',
-    ),
-    NavigationItem(
-      icon: Icons.shopping_bag,
-      label: 'My Bag',
-    ),
-    NavigationItem(
-      icon: Icons.shopping_cart,
-      label: 'My Orders',
-    ),
-    NavigationItem(
-      icon: Icons.person,
-      label: 'Account',
-    ),
-  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       body: _screens[_selectedIndex],
-      bottomNavigationBar: Container(
+      bottomNavigationBar: _buildBottomNav(),
+    );
+  }
+
+  Widget _buildBottomNav() {
+    return Container(
+      decoration: BoxDecoration(
         color: Colors.white,
-        child: SafeArea(
-          child: Container(
-            height: 60,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                for (int i = 0; i < _navigationItems.length; i++)
-                  _buildNavigationItem(i),
-              ],
-            ),
+        border: Border(
+          top: BorderSide(
+            color: Color(0xFFEEEEEE),
+            width: 1,
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildNavigationItem(int index) {
-    final item = _navigationItems[index];
-    final isSelected = _selectedIndex == index;
-
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Stack(
-              children: [
-                Icon(
-                  item.icon,
-                  color: isSelected ? Colors.black : Colors.grey[600],
-                  size: 24,
-                ),
-                if (index == 2) // My Bag - red badge with "1"
-                  Positioned(
-                    right: -2,
-                    top: -2,
-                    child: Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '1',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                if (index == 3) // My Orders - red badge with "4"
-                  Positioned(
-                    right: -2,
-                    top: -2,
-                    child: Container(
-                      width: 16,
-                      height: 16,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Center(
-                        child: Text(
-                          '4',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Text(
-              item.label,
-              style: TextStyle(
-                color: isSelected ? Colors.black : Colors.grey[600],
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
-              ),
-            ),
-          ],
-        ),
+      child: BottomNavigationBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        selectedItemColor: Color(0xFFE8738F),
+        unselectedItemColor: Color(0xFFBBBBBB),
+        selectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
+        unselectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        items: [
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.house, size: 20),
+            activeIcon: FaIcon(FontAwesomeIcons.house, size: 20),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.store, size: 20),
+            activeIcon: FaIcon(FontAwesomeIcons.store, size: 20),
+            label: 'Stores',
+          ),
+          BottomNavigationBarItem(
+            icon: _buildBadgeIcon(FontAwesomeIcons.bagShopping),
+            label: 'My Bag',
+          ),
+          BottomNavigationBarItem(
+            icon: _buildBadgeIcon(FontAwesomeIcons.cartShopping),
+            label: 'My Orders',
+          ),
+          BottomNavigationBarItem(
+            icon: FaIcon(FontAwesomeIcons.user, size: 20),
+            activeIcon: FaIcon(FontAwesomeIcons.user, size: 20),
+            label: 'Account',
+          ),
+        ],
       ),
     );
   }
+
+  Widget _buildBadgeIcon(IconData icon) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        FaIcon(icon, size: 20),
+        Positioned(
+          right: -6,
+          top: -6,
+          child: Container(
+            width: 16,
+            height: 16,
+            decoration: BoxDecoration(
+              color: Color(0xFFFF5555),
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                '1',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 10,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-class NavigationItem {
-  final IconData icon;
-  final String label;
-
-  NavigationItem({
-    required this.icon,
-    required this.label,
-  });
-}
