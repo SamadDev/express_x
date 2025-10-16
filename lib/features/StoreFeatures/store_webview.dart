@@ -137,47 +137,24 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
                 ),
               ),
             ),
-          // Floating Action Buttons
+          // Floating Action Button
           Positioned(
             bottom: 20,
             right: 20,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Add Order Button
-                FloatingActionButton.extended(
-                  onPressed: () {
-                    _showAddOrderDialog();
-                  },
-                  backgroundColor: Color(0xFF5C3A9E), // Purple color
-                  foregroundColor: Colors.white,
-                  icon: Icon(Icons.add_shopping_cart),
-                  label: Text(
-                    'Add Order',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                _showAddToBagDialog();
+              },
+              backgroundColor: Color(0xFFE91E63), // Pink color like Amazon
+              foregroundColor: Colors.white,
+              icon: Icon(Icons.shopping_bag),
+              label: Text(
+                'Add to Bag',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
                 ),
-                SizedBox(height: 10),
-                // Add to Bag Button
-                FloatingActionButton.extended(
-                  onPressed: () {
-                    _showAddToBagDialog();
-                  },
-                  backgroundColor: Color(0xFFE91E63), // Pink color like Amazon
-                  foregroundColor: Colors.white,
-                  icon: Icon(Icons.shopping_bag),
-                  label: Text(
-                    'Add to Bag',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
@@ -238,51 +215,4 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
     );
   }
 
-  void _showAddOrderDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Add Order'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Add order from ${widget.storeName}?'),
-              SizedBox(height: 16),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Order Description',
-                  border: OutlineInputBorder(),
-                ),
-              ),
-              SizedBox(height: 16),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Order URL',
-                  border: OutlineInputBorder(),
-                ),
-                controller: TextEditingController(text: widget.baseUrl ?? widget.storeUrl),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // TODO: Implement order creation logic
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Order added successfully!')),
-                );
-              },
-              child: Text('Add Order'),
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

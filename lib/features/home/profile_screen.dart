@@ -1,39 +1,29 @@
 import 'package:flutter/material.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  bool _isDarkMode = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      appBar: AppBar(
-        title: Text(
-          'Profile',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              _buildProfileHeader(),
+              _buildMyAccountSection(),
+              _buildAppSettingsSection(),
+              _buildShoppingHelpSection(),
+            ],
           ),
-        ),
-        backgroundColor: Color(0xFF5C3A9E),
-        elevation: 0,
-        centerTitle: true,
-        actions: [
-          IconButton(
-            icon: Icon(Icons.settings, color: Colors.white),
-            onPressed: () {
-              _showSettingsDialog(context);
-            },
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildProfileHeader(),
-            _buildStatsSection(),
-            _buildMenuSection(context),
-          ],
         ),
       ),
     );
@@ -41,270 +31,178 @@ class ProfileScreen extends StatelessWidget {
 
   Widget _buildProfileHeader() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(24, 60, 24, 24),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF5C3A9E),
-            Color(0xFF8B66FD),
-            Color(0xFFB794F6),
-          ],
-        ),
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(30),
-          bottomRight: Radius.circular(30),
-        ),
-      ),
-      child: Column(
+      padding: const EdgeInsets.all(24),
+      child: Row(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome back!',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white70,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      'John Doe',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(25),
-                        border: Border.all(color: Colors.white.withOpacity(0.3)),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(Icons.diamond, color: Colors.white, size: 16),
-                          SizedBox(width: 6),
-                          Text(
-                            'Premium Member',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.pink,
+            child: Text(
+              'BonLili',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
               ),
-              Container(
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 3),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 10,
-                      offset: Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    size: 40,
-                    color: Color(0xFF5C3A9E),
+            ),
+          ),
+          SizedBox(width: 16),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Hello razed',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
                   ),
                 ),
-              ),
-            ],
-          ),
-          SizedBox(height: 20),
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: Colors.white.withOpacity(0.2)),
-            ),
-            child: Row(
-              children: [
-                Icon(Icons.email_outlined, color: Colors.white70, size: 20),
-                SizedBox(width: 12),
+                SizedBox(height: 4),
                 Text(
-                  'john.doe@example.com',
+                  '0751 434 4915',
                   style: TextStyle(
                     fontSize: 16,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[600],
                   ),
                 ),
               ],
             ),
           ),
+          IconButton(
+            icon: Icon(Icons.edit, color: Colors.grey[600]),
+            onPressed: () {
+              _showEditProfileDialog(context);
+            },
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildStatsSection() {
+  Widget _buildMyAccountSection() {
     return Container(
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 15,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: _buildStatItem('Orders', '24', Icons.shopping_bag, Color(0xFF5C3A9E)),
-          ),
-          Container(
-            width: 1,
-            height: 50,
-            color: Colors.grey[200],
-          ),
-          Expanded(
-            child: _buildStatItem('Saved', '12', Icons.favorite, Color(0xFFE91E63)),
-          ),
-          Container(
-            width: 1,
-            height: 50,
-            color: Colors.grey[200],
-          ),
-          Expanded(
-            child: _buildStatItem('Reviews', '8', Icons.star, Color(0xFFFF9800)),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildStatItem(String label, String value, IconData icon, Color color) {
-    return Column(
-      children: [
-        Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Icon(
-            icon,
-            color: color,
-            size: 28,
-          ),
-        ),
-        SizedBox(height: 12),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.black87,
-          ),
-        ),
-        SizedBox(height: 4),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[600],
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMenuSection(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 15,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
+      margin: const EdgeInsets.all(16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Text(
+            'My Account',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(height: 16),
           _buildMenuItem(
-            icon: Icons.person_outline,
-            title: 'Personal Information',
-            subtitle: 'Update your profile details',
-            color: Color(0xFF5C3A9E),
-            onTap: () => _showPersonalInfoDialog(context),
+            icon: Icons.account_balance_wallet,
+            title: 'Wallet',
+            onTap: () => _showFeatureDialog(context, 'Wallet', 'Manage your wallet and payment methods.'),
           ),
           _buildMenuItem(
-            icon: Icons.location_on_outlined,
-            title: 'Addresses',
-            subtitle: 'Manage your delivery addresses',
-            color: Color(0xFF4CAF50),
-            onTap: () => _showAddressesDialog(context),
+            icon: Icons.receipt_long,
+            title: 'Invoices',
+            onTap: () => _showFeatureDialog(context, 'Invoices', 'View your order invoices and receipts.'),
           ),
           _buildMenuItem(
-            icon: Icons.payment_outlined,
-            title: 'Payment Methods',
-            subtitle: 'Manage your payment options',
-            color: Color(0xFF2196F3),
-            onTap: () => _showPaymentDialog(context),
+            icon: Icons.location_on,
+            title: 'Delivery Addresses',
+            onTap: () => _showFeatureDialog(context, 'Delivery Addresses', 'Manage your delivery addresses.'),
           ),
           _buildMenuItem(
-            icon: Icons.notifications_outlined,
+            icon: Icons.notifications,
             title: 'Notifications',
-            subtitle: 'Manage your notification preferences',
-            color: Color(0xFFFF9800),
-            onTap: () => _showNotificationsDialog(context),
+            onTap: () => _showFeatureDialog(context, 'Notifications', 'Manage your notification preferences.'),
           ),
           _buildMenuItem(
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            subtitle: 'Get help and contact support',
-            color: Color(0xFF9C27B0),
-            onTap: () => _showHelpDialog(context),
+            icon: Icons.favorite,
+            title: 'Wishlist',
+            onTap: () => _showFeatureDialog(context, 'Wishlist', 'View your saved items and wishlist.'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAppSettingsSection() {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'App Settings',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(height: 16),
+          _buildMenuItem(
+            icon: Icons.dark_mode,
+            title: 'Dark Mode',
+            trailing: Switch(
+              value: _isDarkMode,
+              onChanged: (value) {
+                setState(() {
+                  _isDarkMode = value;
+                });
+              },
+            ),
+            onTap: null,
           ),
           _buildMenuItem(
-            icon: Icons.info_outline,
-            title: 'About',
-            subtitle: 'App version and information',
-            color: Color(0xFF607D8B),
-            onTap: () => _showAboutDialog(context),
+            icon: Icons.language,
+            title: 'Languages',
+            onTap: () => _showFeatureDialog(context, 'Languages', 'Change your app language.'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildShoppingHelpSection() {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Shopping Help',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+          SizedBox(height: 16),
+          _buildMenuItem(
+            icon: Icons.policy,
+            title: 'Shopping Policy',
+            onTap: () => _showFeatureDialog(context, 'Shopping Policy', 'View our shopping policies and terms.'),
           ),
           _buildMenuItem(
-            icon: Icons.logout,
-            title: 'Sign Out',
-            subtitle: 'Sign out of your account',
-            color: Color(0xFFE91E63),
-            onTap: () => _showSignOutDialog(context),
-            isDestructive: true,
+            icon: Icons.info,
+            title: 'About BonLili',
+            onTap: () => _showFeatureDialog(context, 'About BonLili', 'Learn more about our app and company.'),
+          ),
+          _buildMenuItem(
+            icon: Icons.play_circle,
+            title: 'How to order',
+            onTap: () => _showFeatureDialog(context, 'How to order', 'Learn how to place orders on our platform.'),
+          ),
+          _buildMenuItem(
+            icon: Icons.chat,
+            title: 'Chat with us',
+            onTap: () => _showFeatureDialog(context, 'Chat with us', 'Get instant help through our chat support.'),
+          ),
+          _buildMenuItem(
+            icon: Icons.contact_support,
+            title: 'Contact Us',
+            onTap: () => _showFeatureDialog(context, 'Contact Us', 'Get in touch with our support team.'),
           ),
         ],
       ),
@@ -314,58 +212,41 @@ class ProfileScreen extends StatelessWidget {
   Widget _buildMenuItem({
     required IconData icon,
     required String title,
-    required String subtitle,
-    required Color color,
-    required VoidCallback onTap,
-    bool isDestructive = false,
+    Widget? trailing,
+    VoidCallback? onTap,
   }) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey[100]!),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.1),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: Offset(0, 1),
+          ),
+        ],
       ),
       child: ListTile(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        leading: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Icon(
-            icon,
-            color: color,
-            size: 24,
-          ),
+        leading: Icon(
+          icon,
+          color: Colors.grey[600],
+          size: 24,
         ),
         title: Text(
           title,
           style: TextStyle(
             fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.black87,
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
           ),
         ),
-        subtitle: Text(
-          subtitle,
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.grey[600],
-          ),
-        ),
-        trailing: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.grey[100],
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Icon(
-            Icons.arrow_forward_ios,
-            size: 16,
-            color: Colors.grey[600],
-          ),
+        trailing: trailing ?? Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+          color: Colors.grey[400],
         ),
         onTap: onTap,
       ),
@@ -456,3 +337,4 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
+

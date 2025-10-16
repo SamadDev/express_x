@@ -57,7 +57,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
-            margin: const EdgeInsets.all(20),
+            // margin: const EdgeInsets.all(20),
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
               color: Colors.white,
@@ -89,54 +89,50 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 
   Widget _buildHeader() {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Choose your plan',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
+        Text(
+          'Choose your plan',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.black87,
+          ),
+        ),
+        SizedBox(height: 8),
+        Row(
+          children: [
+            Text(
+              '14 days free trial',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.grey[700],
+                fontWeight: FontWeight.w500,
               ),
-              SizedBox(height: 8),
-              Row(
-                children: [
-                  Text(
-                    '14 days free trial',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.black87,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: Colors.green,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Icon(
-                      Icons.local_offer,
-                      color: Colors.white,
-                      size: 16,
-                    ),
-                  ),
-                ],
+            ),
+            SizedBox(width: 8),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.circular(8),
               ),
-              SizedBox(height: 8),
-              Text(
-                'Get the right plan for your business. Plans can be upgraded in the future.',
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey[600],
-                ),
+              child: Icon(
+                Icons.local_offer,
+                color: Colors.white,
+                size: 12,
               ),
-            ],
+            ),
+          ],
+        ),
+        SizedBox(height: 12),
+        Text(
+          'Get the right plan for your business. Plans can be upgraded in the future.',
+          style: TextStyle(
+            fontSize: 13,
+            color: Colors.grey[600],
+            height: 1.4,
           ),
         ),
       ],
@@ -245,88 +241,90 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             Row(
               children: [
                 Container(
-                  width: 8,
-                  height: 8,
+                  width: 6,
+                  height: 6,
                   decoration: BoxDecoration(
                     color: plan.color,
                     shape: BoxShape.circle,
                   ),
                 ),
-                SizedBox(width: 12),
+                SizedBox(width: 10),
                 Text(
                   plan.name,
                   style: TextStyle(
-                    fontSize: 18,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                    color: Colors.black87,
                   ),
                 ),
                 Spacer(),
                 if (isPopular)
                   Container(
-                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
                       color: Colors.green,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       'POPULAR',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 12,
+                        fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 16),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
                   price,
                   style: TextStyle(
-                    fontSize: 32,
+                    fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: Colors.black87,
                   ),
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: 6),
                 Text(
                   _isMonthly ? '/ month' : '/ year',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     color: Colors.grey[600],
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 24),
+            SizedBox(height: 20),
             ...plan.features.map((feature) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.only(bottom: 12),
               child: Row(
                 children: [
                   Icon(
                     Icons.add,
                     color: Colors.orange,
-                    size: 18,
+                    size: 16,
                   ),
-                  SizedBox(width: 12),
+                  SizedBox(width: 10),
                   Expanded(
                     child: Text(
                       feature,
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: Colors.grey[700],
                         fontWeight: FontWeight.w500,
+                        height: 1.3,
                       ),
                     ),
                   ),
                 ],
               ),
             )),
-            SizedBox(height: 24),
+            SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -340,17 +338,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   foregroundColor: isSelected ? Colors.white : Colors.green,
                   side: BorderSide(
                     color: Colors.green,
-                    width: isSelected ? 0 : 2,
+                    width: isSelected ? 0 : 1.5,
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                   ),
                 ),
                 child: Text(
                   'Get Plan',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
                 ),

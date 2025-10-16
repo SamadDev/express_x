@@ -56,14 +56,17 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
-      body: Stack(
-        children: [
-          _screens[_selectedIndex],
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: _buildAnimatedNavigationBar(),
-          ),
-        ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Stack(
+          children: [
+            _screens[_selectedIndex],
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: _buildAnimatedNavigationBar(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -74,10 +77,7 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
       duration: const Duration(milliseconds: 400),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(_selectedIndex == 0 ? 0.0 : 20.0),
-          topRight: Radius.circular(_selectedIndex == _navigationItems.length - 1 ? 0.0 : 20.0),
-        ),
+        borderRadius: BorderRadius.circular(15),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
@@ -87,18 +87,15 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
           ),
         ],
       ),
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            for (int i = 0; i < _navigationItems.length; i++)
-              GestureDetector(
-                onTap: () => setState(() => _selectedIndex = i),
-                child: _buildIconButton(i),
-              ),
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          for (int i = 0; i < _navigationItems.length; i++)
+            GestureDetector(
+              onTap: () => setState(() => _selectedIndex = i),
+              child: _buildIconButton(i),
+            ),
+        ],
       ),
     );
   }
