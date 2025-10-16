@@ -3,7 +3,8 @@ import 'package:x_express/features/home/address/pages/address_home.dart';
 import 'package:x_express/features/home/advertisement/advertisement.dart';
 import 'package:x_express/features/home/logistic/pages/logistic_list.dart';
 import 'package:x_express/features/StoreFeatures/store_webview.dart';
-import 'package:x_express/features/home/services/store_service.dart';
+import 'package:x_express/features/home/services/tab_service.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class NewHomeScreen extends StatefulWidget {
   const NewHomeScreen({super.key});
@@ -15,38 +16,27 @@ class NewHomeScreen extends StatefulWidget {
 class _NewHomeScreenState extends State<NewHomeScreen> {
   final PageController _pageController = PageController();
   int _selectedIndex = 0;
-  List<Store> _stores = [];
+  List<TabItem> _tabs = [];
   bool _isLoading = true;
-
-  final List<String> _tabs = [
-    'US-A',
-    'Dubai',
-    'US-A',
-    'Turkey',
-    'Dubai',
-    'US-A',
-    'Canada',
-    'UK',
-  ];
 
   @override
   void initState() {
     super.initState();
-    _loadStores();
+    _loadTabs();
   }
 
-  Future<void> _loadStores() async {
+  Future<void> _loadTabs() async {
     try {
-      final stores = await StoreService.fetchStores();
+      final tabs = await TabService.fetchTabs();
       setState(() {
-        _stores = stores;
+        _tabs = tabs;
         _isLoading = false;
       });
     } catch (e) {
       setState(() {
         _isLoading = false;
       });
-      print('Error loading stores: $e');
+      print('Error loading tabs: $e');
     }
   }
 
@@ -57,6 +47,29 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   }
 
   Widget customTabWidget() {
+    if (_isLoading) {
+      return Container(
+        height: 48,
+        child: Center(
+          child: CircularProgressIndicator(
+            color: Color(0xFF5C3A9E),
+          ),
+        ),
+      );
+    }
+
+    if (_tabs.isEmpty) {
+      return Container(
+        height: 48,
+        child: Center(
+          child: Text(
+            'No tabs available. Please check your connection.',
+            style: TextStyle(color: Colors.grey[600]),
+          ),
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 0),
       child: Column(
@@ -86,7 +99,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                         ),
                       )),
                       child: Text(
-                        _tabs[index],
+                        _tabs[index].name,
                         style: TextStyle(
                           color: _selectedIndex == index ? Color(0xff5d3ebd) : Colors.grey,
                           fontSize: 16,
@@ -113,10 +126,25 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
       );
     }
 
-    if (_stores.isEmpty) {
+    if (_tabs.isEmpty || _selectedIndex >= _tabs.length) {
       return Center(
         child: Text(
-          'No stores available',
+          'No stores available. Please check your connection.',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey[600],
+          ),
+        ),
+      );
+    }
+
+    final selectedTab = _tabs[_selectedIndex];
+    final stores = selectedTab.stores;
+
+    if (stores.isEmpty) {
+      return Center(
+        child: Text(
+          'No stores available for ${selectedTab.name}',
           style: TextStyle(
             fontSize: 16,
             color: Colors.grey[600],
@@ -134,9 +162,9 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
         mainAxisSpacing: 12,
         crossAxisSpacing: 4,
       ),
-      itemCount: _stores.length,
+      itemCount: stores.length,
       itemBuilder: (context, index) {
-        final store = _stores[index];
+        final store = stores[index];
         return _BrandLogo(
           name: store.name,
           image: store.image,
@@ -145,9 +173,9 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => StoreWebViewScreen(
-                  storeUrl: store.url,
+                  storeUrl: store.websiteUrl,
                   storeName: store.name,
-                  baseUrl: store.baseUrl,
+                  baseUrl: store.websiteUrl,
                 ),
               ),
             );
@@ -329,11 +357,28 @@ class _BrandLogo extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset(
-              "assets/images/$image",
+            Container(
               height: 60,
               width: 60,
-              fit: BoxFit.fill,
+              child: image.startsWith('http')
+                  ? CachedNetworkImage(
+                      imageUrl: image,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => Container(
+                        color: Colors.grey[200],
+                        child: Icon(Icons.store, color: Colors.grey[400]),
+                      ),
+                      errorWidget: (context, url, error) => Container(
+                        color: Colors.grey[200],
+                        child: Icon(Icons.store, color: Colors.grey[400]),
+                      ),
+                    )
+                  : Image.asset(
+                      "assets/images/$image",
+                      height: 60,
+                      width: 60,
+                      fit: BoxFit.cover,
+                    ),
             ),
             Text(
               name,
