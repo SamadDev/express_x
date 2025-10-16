@@ -87,15 +87,18 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
           ),
         ],
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          for (int i = 0; i < _navigationItems.length; i++)
-            GestureDetector(
-              onTap: () => setState(() => _selectedIndex = i),
-              child: _buildIconButton(i),
-            ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            for (int i = 0; i < _navigationItems.length; i++)
+              GestureDetector(
+                onTap: () => setState(() => _selectedIndex = i),
+                child: _buildIconButton(i),
+              ),
+          ],
+        ),
       ),
     );
   }
