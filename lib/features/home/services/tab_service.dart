@@ -2,19 +2,19 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:x_express/core/config/constant/api.dart';
 
-class Tab {
+class TabItem {
   final String name;
   final String id;
   final String? description;
 
-  Tab({
+  TabItem({
     required this.name,
     required this.id,
     this.description,
   });
 
-  factory Tab.fromJson(Map<String, dynamic> json) {
-    return Tab(
+  factory TabItem.fromJson(Map<String, dynamic> json) {
+    return TabItem(
       name: json['name'] ?? '',
       id: json['id'] ?? '',
       description: json['description'],
@@ -23,7 +23,7 @@ class Tab {
 }
 
 class TabService {
-  static Future<List<Tab>> fetchTabs() async {
+  static Future<List<TabItem>> fetchTabs() async {
     try {
       final response = await http.get(
         Uri.parse('${AppUrl.baseURL}tabs'),
@@ -34,7 +34,7 @@ class TabService {
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        return data.map((json) => Tab.fromJson(json)).toList();
+        return data.map((json) => TabItem.fromJson(json)).toList();
       } else {
         // Return default tabs if API fails
         return _getDefaultTabs();
@@ -46,13 +46,13 @@ class TabService {
     }
   }
 
-  static List<Tab> _getDefaultTabs() {
+  static List<TabItem> _getDefaultTabs() {
     return [
-      Tab(name: 'US-A', id: 'us-a'),
-      Tab(name: 'Dubai', id: 'dubai'),
-      Tab(name: 'Turkey', id: 'turkey'),
-      Tab(name: 'Canada', id: 'canada'),
-      Tab(name: 'UK', id: 'uk'),
+      TabItem(name: 'US-A', id: 'us-a'),
+      TabItem(name: 'Dubai', id: 'dubai'),
+      TabItem(name: 'Turkey', id: 'turkey'),
+      TabItem(name: 'Canada', id: 'canada'),
+      TabItem(name: 'UK', id: 'uk'),
     ];
   }
 }

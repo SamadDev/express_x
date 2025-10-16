@@ -16,7 +16,7 @@ class HomePageNew extends StatefulWidget {
 class _HomePageNewState extends State<HomePageNew> {
   final PageController _pageController = PageController();
   int _selectedIndex = 0;
-  List<Tab> _tabs = [];
+  List<TabItem> _tabs = [];
   List<Store> _stores = [];
   bool _isLoadingTabs = true;
   bool _isLoadingStores = true;
