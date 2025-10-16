@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:x_express/features/home/services/tab_service.dart';
+import 'package:x_express/features/home/services/data_cache_service.dart';
 import 'package:x_express/features/StoreFeatures/store_webview.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
@@ -26,10 +26,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Future<void> _loadData() async {
     try {
-      final tabs = await TabService.fetchTabs();
+      final tabs = await DataCacheService.instance.getTabs();
+      final allStores = await DataCacheService.instance.getAllStores();
       setState(() {
         _tabs = tabs;
-        _allStores = tabs.expand((tab) => tab.stores).toList();
+        _allStores = allStores;
         _filteredStores = _allStores;
         _isLoading = false;
       });

@@ -3,7 +3,7 @@ import 'package:x_express/features/home/address/pages/address_home.dart';
 import 'package:x_express/features/home/advertisement/advertisement.dart';
 import 'package:x_express/features/home/logistic/pages/logistic_list.dart';
 import 'package:x_express/features/StoreFeatures/store_webview.dart';
-import 'package:x_express/features/home/services/tab_service.dart';
+import 'package:x_express/features/home/services/data_cache_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class NewHomeScreen extends StatefulWidget {
@@ -27,7 +27,7 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
 
   Future<void> _loadTabs() async {
     try {
-      final tabs = await TabService.fetchTabs();
+      final tabs = await DataCacheService.instance.getTabs();
       setState(() {
         _tabs = tabs;
         _isLoading = false;
