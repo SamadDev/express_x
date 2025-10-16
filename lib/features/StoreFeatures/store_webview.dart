@@ -331,12 +331,24 @@ class _ProductDialog extends StatefulWidget {
 }
 
 class _ProductDialogState extends State<_ProductDialog> {
-  String? selectedSize;
-  String? selectedColor;
-  int quantity = 1;
+  final TextEditingController _sizeController = TextEditingController();
+  final TextEditingController _colorController = TextEditingController();
 
-  final List<String> sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
-  final List<String> colors = ['Black', 'White', 'Red', 'Blue', 'Green', 'Yellow'];
+  bool _isValidImageUrl(String url) {
+    try {
+      final uri = Uri.parse(url);
+      return uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https') && uri.host.isNotEmpty;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _sizeController.dispose();
+    _colorController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -350,7 +362,7 @@ class _ProductDialogState extends State<_ProductDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Product Image
-            if (widget.productImage != null)
+            if (widget.productImage != null && _isValidImageUrl(widget.productImage!))
               Container(
                 height: 200,
                 width: double.infinity,
@@ -359,7 +371,24 @@ class _ProductDialogState extends State<_ProductDialog> {
                   image: DecorationImage(
                     image: NetworkImage(widget.productImage!),
                     fit: BoxFit.cover,
+                    onError: (exception, stackTrace) {
+                      print('Image loading error: $exception');
+                    },
                   ),
+                ),
+              )
+            else if (widget.productImage != null)
+              Container(
+                height: 200,
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.grey[200],
+                ),
+                child: Icon(
+                  Icons.image_not_supported,
+                  size: 50,
+                  color: Colors.grey[400],
                 ),
               ),
             SizedBox(height: 16),
@@ -376,121 +405,39 @@ class _ProductDialogState extends State<_ProductDialog> {
             ),
             SizedBox(height: 20),
             
-            // Size Selection
-            Text(
-              'Select Size',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
+            // Size Text Field
+            TextField(
+              controller: _sizeController,
+              decoration: InputDecoration(
+                labelText: 'Size',
+                hintText: 'Enter size (e.g., M, L, XL)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Color(0xff5d3ebd), width: 2),
+                ),
+                prefixIcon: Icon(Icons.straighten, color: Color(0xff5d3ebd)),
               ),
             ),
-            SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              children: sizes.map((size) {
-                final isSelected = selectedSize == size;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedSize = size;
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isSelected ? Color(0xff5d3ebd) : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: isSelected ? Color(0xff5d3ebd) : Colors.grey[300]!,
-                      ),
-                    ),
-                    child: Text(
-                      size,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black87,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 20),
+            SizedBox(height: 16),
             
-            // Color Selection
-            Text(
-              'Select Color',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: Colors.black87,
+            // Color Text Field
+            TextField(
+              controller: _colorController,
+              decoration: InputDecoration(
+                labelText: 'Color',
+                hintText: 'Enter color (e.g., Black, Red, Blue)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(color: Color(0xff5d3ebd), width: 2),
+                ),
+                prefixIcon: Icon(Icons.palette, color: Color(0xff5d3ebd)),
               ),
-            ),
-            SizedBox(height: 12),
-            Wrap(
-              spacing: 8,
-              children: colors.map((color) {
-                final isSelected = selectedColor == color;
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedColor = color;
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: isSelected ? Color(0xff5d3ebd) : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(
-                        color: isSelected ? Color(0xff5d3ebd) : Colors.grey[300]!,
-                      ),
-                    ),
-                    child: Text(
-                      color,
-                      style: TextStyle(
-                        color: isSelected ? Colors.white : Colors.black87,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 20),
-            
-            // Quantity Selection
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Quantity: ',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black87,
-                  ),
-                ),
-                IconButton(
-                  onPressed: quantity > 1 ? () => setState(() => quantity--) : null,
-                  icon: Icon(Icons.remove_circle_outline),
-                  color: quantity > 1 ? Color(0xff5d3ebd) : Colors.grey,
-                ),
-                Text(
-                  '$quantity',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black87,
-                  ),
-                ),
-                IconButton(
-                  onPressed: () => setState(() => quantity++),
-                  icon: Icon(Icons.add_circle_outline),
-                  color: Color(0xff5d3ebd),
-                ),
-              ],
             ),
             SizedBox(height: 24),
             
@@ -512,7 +459,7 @@ class _ProductDialogState extends State<_ProductDialog> {
                 SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: selectedSize != null && selectedColor != null
+                    onPressed: _sizeController.text.isNotEmpty && _colorController.text.isNotEmpty
                         ? () {
                             // Add to bag logic here
                             Navigator.pop(context);
