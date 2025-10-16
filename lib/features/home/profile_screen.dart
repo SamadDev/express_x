@@ -321,6 +321,52 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  void _showEditProfileDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Edit Profile'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                labelText: 'Phone Number',
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Profile updated successfully!')),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color(0xFF5C3A9E),
+              foregroundColor: Colors.white,
+            ),
+            child: Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showFeatureDialog(BuildContext context, String title, String message) {
     showDialog(
       context: context,
