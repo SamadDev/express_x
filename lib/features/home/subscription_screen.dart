@@ -197,11 +197,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   }
 
   Widget _buildPlansGrid() {
-    return Row(
+    return Column(
       children: _plans.asMap().entries.map((entry) {
         final index = entry.key;
         final plan = entry.value;
-        return Expanded(
+        return Container(
+          margin: EdgeInsets.only(bottom: 16),
           child: _buildPlanCard(plan, index),
         );
       }).toList(),
@@ -220,8 +221,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         });
       },
       child: Container(
-        margin: EdgeInsets.only(right: index < _plans.length - 1 ? 16 : 0),
-        padding: EdgeInsets.all(20),
+        width: double.infinity,
+        padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
@@ -233,7 +234,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             BoxShadow(
               color: Colors.grey.withOpacity(0.1),
               spreadRadius: 1,
-              blurRadius: 5,
+              blurRadius: 8,
               offset: Offset(0, 2),
             ),
           ],
@@ -251,62 +252,81 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                     shape: BoxShape.circle,
                   ),
                 ),
-                SizedBox(width: 8),
+                SizedBox(width: 12),
                 Text(
                   plan.name,
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
                   ),
                 ),
+                Spacer(),
+                if (isPopular)
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: Colors.green,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      'POPULAR',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
               ],
             ),
-            SizedBox(height: 16),
+            SizedBox(height: 20),
             Row(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
                   price,
                   style: TextStyle(
-                    fontSize: 24,
+                    fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
+                SizedBox(width: 8),
                 Text(
                   _isMonthly ? '/ month' : '/ year',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     color: Colors.grey[600],
                   ),
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 24),
             ...plan.features.map((feature) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.only(bottom: 16),
               child: Row(
                 children: [
                   Icon(
                     Icons.add,
                     color: Colors.orange,
-                    size: 16,
+                    size: 18,
                   ),
-                  SizedBox(width: 8),
+                  SizedBox(width: 12),
                   Expanded(
                     child: Text(
                       feature,
                       style: TextStyle(
-                        fontSize: 14,
+                        fontSize: 16,
                         color: Colors.grey[700],
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                   ),
                 ],
               ),
             )),
-            SizedBox(height: 20),
+            SizedBox(height: 24),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
@@ -320,17 +340,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   foregroundColor: isSelected ? Colors.white : Colors.green,
                   side: BorderSide(
                     color: Colors.green,
-                    width: isSelected ? 0 : 1,
+                    width: isSelected ? 0 : 2,
                   ),
-                  padding: EdgeInsets.symmetric(vertical: 12),
+                  padding: EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: Text(
                   'Get Plan',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
