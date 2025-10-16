@@ -46,6 +46,13 @@ class _HomePageNewState extends State<HomePageNew> {
     }
   }
 
+  void _retryLoadTabs() {
+    setState(() {
+      _isLoading = true;
+    });
+    _loadTabs();
+  }
+
   Widget customTabWidget() {
     if (_isLoading) {
       return Container(
@@ -62,9 +69,23 @@ class _HomePageNewState extends State<HomePageNew> {
       return Container(
         height: 48,
         child: Center(
-          child: Text(
-            'No tabs available',
-            style: TextStyle(color: Colors.grey[600]),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                'No tabs available. Please check your connection.',
+                style: TextStyle(color: Colors.grey[600]),
+              ),
+              SizedBox(height: 8),
+              ElevatedButton(
+                onPressed: _retryLoadTabs,
+                child: Text('Retry'),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF5C3A9E),
+                  foregroundColor: Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
       );
@@ -128,12 +149,26 @@ class _HomePageNewState extends State<HomePageNew> {
 
     if (_tabs.isEmpty || _selectedIndex >= _tabs.length) {
       return Center(
-        child: Text(
-          'No stores available',
-          style: TextStyle(
-            fontSize: 16,
-            color: Colors.grey[600],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'No stores available. Please check your connection.',
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.grey[600],
+              ),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: _retryLoadTabs,
+              child: Text('Retry'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF5C3A9E),
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ],
         ),
       );
     }

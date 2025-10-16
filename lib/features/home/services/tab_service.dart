@@ -62,48 +62,12 @@ class TabService {
         final List<dynamic> data = responseData['data'] ?? [];
         return data.map((json) => TabItem.fromJson(json)).toList();
       } else {
-        // Return default tabs if API fails
-        return _getDefaultTabs();
+        print('API Error: ${response.statusCode} - ${response.body}');
+        return [];
       }
     } catch (e) {
       print('Error fetching tabs: $e');
-      // Return default tabs if API fails
-      return _getDefaultTabs();
+      return [];
     }
-  }
-
-  static List<TabItem> _getDefaultTabs() {
-    return [
-      TabItem(
-        name: 'USA',
-        id: '2',
-        stores: [
-          Store(
-            id: '1',
-            name: 'Amazon',
-            image: 'amazon.png',
-            websiteUrl: 'https://www.amazon.com',
-          ),
-          Store(
-            id: '2',
-            name: 'eBay',
-            image: 'ebay.png',
-            websiteUrl: 'https://www.ebay.com',
-          ),
-        ],
-      ),
-      TabItem(
-        name: 'China',
-        id: '3',
-        stores: [
-          Store(
-            id: '4',
-            name: 'AliExpress',
-            image: 'aliexpress.png',
-            websiteUrl: 'https://www.aliexpress.com',
-          ),
-        ],
-      ),
-    ];
   }
 }
