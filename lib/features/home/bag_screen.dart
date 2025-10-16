@@ -46,9 +46,9 @@ class BagScreen extends StatelessWidget {
               Expanded(
                 child: ListView.builder(
                   padding: const EdgeInsets.all(16),
-                  itemCount: bagService.items.length,
+                  itemCount: bagService.bagItems.length,
                   itemBuilder: (context, index) {
-                    final item = bagService.items[index];
+                    final item = bagService.bagItems[index];
                     return _buildBagItem(item, bagService);
                   },
                 ),
@@ -116,7 +116,7 @@ class BagScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBagItem(dynamic item, BagService bagService) {
+  Widget _buildBagItem(BagItem item, BagService bagService) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -154,7 +154,7 @@ class BagScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item['name'] ?? 'Store Item',
+                    item.name,
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
@@ -163,7 +163,7 @@ class BagScreen extends StatelessWidget {
                   ),
                   SizedBox(height: 4),
                   Text(
-                    item['description'] ?? 'Item from store',
+                    'Added ${_formatDate(item.addedAt)}',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey[600],
@@ -180,7 +180,7 @@ class BagScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        item['storeName'] ?? 'Unknown Store',
+                        item.storeName,
                         style: TextStyle(
                           fontSize: 12,
                           color: Color(0xFF5C3A9E),
@@ -195,23 +195,18 @@ class BagScreen extends StatelessWidget {
             Column(
               children: [
                 IconButton(
-                  icon: Icon(Icons.remove_circle_outline, color: Colors.red),
+                  icon: Icon(Icons.delete_outline, color: Colors.red),
                   onPressed: () {
-                    bagService.removeItem(item);
+                    bagService.removeFromBag(item.id);
                   },
                 ),
                 Text(
-                  '${item['quantity'] ?? 1}',
+                  'Remove',
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    color: Colors.red,
+                    fontWeight: FontWeight.w500,
                   ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.add_circle_outline, color: Colors.green),
-                  onPressed: () {
-                    bagService.addItem(item);
-                  },
                 ),
               ],
             ),
@@ -318,5 +313,20 @@ class BagScreen extends StatelessWidget {
   void _showCheckoutDialog() {
     // This would show a checkout dialog or navigate to checkout screen
     // For now, just show a placeholder
+  }
+
+  String _formatDate(DateTime date) {
+    final now = DateTime.now();
+    final difference = now.difference(date);
+
+    if (difference.inDays > 0) {
+      return '${difference.inDays} day${difference.inDays == 1 ? '' : 's'} ago';
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours} hour${difference.inHours == 1 ? '' : 's'} ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes} minute${difference.inMinutes == 1 ? '' : 's'} ago';
+    } else {
+      return 'Just now';
+    }
   }
 }
