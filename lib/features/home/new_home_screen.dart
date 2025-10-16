@@ -344,17 +344,17 @@ class _AppBarWidget extends StatelessWidget {
       backgroundColor: const Color(0xFF5C3A9E),
       title: Image.asset("assets/images/logo.png", height: 30),
       actions: [
-        Container(
-          margin: const EdgeInsets.only(right: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: const IconButton(
-            icon: Icon(Icons.shopping_basket_outlined, color: Color(0xFF5C3A9E)),
-            onPressed: null,
-          ),
-        ),
+        // Container(
+        //   margin: const EdgeInsets.only(right: 16),
+        //   decoration: BoxDecoration(
+        //     color: Colors.white,
+        //     borderRadius: BorderRadius.circular(8),
+        //   ),
+        //   child: const IconButton(
+        //     icon: Icon(Icons.shopping_basket_outlined, color: Color(0xFF5C3A9E)),
+        //     onPressed: null,
+        //   ),
+        // ),
       ],
     );
   }

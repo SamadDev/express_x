@@ -137,22 +137,46 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
                 ),
               ),
             ),
-          // Floating Action Button
+          // Custom Add to Bag Button
           Positioned(
             bottom: 20,
             right: 20,
-            child: FloatingActionButton.extended(
-              onPressed: () {
+            child: GestureDetector(
+              onTap: () {
                 _showAddToBagDialog();
               },
-              backgroundColor: Color(0xFFE91E63), // Pink color like Amazon
-              foregroundColor: Colors.white,
-              icon: Icon(Icons.shopping_bag),
-              label: Text(
-                'Add to Bag',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Color(0xff5d3ebd),
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Color(0xff5d3ebd).withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.shopping_bag,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Add to Bag',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
