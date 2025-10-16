@@ -380,76 +380,94 @@ class _ProductDialogState extends State<_ProductDialog> {
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.grey[100],
               ),
-              child: widget.productImage != null && _isValidImageUrl(widget.productImage!)
-                  ? ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: widget.productImage != null
+                    ? Image.network(
                         widget.productImage!,
                         fit: BoxFit.cover,
+                        width: double.infinity,
+                        height: 200,
                         loadingBuilder: (context, child, loadingProgress) {
                           if (loadingProgress == null) return child;
-                          return Center(
-                            child: CircularProgressIndicator(
-                              value: loadingProgress.expectedTotalBytes != null
-                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
-                                  : null,
-                              color: Color(0xff5d3ebd),
+                          return Container(
+                            height: 200,
+                            width: double.infinity,
+                            color: Colors.grey[100],
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(
+                                    value: loadingProgress.expectedTotalBytes != null
+                                        ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                        : null,
+                                    color: Color(0xff5d3ebd),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'Loading image...',
+                                    style: TextStyle(
+                                      color: Colors.grey[600],
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           );
                         },
                         errorBuilder: (context, error, stackTrace) {
                           print('Image loading error: $error');
+                          // Try to load the image anyway, even if it fails
                           return Container(
+                            height: 200,
+                            width: double.infinity,
                             decoration: BoxDecoration(
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.image_not_supported,
-                                  size: 50,
-                                  color: Colors.grey[400],
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Image not available',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 12,
+                            child: Image.network(
+                              widget.productImage!,
+                              fit: BoxFit.contain,
+                              errorBuilder: (context, error, stackTrace) {
+                                // Final fallback - show a simple placeholder without icons
+                                return Container(
+                                  height: 200,
+                                  width: double.infinity,
+                                  color: Colors.grey[100],
+                                  child: Center(
+                                    child: Text(
+                                      'Product Image',
+                                      style: TextStyle(
+                                        color: Colors.grey[500],
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ],
+                                );
+                              },
                             ),
                           );
                         },
-                      ),
-                    )
-                  : Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.image,
-                            size: 50,
-                            color: Colors.grey[400],
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'No product image',
+                      )
+                    : Container(
+                        height: 200,
+                        width: double.infinity,
+                        color: Colors.grey[100],
+                        child: Center(
+                          child: Text(
+                            'Product Image',
                             style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 12,
+                              color: Colors.grey[500],
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
-                        ],
+                        ),
                       ),
-                    ),
+              ),
             ),
             SizedBox(height: 16),
             
@@ -527,19 +545,33 @@ class _ProductDialogState extends State<_ProductDialog> {
                               SnackBar(
                                 content: Row(
                                   children: [
-                                    if (widget.productImage != null && _isValidImageUrl(widget.productImage!))
+                                    if (widget.productImage != null)
                                       Container(
                                         width: 30,
                                         height: 30,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(4),
-                                          image: DecorationImage(
-                                            image: NetworkImage(widget.productImage!),
+                                          color: Colors.white,
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(4),
+                                          child: Image.network(
+                                            widget.productImage!,
                                             fit: BoxFit.cover,
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return Container(
+                                                color: Colors.grey[200],
+                                                child: Icon(
+                                                  Icons.shopping_bag,
+                                                  size: 16,
+                                                  color: Colors.grey[600],
+                                                ),
+                                              );
+                                            },
                                           ),
                                         ),
                                       ),
-                                    if (widget.productImage != null && _isValidImageUrl(widget.productImage!))
+                                    if (widget.productImage != null)
                                       SizedBox(width: 12),
                                     Expanded(
                                       child: Text(
