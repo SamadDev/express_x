@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
+import 'package:x_express/core/config/theme/color.dart';
 
 class SubscriptionScreen extends StatefulWidget {
   const SubscriptionScreen({super.key});
@@ -22,7 +24,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         'Up to 5 projects',
       ],
       isPopular: false,
-      color: Colors.purple,
+      color: kLightPrimary,
     ),
     SubscriptionPlan(
       name: 'Standard Plan',
@@ -34,7 +36,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         'Up to 10 projects',
       ],
       isPopular: true,
-      color: Colors.green,
+      color: kLightPrimary,
     ),
     SubscriptionPlan(
       name: 'Premium Plan',
@@ -46,7 +48,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         'Permanent Membership',
       ],
       isPopular: false,
-      color: Colors.purple,
+      color: kLightPrimary,
     ),
   ];
 
@@ -156,7 +158,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: _isMonthly ? Colors.green : Colors.transparent,
+                    color: _isMonthly ? kLightPrimary : Colors.transparent,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Text(
@@ -173,7 +175,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: !_isMonthly ? Colors.green : Colors.transparent,
+                    color: !_isMonthly ? kLightPrimary : Colors.transparent,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Text(
@@ -223,7 +225,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? Colors.green : Colors.grey[200]!,
+            color: isSelected ? kLightPrimary : Colors.grey[200]!,
             width: isSelected ? 2 : 1,
           ),
           boxShadow: [
@@ -262,7 +264,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   Container(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color: kLightPrimary,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
@@ -334,10 +336,10 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isSelected ? Colors.green : Colors.white,
-                  foregroundColor: isSelected ? Colors.white : Colors.green,
+                  backgroundColor: isSelected ? kLightPrimary : Colors.white,
+                  foregroundColor: isSelected ? Colors.white : kLightPrimary,
                   side: BorderSide(
-                    color: Colors.green,
+                    color: kLightPrimary,
                     width: isSelected ? 0 : 1.5,
                   ),
                   padding: EdgeInsets.symmetric(vertical: 12),

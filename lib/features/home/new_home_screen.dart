@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:x_express/features/home/address/pages/address_home.dart';
 import 'package:x_express/features/home/advertisement/advertisement.dart';
 import 'package:x_express/features/home/logistic/pages/logistic_list.dart';
@@ -51,9 +52,16 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
     if (_isLoading) {
       return Container(
         height: 48,
-        child: Center(
-          child: CircularProgressIndicator(
-            color: Color(0xFF5C3A9E),
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            height: 30,
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
           ),
         ),
       );
@@ -120,9 +128,30 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
 
   Widget getSelectedTabContent() {
     if (_isLoading) {
-      return Center(
-        child: CircularProgressIndicator(
-          color: Color(0xFF5C3A9E),
+      return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: GridView.builder(
+          shrinkWrap: true,
+          physics: NeverScrollableScrollPhysics(),
+          padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 4,
+          ),
+          itemCount: 8,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 4),
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            );
+          },
         ),
       );
     }

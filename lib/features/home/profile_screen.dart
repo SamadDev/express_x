@@ -28,7 +28,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: _buildBottomNav(),
     );
   }
 
@@ -313,91 +312,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildBottomNav() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: Color(0xFFEEEEEE),
-            width: 1,
-          ),
-        ),
-      ),
-      child: BottomNavigationBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _selectedNavIndex,
-        selectedItemColor: Color(0xFFE8738F),
-        unselectedItemColor: Color(0xFFBBBBBB),
-        selectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
-        unselectedLabelStyle: TextStyle(fontSize: 11, fontWeight: FontWeight.w400),
-        onTap: (index) {
-          setState(() {
-            _selectedNavIndex = index;
-          });
-        },
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined),
-            activeIcon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.store_outlined),
-            activeIcon: Icon(Icons.store),
-            label: 'Stores',
-          ),
-          BottomNavigationBarItem(
-            icon: _buildBadgeIcon(Icons.shopping_bag_outlined),
-            label: 'My Bag',
-          ),
-          BottomNavigationBarItem(
-            icon: _buildBadgeIcon(Icons.shopping_cart_outlined),
-            label: 'My Orders',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline),
-            activeIcon: Icon(Icons.person),
-            label: 'Account',
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBadgeIcon(IconData icon) {
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Icon(icon),
-        Positioned(
-          right: -6,
-          top: -6,
-          child: Container(
-            width: 16,
-            height: 16,
-            decoration: BoxDecoration(
-              color: Color(0xFFFF5555),
-              shape: BoxShape.circle,
-            ),
-            child: Center(
-              child: Text(
-                '1',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 10,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

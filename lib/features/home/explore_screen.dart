@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:x_express/features/home/services/data_cache_service.dart';
 import 'package:x_express/features/home/services/tab_service.dart';
 import 'package:x_express/features/StoreFeatures/store_webview.dart';
@@ -133,8 +134,17 @@ class _ExploreScreenState extends State<ExploreScreen> {
     if (_isLoading) {
       return Container(
         height: 50,
-        child: Center(
-          child: CircularProgressIndicator(color: Color(0xFF5C3A9E)),
+        child: Shimmer.fromColors(
+          baseColor: Colors.grey[300]!,
+          highlightColor: Colors.grey[100]!,
+          child: Container(
+            height: 30,
+            margin: EdgeInsets.symmetric(horizontal: 16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
         ),
       );
     }
@@ -179,8 +189,29 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Widget _buildStoresGrid() {
     if (_isLoading) {
-      return Center(
-        child: CircularProgressIndicator(color: Color(0xFF5C3A9E)),
+      return Shimmer.fromColors(
+        baseColor: Colors.grey[300]!,
+        highlightColor: Colors.grey[100]!,
+        child: GridView.builder(
+          padding: const EdgeInsets.all(16),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            mainAxisSpacing: 12,
+            crossAxisSpacing: 4,
+          ),
+          itemCount: 8,
+          itemBuilder: (context, index) {
+            return Container(
+              margin: EdgeInsets.symmetric(horizontal: 4),
+              width: 70,
+              height: 70,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+            );
+          },
+        ),
       );
     }
 

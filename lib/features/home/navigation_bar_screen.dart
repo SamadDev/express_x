@@ -66,8 +66,8 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.store, size: 20),
-            activeIcon: FaIcon(FontAwesomeIcons.store, size: 20),
+            icon: FaIcon(FontAwesomeIcons.compass, size: 20),
+            activeIcon: FaIcon(FontAwesomeIcons.compass, size: 20),
             label: 'Stores',
           ),
           BottomNavigationBarItem(
