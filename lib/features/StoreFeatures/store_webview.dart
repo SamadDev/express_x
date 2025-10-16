@@ -277,9 +277,20 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
         var img = document.querySelector('img[data-testid="product-image"]') ||
                   document.querySelector('.product-image img') ||
                   document.querySelector('#landingImage') ||
+                  document.querySelector('#imgTagWrapperId img') ||
+                  document.querySelector('.a-dynamic-image') ||
                   document.querySelector('img[alt*="product"]') ||
-                  document.querySelector('img[src*="product"]');
-        img ? img.src : '';
+                  document.querySelector('img[src*="product"]') ||
+                  document.querySelector('img[src*="amazon"]') ||
+                  document.querySelector('img[src*="ebay"]') ||
+                  document.querySelector('img[src*="walmart"]') ||
+                  document.querySelector('img[src*="aliexpress"]') ||
+                  document.querySelector('img[src*="shein"]') ||
+                  document.querySelector('img[src*="trendyol"]') ||
+                  document.querySelector('img[src*="zara"]') ||
+                  document.querySelector('img[data-src]') ||
+                  document.querySelector('img[src]');
+        img ? (img.src || img.getAttribute('data-src') || img.getAttribute('src')) : '';
       """);
       
       setState(() {
@@ -362,35 +373,84 @@ class _ProductDialogState extends State<_ProductDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             // Product Image
-            if (widget.productImage != null && _isValidImageUrl(widget.productImage!))
-              Container(
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    image: NetworkImage(widget.productImage!),
-                    fit: BoxFit.cover,
-                    onError: (exception, stackTrace) {
-                      print('Image loading error: $exception');
-                    },
-                  ),
-                ),
-              )
-            else if (widget.productImage != null)
-              Container(
-                height: 200,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.grey[200],
-                ),
-                child: Icon(
-                  Icons.image_not_supported,
-                  size: 50,
-                  color: Colors.grey[400],
-                ),
+            Container(
+              height: 200,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: Colors.grey[100],
               ),
+              child: widget.productImage != null && _isValidImageUrl(widget.productImage!)
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        widget.productImage!,
+                        fit: BoxFit.cover,
+                        loadingBuilder: (context, child, loadingProgress) {
+                          if (loadingProgress == null) return child;
+                          return Center(
+                            child: CircularProgressIndicator(
+                              value: loadingProgress.expectedTotalBytes != null
+                                  ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                                  : null,
+                              color: Color(0xff5d3ebd),
+                            ),
+                          );
+                        },
+                        errorBuilder: (context, error, stackTrace) {
+                          print('Image loading error: $error');
+                          return Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.image_not_supported,
+                                  size: 50,
+                                  color: Colors.grey[400],
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Image not available',
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 12,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    )
+                  : Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.image,
+                            size: 50,
+                            color: Colors.grey[400],
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'No product image',
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 12,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+            ),
             SizedBox(height: 16),
             
             // Product Title
@@ -465,8 +525,32 @@ class _ProductDialogState extends State<_ProductDialog> {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Added to bag: ${widget.productTitle}'),
+                                content: Row(
+                                  children: [
+                                    if (widget.productImage != null && _isValidImageUrl(widget.productImage!))
+                                      Container(
+                                        width: 30,
+                                        height: 30,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(4),
+                                          image: DecorationImage(
+                                            image: NetworkImage(widget.productImage!),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                    if (widget.productImage != null && _isValidImageUrl(widget.productImage!))
+                                      SizedBox(width: 12),
+                                    Expanded(
+                                      child: Text(
+                                        'Added to bag: ${widget.productTitle}',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 backgroundColor: Color(0xff5d3ebd),
+                                duration: Duration(seconds: 3),
                               ),
                             );
                           }
