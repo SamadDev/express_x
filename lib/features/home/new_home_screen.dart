@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:x_express/core/config/widgets/safe_webview.dart';
 import 'package:x_express/features/home/address/pages/address_home.dart';
 import 'package:x_express/features/home/advertisement/advertisement.dart';
 import 'package:x_express/features/home/logistic/pages/logistic_list.dart';
 import 'package:x_express/features/StoreFeatures/store_webview.dart';
 import 'package:x_express/features/home/services/data_cache_service.dart';
 import 'package:x_express/features/home/services/tab_service.dart';
+import 'package:x_express/features/home/order_history_screen.dart';
+import 'package:x_express/features/home/bag_screen.dart';
+import 'package:x_express/features/Bag/bag_service.dart';
+import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class NewHomeScreen extends StatefulWidget {
@@ -30,14 +35,18 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   Future<void> _loadTabs() async {
     try {
       final tabs = await DataCacheService.instance.getTabs();
-      setState(() {
-        _tabs = tabs;
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _tabs = tabs;
+          _isLoading = false;
+        });
+      }
     } catch (e) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
       print('Error loading tabs: $e');
     }
   }
@@ -91,10 +100,12 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                 children: List.generate(_tabs.length, (index) {
                   return GestureDetector(
                     onTap: () {
-                      setState(() {
-                        _selectedIndex = index;
-                      });
-                      _pageController.jumpToPage(index);
+                      if (mounted) {
+                        setState(() {
+                          _selectedIndex = index;
+                        });
+                        _pageController.jumpToPage(index);
+                      }
                     },
                     child: Container(
                       margin: EdgeInsets.all(2),
@@ -218,6 +229,9 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(onPressed: (){
+        SafeWebView(initialUrl: '',);
+      }),
       backgroundColor: Colors.grey.shade50,
       appBar: PreferredSize(preferredSize: Size(double.infinity, 60), child: _AppBarWidget()),
       body: SingleChildScrollView(
@@ -344,17 +358,77 @@ class _AppBarWidget extends StatelessWidget {
       backgroundColor: const Color(0xFF5C3A9E),
       title: Image.asset("assets/images/logo.png", height: 30),
       actions: [
-        // Container(
-        //   margin: const EdgeInsets.only(right: 16),
-        //   decoration: BoxDecoration(
-        //     color: Colors.white,
-        //     borderRadius: BorderRadius.circular(8),
-        //   ),
-        //   child: const IconButton(
-        //     icon: Icon(Icons.shopping_basket_outlined, color: Color(0xFF5C3A9E)),
-        //     onPressed: null,
-        //   ),
-        // ),
+        // Bag Icon
+        Consumer<BagService>(
+          builder: (context, bagService, child) {
+            return Container(
+              margin: const EdgeInsets.only(right: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Stack(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.shopping_bag_outlined, color: Color(0xFF5C3A9E)),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => BagScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                  if (bagService.itemCount > 0)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        constraints: BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '${bagService.itemCount}',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+        // Order History Icon
+        Container(
+          margin: const EdgeInsets.only(right: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: IconButton(
+            icon: Icon(Icons.receipt_long_outlined, color: Color(0xFF5C3A9E)),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OrderHistoryScreen(),
+                ),
+              );
+            },
+          ),
+        ),
       ],
     );
   }

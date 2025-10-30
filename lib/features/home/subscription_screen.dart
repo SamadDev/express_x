@@ -55,21 +55,21 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+      backgroundColor: kLightBackground,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Container(
             // margin: const EdgeInsets.all(20),
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: kLightSurface,
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 1,
-                  blurRadius: 10,
-                  offset: Offset(0, 2),
+                  color: Colors.black.withOpacity(0.05),
+                  spreadRadius: 0,
+                  blurRadius: 20,
+                  offset: Offset(0, 4),
                 ),
               ],
             ),
@@ -99,7 +99,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.black87,
+            color: kLightText,
           ),
         ),
         SizedBox(height: 8),
@@ -109,7 +109,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
               '14 days free trial',
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[700],
+                color: kLightGrayText,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -117,7 +117,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
               decoration: BoxDecoration(
-                color: Colors.green,
+                color: kLightSuccess,
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Icon(
@@ -133,7 +133,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
           'Get the right plan for your business. Plans can be upgraded in the future.',
           style: TextStyle(
             fontSize: 13,
-            color: Colors.grey[600],
+            color: kLightGrayText,
             height: 1.4,
           ),
         ),
@@ -147,7 +147,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey[200],
+            color: kLightFill,
             borderRadius: BorderRadius.circular(25),
           ),
           child: Row(
@@ -158,13 +158,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: _isMonthly ? Color(0xff5d3ebd) : Colors.transparent,
+                    color: _isMonthly ? kLightPrimary : Colors.transparent,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Text(
                     'Monthly',
                     style: TextStyle(
-                      color: _isMonthly ? Colors.white : Colors.grey[700],
+                      color: _isMonthly ? Colors.white : kLightGrayText,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -175,13 +175,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   decoration: BoxDecoration(
-                    color: !_isMonthly ? Color(0xff5d3ebd) : Colors.transparent,
+                    color: !_isMonthly ? kLightPrimary : Colors.transparent,
                     borderRadius: BorderRadius.circular(25),
                   ),
                   child: Text(
                     'Yearly',
                     style: TextStyle(
-                      color: !_isMonthly ? Colors.white : Colors.grey[700],
+                      color: !_isMonthly ? Colors.white : kLightGrayText,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -222,17 +222,17 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
         width: double.infinity,
         padding: EdgeInsets.all(24),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: kLightSurface,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: isSelected ? Color(0xff5d3ebd) : Colors.grey[200]!,
+            color: isSelected ? kLightPrimary : kLightStroke,
             width: isSelected ? 2 : 1,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 8,
+              color: Colors.black.withOpacity(0.05),
+              spreadRadius: 0,
+              blurRadius: 10,
               offset: Offset(0, 2),
             ),
           ],
@@ -256,7 +256,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: Colors.black87,
+                    color: kLightText,
                   ),
                 ),
                 Spacer(),
@@ -287,7 +287,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: kLightText,
                   ),
                 ),
                 SizedBox(width: 6),
@@ -295,7 +295,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   _isMonthly ? '/ month' : '/ year',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.grey[600],
+                    color: kLightGrayText,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -308,7 +308,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                 children: [
                   Icon(
                     Icons.add,
-                    color: Colors.orange,
+                    color: kLightPrimary,
                     size: 16,
                   ),
                   SizedBox(width: 10),
@@ -317,7 +317,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                       feature,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Colors.grey[700],
+                        color: kLightGrayText,
                         fontWeight: FontWeight.w500,
                         height: 1.3,
                       ),
@@ -336,15 +336,15 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> {
                   });
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: isSelected ? Color(0xff5d3ebd) : Colors.white,
-                  foregroundColor: isSelected ? Colors.white : Color(0xff5d3ebd),
+                  backgroundColor: isSelected ? kLightPrimary : kLightSurface,
+                  foregroundColor: isSelected ? Colors.white : kLightPrimary,
                   side: BorderSide(
-                    color: Color(0xff5d3ebd),
+                    color: kLightPrimary,
                     width: isSelected ? 0 : 1.5,
                   ),
                   padding: EdgeInsets.symmetric(vertical: 12),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
                 child: Text(

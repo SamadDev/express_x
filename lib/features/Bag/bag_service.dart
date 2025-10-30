@@ -9,6 +9,8 @@ class BagItem {
   final String? imagePath;
   final DateTime addedAt;
   final String storeName;
+  final String? size;
+  final String? color;
 
   BagItem({
     required this.id,
@@ -16,6 +18,8 @@ class BagItem {
     this.imagePath,
     required this.addedAt,
     required this.storeName,
+    this.size,
+    this.color,
   });
 
   Map<String, dynamic> toJson() {
@@ -25,6 +29,8 @@ class BagItem {
       'imagePath': imagePath,
       'addedAt': addedAt.toIso8601String(),
       'storeName': storeName,
+      'size': size,
+      'color': color,
     };
   }
 
@@ -35,6 +41,8 @@ class BagItem {
       imagePath: json['imagePath'],
       addedAt: DateTime.parse(json['addedAt']),
       storeName: json['storeName'],
+      size: json['size'],
+      color: json['color'],
     );
   }
 }
@@ -80,6 +88,8 @@ class BagService with ChangeNotifier {
     required String name,
     String? imagePath,
     String storeName = 'Store',
+    String? size,
+    String? color,
   }) async {
     try {
       final bagItem = BagItem(
@@ -88,6 +98,8 @@ class BagService with ChangeNotifier {
         imagePath: imagePath,
         addedAt: DateTime.now(),
         storeName: storeName,
+        size: size,
+        color: color,
       );
 
       _bagItems.add(bagItem);

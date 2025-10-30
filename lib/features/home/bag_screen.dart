@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
+import 'package:x_express/features/home/services/order_service.dart';
+import 'package:x_express/features/home/order_history_screen.dart';
 
 class BagScreen extends StatelessWidget {
   const BagScreen({super.key});
@@ -53,7 +55,7 @@ class BagScreen extends StatelessWidget {
                   },
                 ),
               ),
-              _buildCheckoutSection(bagService),
+              _buildCheckoutSection(context, bagService),
             ],
           );
         },
@@ -216,7 +218,7 @@ class BagScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCheckoutSection(BagService bagService) {
+  Widget _buildCheckoutSection(BuildContext buildContext, BagService bagService) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -253,11 +255,12 @@ class BagScreen extends StatelessWidget {
             ],
           ),
           SizedBox(height: 16),
+          // Add Order Button
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                _showCheckoutDialog();
+                _addOrder(buildContext, bagService);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Color(0xFF5C3A9E),
@@ -268,7 +271,32 @@ class BagScreen extends StatelessWidget {
                 ),
               ),
               child: Text(
-                'Proceed to Checkout',
+                'Add Order',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 12),
+          // View Orders Button
+          SizedBox(
+            width: double.infinity,
+            child: OutlinedButton(
+              onPressed: () {
+                _viewOrders(buildContext);
+              },
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Color(0xFF5C3A9E),
+                side: BorderSide(color: Color(0xFF5C3A9E)),
+                padding: EdgeInsets.symmetric(vertical: 16),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: Text(
+                'View Order History',
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -310,9 +338,109 @@ class BagScreen extends StatelessWidget {
     );
   }
 
-  void _showCheckoutDialog() {
-    // This would show a checkout dialog or navigate to checkout screen
-    // For now, just show a placeholder
+  void _addOrder(BuildContext context, BagService bagService) {
+    // Show confirmation dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Add Order'),
+          content: Text('Are you sure you want to add this order with ${bagService.itemCount} item(s)?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+                _processOrder(context, bagService);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color(0xFF5C3A9E),
+                foregroundColor: Colors.white,
+              ),
+              child: Text('Add Order'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _processOrder(BuildContext context, BagService bagService) async {
+    // Get OrderService
+    final orderService = Provider.of<OrderService>(context, listen: false);
+    
+    // Show processing dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('Processing your order...'),
+            ],
+          ),
+        );
+      },
+    );
+
+    try {
+      // Create orders for each bag item
+      for (final item in bagService.bagItems) {
+        await orderService.createOrder(
+          productName: item.name,
+          storeName: item.storeName,
+          price: 29.99, // Mock price - in real app this would come from item data
+          description: 'Order from ${item.storeName}',
+        );
+      }
+
+      // Close loading dialog
+      if (context.mounted) {
+        Navigator.pop(context);
+        
+        // Show success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Order added successfully!'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 3),
+          ),
+        );
+
+        // Clear the bag after successful order
+        bagService.clearBag();
+      }
+    } catch (e) {
+      // Close loading dialog
+      if (context.mounted) {
+        Navigator.pop(context);
+        
+        // Show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error creating order: $e'),
+            backgroundColor: Colors.red,
+            duration: Duration(seconds: 3),
+          ),
+        );
+      }
+    }
+  }
+
+  void _viewOrders(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrderHistoryScreen(),
+      ),
+    );
   }
 
   String _formatDate(DateTime date) {

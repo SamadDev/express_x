@@ -13,7 +13,8 @@ class AppUrl {
     }
   }
 
-  static String login = '${_formattedBaseURL}Authentication';
+  static String login = '${_formattedBaseURL}login';
+  static String register = '${_formattedBaseURL}register';
   static String checkUserType = '${_formattedBaseURL}hr/mypage/employee/self-direct-reports';
   static String profile = '${_formattedBaseURL}hr/mypage/employee/profile';
   static String attendance = '${_formattedBaseURL}hr/mypage/attendance/self';

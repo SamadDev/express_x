@@ -91,7 +91,59 @@ class AuthService extends ChangeNotifier {
       notifyListeners();
       return true;
     } catch (e) {
-      _error = e.toString();
+      print('Login error: $e');
+      // Provide more user-friendly error messages
+      if (e.toString().contains('type \'Null\' is not a subtype')) {
+        _error = 'Invalid response from server. Please try again.';
+      } else if (e.toString().contains('RequestException')) {
+        _error = e.toString().replaceFirst('RequestException: ', '');
+      } else {
+        _error = 'Login failed. Please check your credentials and try again.';
+      }
+      _loginResponse = null;
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> register({
+    required String username,
+    required String phoneNumber,
+    required String password,
+  }) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      _loginResponse = await AuthRepository().register(
+        username: username,
+        phoneNumber: phoneNumber,
+        password: password,
+      );
+
+      if (_loginResponse != null) {
+        final jsonStr = json.encode(_loginResponse!.toJson());
+        await LocalStorage.saveUserData(
+          jsonData: jsonStr,
+          rememberMe: false,
+          credentialData: null,
+        );
+      }
+      await FetchUserType();
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      print('Register error: $e');
+      if (e.toString().contains('type \'Null\' is not a subtype')) {
+        _error = 'Invalid response from server. Please try again.';
+      } else if (e.toString().contains('RequestException')) {
+        _error = e.toString().replaceFirst('RequestException: ', '');
+      } else {
+        _error = 'Registration failed. Please check your information and try again.';
+      }
       _loginResponse = null;
       _isLoading = false;
       notifyListeners();

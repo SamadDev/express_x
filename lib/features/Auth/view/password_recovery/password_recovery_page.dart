@@ -137,7 +137,9 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                         label: "Phone Number",
                         hintText: "Enter your phone number",
                         onChanged: (phone, countryCode) {
-                          _phoneController.text = phone;
+                          // Remove spaces from phone number
+                          String cleanPhone = phone.replaceAll(' ', '');
+                          _phoneController.text = cleanPhone;
                         },
                       ),
                       

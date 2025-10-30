@@ -234,6 +234,26 @@ class _BagScreenState extends State<BagScreen> {
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 4),
+                  if (item.size != null && item.size!.isNotEmpty)
+                    Text(
+                      'Size: ${item.size}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  if (item.size != null && item.size!.isNotEmpty)
+                    SizedBox(height: 2),
+                  if (item.color != null && item.color!.isNotEmpty)
+                    Text(
+                      'Color: ${item.color}',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  if (item.color != null && item.color!.isNotEmpty)
+                    SizedBox(height: 2),
                   Text(
                     'From: ${item.storeName}',
                     style: TextStyle(

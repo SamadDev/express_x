@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:x_express/core/config/routes/routes.dart';
-import 'package:x_express/core/config/theme/color.dart';
-import 'package:x_express/core/config/widgets/globalText.dart';
-import 'package:x_express/core/config/widgets/userTextformfeild.dart';
-import 'package:x_express/core/config/widgets/phone_input_field.dart';
-import 'package:x_express/features/auth/data/service/auth_service.dart';
 import 'package:provider/provider.dart';
 import 'package:x_express/core/config/language/language.dart';
+import 'package:x_express/features/Auth/data/service/auth_service.dart';
+import 'package:x_express/core/config/widgets/phone_input_field.dart';
+import 'package:x_express/core/config/widgets/globalText.dart';
+import 'package:x_express/core/config/theme/color.dart';
+import 'package:x_express/core/config/routes/routes.dart';
+import 'package:x_express/features/Auth/view/register/register.dart';
+import 'package:x_express/features/Auth/view/forgot_password/forgot_password_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,221 +17,389 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  bool _hasLoadedCredentials = false;
+
   @override
   void initState() {
-    final state = Provider.of<AuthService>(context, listen: false);
-    state.loadSavedCredentials();
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final language = Provider.of<Language>(context, listen: false).getWords;
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Consumer<AuthService>(
-            builder: (context, state, child) {
-              return Column(
+    try {
+      final authService = Provider.of<AuthService>(context, listen: true);
+      
+      // Load saved credentials only once when the widget first builds
+      if (!_hasLoadedCredentials) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            authService.loadSavedCredentials();
+            setState(() {
+              _hasLoadedCredentials = true;
+            });
+          }
+        });
+      }
+
+      return Scaffold(
+        backgroundColor: kLightBackground,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Expanded(
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 80),
-                          Center(
-                            child: Column(
-                              children: [
-                                GlobalText(
-                                  "Let’s Sign You In",
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: kLightTitle,
-                                  textAlign: TextAlign.center,
-                                ),
-                                const SizedBox(height: 12),
-                                GlobalText(
-                                  "Welcome back, you’ve been missed!",
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w500,
-                                  color: kLightPlatinum300,
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 70),
-                          PhoneInputField(
-                            label: "Phone Number",
-                            hintText: "Enter your phone number",
-                            onChanged: (phone, countryCode) {
-                              state.usernameController.text = phone;
-                            },
-                          ),
-                          const SizedBox(height: 28),
-                          CustomUserTextFormField(
-                            title: "password",
-                            hintText: "Enter your password",
-                            obscureText: state.isObscure,
-                            controller: state.passwordController,
-                            suffix: IconButton(
-                              icon: Icon(
-                                state.isObscure ? Icons.visibility_off : Icons.visibility,
-                              ),
-                              onPressed: () => state.setObscure(),
-                              color: kLightPasswordEyeIcon,
-                            ),
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: Checkbox(
-                                      value: state.rememberMe,
-                                      activeColor: kLightPrimary,
-                                      shape: const CircleBorder(),
-                                      onChanged: (value) {
-                                        state.setRememberMe(value);
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  GlobalText(
-                                    "save_me",
-                                    fontSize: 14,
-                                    color: kLightGrayText,
-                                  ),
-                                ],
-                              ),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pushNamed(context, AppRoute.passwordRecovery);
-                                },
-                                child: GlobalText(
-                                  "forgot_password",
-                                  fontSize: 14,
-                                  color: kLightGrayText,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                  const SizedBox(height: 40),
+                  
+                  // Logo and Welcome Section
+                  Center(
+                    child: Column(
+                      children: [
+                        Container(
+                          width: 80,
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: kLightPrimary,
+                            borderRadius: BorderRadius.circular(20),
+                            boxShadow: [
+                              BoxShadow(
+                                color: kLightPrimary.withOpacity(0.3),
+                                spreadRadius: 0,
+                                blurRadius: 20,
+                                offset: const Offset(0, 10),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 40),
-                          Container(
-                            width: double.infinity,
-                            height: 56,
-                            decoration: BoxDecoration(
-                              color: kLightPrimary,
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                backgroundColor: kLightPrimary,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              onPressed: state.isLoading
-                                  ? null
-                                  : () async {
-                                      if (state.usernameController.text.isEmpty) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text('Please enter your phone number')),
-                                        );
-                                        return;
-                                      }
-
-                                      if (state.passwordController.text.isEmpty) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text('Please enter your password')),
-                                        );
-                                        return;
-                                      }
-
-                                      if (state.passwordController.text.length < 6) {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text('Password must be at least 6 characters')),
-                                        );
-                                        return;
-                                      }
-
-                                      Navigator.pushReplacementNamed(context, AppRoute.navigationBar);
-                                      bool success = await state.login(
-                                        username: state.usernameController.text,
-                                        password: state.passwordController.text,
-                                        rememberMe: state.rememberMe,
-                                      );
-                                      if (success) {
-                                        Navigator.pushReplacementNamed(context, AppRoute.navigationBar);
-                                      } else {
-                                        ScaffoldMessenger.of(context).showSnackBar(
-                                          SnackBar(content: Text(state.error ?? 'Login failed')),
-                                        );
-                                      }
-                                    },
-                              child: state.isLoading
-                                  ? const SizedBox(
-                                      height: 20,
-                                      width: 20,
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                      ),
-                                    )
-                                  : GlobalText(
-                                      "sign_in",
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                          child: const Icon(
+                            Icons.shopping_bag_outlined,
+                            color: Colors.white,
+                            size: 40,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        const GlobalText(
+                          "Welcome Back!",
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: kLightText,
+                        ),
+                        const SizedBox(height: 8),
+                        const GlobalText(
+                          "Sign in to continue your shopping journey",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: kLightGrayText,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 48),
+                  
+                  // Login Form
+                  Container(
+                    padding: const EdgeInsets.all(24),
+                    decoration: BoxDecoration(
+                      color: kLightSurface,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          spreadRadius: 0,
+                          blurRadius: 20,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const GlobalText(
+                          "Phone Number",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: kLightText,
+                        ),
+                        const SizedBox(height: 12),
+                        PhoneInputField(
+                          label: null,
+                          hintText: "Enter your phone number",
+                          onChanged: (phone, countryCode) {
+                            // Remove spaces from phone number before storing
+                            String cleanPhone = phone.replaceAll(' ', '');
+                            authService.usernameController.text = '$countryCode$cleanPhone';
+                          },
+                        ),
+                        const SizedBox(height: 24),
+                        
+                        const GlobalText(
+                          "Password",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: kLightText,
+                        ),
+                        const SizedBox(height: 12),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: kLightFill,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: authService.isObscure ? kLightStroke : kLightPrimary,
+                              width: 1,
                             ),
                           ),
-                          const SizedBox(height: 24),
-                          Center(
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                GlobalText(
-                                  "dont_have_account",
-                                  fontSize: 16,
+                          child: TextFormField(
+                            controller: authService.passwordController,
+                            obscureText: authService.isObscure,
+                            decoration: InputDecoration(
+                              hintText: "Enter your password",
+                              hintStyle: const TextStyle(
+                                color: kLightLightGrayText,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              border: InputBorder.none,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  authService.isObscure ? Icons.visibility_off : Icons.visibility,
                                   color: kLightGrayText,
-                                  fontWeight: FontWeight.w400,
                                 ),
-                                const SizedBox(width: 4),
-                                GestureDetector(
-                                  onTap: () {
-                                    Navigator.pushNamed(context, AppRoute.register);
-                                  },
-                                  child: GlobalText(
-                                    "sign_up",
-                                    fontSize: 16,
-                                    color: kLightAuthText,
-                                    fontWeight: FontWeight.bold,
-                                  ),
+                                onPressed: () => authService.setObscure(),
+                              ),
+                            ),
+                            style: const TextStyle(
+                              color: kLightText,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        
+                        // Remember Me & Forgot Password
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: Checkbox(
+                                    value: authService.rememberMe,
+                                    activeColor: kLightPrimary,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    onChanged: (value) {
+                                      authService.setRememberMe(value);
+                                    },
+                                  )),
+                                const SizedBox(width: 8),
+                                const GlobalText(
+                                  "Remember me",
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: kLightGrayText,
                                 ),
                               ],
                             ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const ForgotPasswordPage(),
+                                  ),
+                                );
+                              },
+                              child: GlobalText(
+                                "Forgot Password?",
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                                color: kLightPrimary,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                        
+                        // Login Button
+                        Container(
+                          width: double.infinity,
+                          height: 56,
+                          decoration: BoxDecoration(
+                            color: kLightPrimary,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: kLightPrimary.withOpacity(0.3),
+                                spreadRadius: 0,
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.transparent,
+                              shadowColor: Colors.transparent,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                            ),
+                            onPressed: authService.isLoading
+                                ? null
+                                : () async {
+                                    if (authService.usernameController.text.isEmpty) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Please enter your phone number'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    if (authService.passwordController.text.isEmpty) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Please enter your password'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    if (authService.passwordController.text.length < 6) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Password must be at least 6 characters'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                      return;
+                                    }
+
+                                    // Clean the phone number before sending to API
+                                    String cleanUsername = authService.usernameController.text.replaceAll(' ', '');
+                                    
+                                    bool success = await authService.login(
+                                      username: cleanUsername,
+                                      password: authService.passwordController.text,
+                                      rememberMe: authService.rememberMe,
+                                    );
+                                    
+                                    if (success) {
+                                      // Login successful - AuthWrapper will automatically navigate
+                                    } else {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(authService.error ?? 'Login failed'),
+                                          backgroundColor: Colors.red,
+                                        ),
+                                      );
+                                    }
+                                  },
+                            child: authService.isLoading
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2,
+                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    ),
+                                  )
+                                : const GlobalText(
+                                    "Sign In",
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
+                  
+                  const SizedBox(height: 32),
+                  
+                  // Sign Up Link
+                  Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const GlobalText(
+                          "Don't have an account? ",
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: kLightGrayText,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const RegisterPage(),
+                              ),
+                            );
+                          },
+                          child: GlobalText(
+                            "Sign Up",
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: kLightPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 40),
                 ],
-              );
-            },
+              ),
+            ),
           ),
         ),
-      ),
-    );
+      );
+    } catch (e) {
+      print('Error accessing AuthService in LoginPage: $e');
+      return Scaffold(
+        backgroundColor: Colors.grey.shade50,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.error_outline,
+                color: kLightPrimary,
+                size: 64,
+              ),
+              const SizedBox(height: 16),
+              const GlobalText(
+                'Error loading login page',
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF2D2D2D),
+              ),
+              const SizedBox(height: 8),
+              GlobalText(
+                '$e',
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: const Color(0xFF666666),
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }

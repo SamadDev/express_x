@@ -218,7 +218,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           label: "phone_number",
           hintText: "enter_your_phone_number",
           onChanged: (phone, countryCode) {
-            _phoneController.text = phone;
+            // Remove spaces from phone number
+            String cleanPhone = phone.replaceAll(' ', '');
+            _phoneController.text = cleanPhone;
           },
         ),
         

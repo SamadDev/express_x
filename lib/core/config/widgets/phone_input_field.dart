@@ -156,29 +156,34 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
           ),
           const SizedBox(height: 8),
         ],
+        // Single container wrapping both fields
         Container(
           decoration: BoxDecoration(
-            color: _isFocused ? Colors.white : const Color(0xFFF2F5FF),
+            color: const Color(0xFFF2F5FF),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(
               color: _isFocused ? kLightPrimary : Colors.transparent,
-              width: _isFocused ? 1 : 0,
+              width: 1,
             ),
           ),
           child: Row(
             children: [
+              // Country code dropdown - no border
               GestureDetector(
                 onTap: () => _showCountryPicker(context),
                 child: Container(
-                  padding: const EdgeInsets.fromLTRB(12, 16, 4, 16),
+                  width: 100,
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      GlobalText(
-                        _selectedCountryCode,
-                        fontSize: 14,
-                        color: kLightTitle,
-                        fontWeight: FontWeight.w500,
+                      Expanded(
+                        child: GlobalText(
+                          _selectedCountryCode,
+                          fontSize: 14,
+                          color: kLightTitle,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                       const SizedBox(width: 4),
                       Icon(
@@ -190,7 +195,15 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                   ),
                 ),
               ),
-
+              
+              // Divider line
+              Container(
+                height: 20,
+                width: 1,
+                color: kLightPlatinum500.withOpacity(0.3),
+              ),
+              
+              // Phone number input - no individual border
               Expanded(
                 child: TextFormField(
                   controller: _phoneController,
@@ -208,29 +221,24 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                     _validatePhone();
                   },
                   decoration: InputDecoration(
-                    hintText: "750",
+                    hintText: widget.hintText ?? "750",
                     hintStyle: TextStyle(color: kLightPlatinum300, fontSize: 14, fontWeight: FontWeight.w400),
+                    filled: false,
+                    suffixIcon: _phoneController.text.isNotEmpty
+                      ? Icon(
+                          _isValid ? Icons.check_circle : Icons.error,
+                          color: _isValid ? kLightPrimary : kLightError,
+                          size: 20,
+                        )
+                      : null,
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.fromLTRB(4, 16, 12, 16),
+                    focusedBorder: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   ),
-                  style: TextStyle(
-                    color: kLightTitle,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: TextTheme.of(context).bodyLarge,
                 ),
               ),
-
-              // Validation icon
-              if (_phoneController.text.isNotEmpty)
-                Container(
-                  padding: const EdgeInsets.only(right: 12),
-                  child: Icon(
-                    _isValid ? Icons.check_circle : Icons.error,
-                    color: _isValid ? kLightPrimary : kLightError,
-                    size: 20,
-                  ),
-                ),
             ],
           ),
         ),

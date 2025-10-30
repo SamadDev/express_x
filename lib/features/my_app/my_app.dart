@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:x_express/core/config/language/language.dart';
 import 'package:x_express/core/config/theme/theme.dart';
 import 'package:x_express/features/Auth/data/service/auth_service.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
-import 'package:x_express/features/wellcom/splash.dart';
+import 'package:x_express/features/home/services/order_service.dart';
+import 'package:x_express/features/wellcom/auth_wrapper.dart';
 import 'package:x_express/main.dart';
 
 
@@ -48,21 +50,17 @@ class _MyAppsState extends State<MyApps> {
       providers: [
         ChangeNotifierProvider(create: (_) => AuthService()),
         ChangeNotifierProvider(create: (_) => BagService()),
+        ChangeNotifierProvider(create: (_) => OrderService()),
+        ChangeNotifierProvider(create: (_) => Language()),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
-        builder: (context, child) {
-          return Directionality(
-            textDirection:
-                TextDirection.ltr,
-
-            child: child!,
-          );
-        },
         debugShowCheckedModeBanner: false,
         title: "X_Express",
         theme: AppTheme.lightTheme,
-        home: SplashScreen(),
+        home: AuthWrapper(),
+        // Remove routes to prevent LoginPage from being created outside provider context
+        // onGenerateRoute: AppRoute.generateRoute,
       ),
     );
   }

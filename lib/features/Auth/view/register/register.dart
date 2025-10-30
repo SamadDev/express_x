@@ -6,6 +6,7 @@ import 'package:x_express/core/config/widgets/userTextformfeild.dart';
 import 'package:x_express/core/config/widgets/phone_input_field.dart';
 import 'package:provider/provider.dart';
 import 'package:x_express/core/config/language/language.dart';
+import 'package:x_express/features/Auth/data/service/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -45,17 +46,19 @@ class _RegisterPageState extends State<RegisterPage> {
   }
 
   Future<void> _register() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+
     // Name validation
     if (_nameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your name')),
+        const SnackBar(content: Text('Please enter your name'), backgroundColor: Colors.red),
       );
       return;
     }
     
     if (_nameController.text.length < 2) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Name must be at least 2 characters')),
+        const SnackBar(content: Text('Name must be at least 2 characters'), backgroundColor: Colors.red),
       );
       return;
     }
@@ -63,14 +66,14 @@ class _RegisterPageState extends State<RegisterPage> {
     // Phone validation
     if (_emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your phone number')),
+        const SnackBar(content: Text('Please enter your phone number'), backgroundColor: Colors.red),
       );
       return;
     }
     
     if (!_isValidPhone(_emailController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid phone number')),
+        const SnackBar(content: Text('Please enter a valid phone number'), backgroundColor: Colors.red),
       );
       return;
     }
@@ -78,21 +81,21 @@ class _RegisterPageState extends State<RegisterPage> {
     // Password validation
     if (_passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your password')),
+        const SnackBar(content: Text('Please enter your password'), backgroundColor: Colors.red),
       );
       return;
     }
     
     if (_passwordController.text.length < 8) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password must be at least 8 characters')),
+        const SnackBar(content: Text('Password must be at least 8 characters'), backgroundColor: Colors.red),
       );
       return;
     }
     
     if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)').hasMatch(_passwordController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password must contain uppercase, lowercase, and number')),
+        const SnackBar(content: Text('Password must contain uppercase, lowercase, and number'), backgroundColor: Colors.red),
       );
       return;
     }
@@ -101,31 +104,46 @@ class _RegisterPageState extends State<RegisterPage> {
       _isLoading = true;
     });
 
-    await Future.delayed(Duration(seconds: 2));
+    // Call API to register
+    final success = await authService.register(
+      username: _nameController.text,
+      phoneNumber: _emailController.text,
+      password: _passwordController.text,
+    );
 
     setState(() {
       _isLoading = false;
     });
-    
-    // Show success screen
-    Navigator.pushNamed(
-      context, 
-      AppRoute.success,
-      arguments: {
-        'title': 'Congratulations!',
-        'message': 'You successfully created your account.\nNow you are good to go',
-        'buttonText': 'Go to Log In',
-        'nextRoute': AppRoute.login,
-        'isPasswordReset': false,
-      },
-    );
+
+    if (success) {
+      // Show success screen
+      Navigator.pushNamed(
+        context, 
+        AppRoute.success,
+        arguments: {
+          'title': 'Congratulations!',
+          'message': 'You successfully created your account.\nNow you are good to go',
+          'buttonText': 'Go to Home',
+          'nextRoute': AppRoute.navigationBar,
+          'isPasswordReset': false,
+        },
+      );
+    } else {
+      // Show error message
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(authService.error ?? 'Registration failed. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final language = Provider.of<Language>(context, listen: false).getWords;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: kLightBackground,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
@@ -144,7 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               "Getting Started",
                               fontSize: 25,
                               fontWeight: FontWeight.bold,
-                              color: kLightTitle,
+                              color: kLightText,
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 12),
@@ -152,7 +170,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               "Create an account to continue!",
                               fontSize: 15,
                               fontWeight: FontWeight.w500,
-                              color: kLightPlatinum300,
+                              color: kLightGrayText,
                               textAlign: TextAlign.center,
                             ),
                           ],
@@ -163,7 +181,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         label: "phone_number",
                         hintText: "enter_your_phone_number",
                         onChanged: (phone, countryCode) {
-                          _emailController.text = phone;
+                          // Remove spaces from phone number
+                          String cleanPhone = phone.replaceAll(' ', '');
+                          _emailController.text = cleanPhone;
                         },
                       ),
                       const SizedBox(height: 20),

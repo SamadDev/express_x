@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
+import 'package:x_express/core/config/theme/theme.dart';
 
 class AddToBagDialog extends StatefulWidget {
   final String storeName;
@@ -18,9 +19,29 @@ class AddToBagDialog extends StatefulWidget {
 
 class _AddToBagDialogState extends State<AddToBagDialog> {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _sizeController = TextEditingController();
+  final TextEditingController _colorController = TextEditingController();
   File? _selectedImage;
   final ImagePicker _picker = ImagePicker();
   bool _isLoading = false;
+
+  bool get _isFormValid {
+    return _nameController.text.trim().isNotEmpty &&
+           _sizeController.text.trim().isNotEmpty &&
+           _colorController.text.trim().isNotEmpty;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _nameController.addListener(_onFormChanged);
+    _sizeController.addListener(_onFormChanged);
+    _colorController.addListener(_onFormChanged);
+  }
+
+  void _onFormChanged() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +101,34 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 prefixIcon: Icon(Icons.shopping_bag),
+              ),
+            ),
+            SizedBox(height: 16),
+            
+            // Size Field
+            TextField(
+              controller: _sizeController,
+              decoration: InputDecoration(
+                labelText: 'Size',
+                hintText: 'Enter product size',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                prefixIcon: Icon(Icons.straighten),
+              ),
+            ),
+            SizedBox(height: 16),
+            
+            // Color Field
+            TextField(
+              controller: _colorController,
+              decoration: InputDecoration(
+                labelText: 'Color',
+                hintText: 'Enter product color',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                prefixIcon: Icon(Icons.palette),
               ),
             ),
             SizedBox(height: 16),
@@ -155,9 +204,9 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
                 SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _isLoading ? null : _addToBag,
+                    onPressed: (_isLoading || !_isFormValid) ? null : _addToBag,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFE91E63), // Pink color like Amazon
+                      backgroundColor: AppTheme.primaryColor,
                       foregroundColor: Colors.white,
                       padding: EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
@@ -215,10 +264,10 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
   }
 
   Future<void> _addToBag() async {
-    if (_nameController.text.trim().isEmpty) {
+    if (!_isFormValid) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Please enter a product name'),
+          content: Text('Please fill in all required fields (Name, Size, Color)'),
           backgroundColor: Colors.red,
         ),
       );
@@ -235,6 +284,8 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
         name: _nameController.text.trim(),
         imagePath: _selectedImage?.path,
         storeName: widget.storeName,
+        size: _sizeController.text.trim(),
+        color: _colorController.text.trim(),
       );
 
       Navigator.of(context).pop();
@@ -261,7 +312,12 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
 
   @override
   void dispose() {
+    _nameController.removeListener(_onFormChanged);
+    _sizeController.removeListener(_onFormChanged);
+    _colorController.removeListener(_onFormChanged);
     _nameController.dispose();
+    _sizeController.dispose();
+    _colorController.dispose();
     super.dispose();
   }
 }

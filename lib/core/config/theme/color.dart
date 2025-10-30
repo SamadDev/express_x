@@ -1,22 +1,38 @@
 import 'package:flutter/material.dart';
 
-const Color kLightPrimary = Color(0xFF6F9676);
-const Color kLightSecondary = Color(0xFF6ACEDE);
-const Color kLightStroke = Color(0xFFEAECF0);
-const Color kLightText = Color(0xff374151);
-const Color kLightBlackText = Color(0xff000000);
-const Color kLightBackground = Color(0xFFFAFAFA);
-const Color kLightFill = Color(0xFFF9FAFB);
-const Color kLightTertiary = Color(0xFF3B82F6);
-const Color kLightError = Color(0xFFE23A3A);
-const Color kLightAuthText = Color(0xFFD86885);
-const Color kLightGrayText = Color(0xFF475467);
-const Color kLightTitle = Color(0xFF101828);
-const Color kLightAppBar = Color(0xFFFFFFFF);
-const Color kLightButton = Color(0xFF1E3A8A);
-const Color kLightSurfacePrimary = Color(0xFFFEFEFE);
-const Color kLightPasswordEyeIcon = Color(0xFF7E8B99);
-const Color kLightCardBackground = Color(0xFFF9FAFB);
+// Modern E-commerce Design System Colors
+// Primary accent color - vibrant orange/yellow
+const Color kLightPrimary = Color(0xFFFF6B35); // Vibrant orange
+const Color kLightSecondary = Color(0xFFFF8C42); // Lighter orange
+const Color kLightAccent = Color(0xFFFFA726); // Yellow-orange
+
+// Text colors
+const Color kLightText = Color(0xFF2D2D2D); // Main black text
+const Color kLightBlackText = Color(0xFF000000); // Pure black
+const Color kLightGrayText = Color(0xFF666666); // Secondary gray text
+const Color kLightLightGrayText = Color(0xFF999999); // Light gray text
+const Color kLightTitle = Color(0xFF2D2D2D); // Section titles
+
+// Background colors
+const Color kLightBackground = Color(0xFFF5F5F5); // Light gray background
+const Color kLightSurface = Color(0xFFFFFFFF); // White surface
+const Color kLightFill = Color(0xFFF8F9FA); // Input field background
+const Color kLightCardBackground = Color(0xFFFFFFFF); // Card background
+
+// UI element colors
+const Color kLightStroke = Color(0xFFE5E5E5); // Border color
+const Color kLightPasswordEyeIcon = Color(0xFF666666); // Icon color
+const Color kLightAppBar = Color(0xFFFFFFFF); // App bar background
+const Color kLightButton = Color(0xFFFF6B35); // Button color
+const Color kLightSurfacePrimary = Color(0xFFFFFFFF); // Primary surface
+
+// Status colors
+const Color kLightError = Color(0xFFE23A3A); // Error red
+const Color kLightSuccess = Color(0xFF1CB09C); // Success green
+const Color kLightWarning = Color(0xFFFFA726); // Warning orange
+
+// Auth specific colors
+const Color kLightAuthText = Color(0xFFFF6B35); // Auth accent
 
 const Color kLightPlatinum950 = Color(0xFF101828);
 const Color kLightPlatinum900 = Color(0xFF0F172A);

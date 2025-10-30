@@ -6,7 +6,6 @@ import 'package:x_express/features/Bag/bag_service.dart';
 import 'package:x_express/features/Store/add_to_bag_dialog.dart';
 import 'package:x_express/features/Store/bag_screen.dart';
 
-
 class StoreWebViewScreen extends StatefulWidget {
   final String storeUrl;
   final String storeName;
@@ -26,14 +25,15 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
   bool isLoading = true;
   bool canGoBack = false;
   bool canGoForward = false;
+  bool _isWebViewInitialized = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.storeName),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: kLightSurface,
+        foregroundColor: kLightText,
         elevation: 0,
         actions: [
           Consumer<BagService>(
@@ -57,7 +57,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
                       child: Container(
                         padding: EdgeInsets.all(2),
                         decoration: BoxDecoration(
-                          color: Color(0xFFE91E63),
+                          color: kLightPrimary,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         constraints: BoxConstraints(
@@ -86,7 +86,10 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
           InAppWebView(
             initialUrlRequest: URLRequest(url: WebUri(widget.storeUrl)),
             onWebViewCreated: (controller) {
-              webViewController = controller;
+              if (!_isWebViewInitialized) {
+                webViewController = controller;
+                _isWebViewInitialized = true;
+              }
             },
             onLoadStart: (controller, url) {
               setState(() {
@@ -128,7 +131,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
           ),
           if (isLoading)
             Container(
-              color: Colors.white,
+              color: kLightSurface,
               child: Center(
                 child: CircularProgressIndicator(
                   color: kLightPrimary,
@@ -143,7 +146,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
               onPressed: () {
                 _showAddToBagDialog();
               },
-              backgroundColor: Color(0xFFE91E63), // Pink color like Amazon
+              backgroundColor: kLightPrimary,
               foregroundColor: Colors.white,
               icon: Icon(Icons.shopping_bag),
               label: Text(
@@ -160,12 +163,12 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
       bottomNavigationBar: Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: kLightSurface,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 1,
-              blurRadius: 5,
+              color: Colors.black.withOpacity(0.05),
+              spreadRadius: 0,
+              blurRadius: 10,
               offset: Offset(0, -2),
             ),
           ],
@@ -176,17 +179,17 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
             IconButton(
               onPressed: canGoBack ? () => webViewController?.goBack() : null,
               icon: Icon(Icons.arrow_back_ios),
-              color: canGoBack ? Colors.black : Colors.grey,
+              color: canGoBack ? kLightText : kLightLightGrayText,
             ),
             IconButton(
               onPressed: () => webViewController?.reload(),
               icon: Icon(Icons.refresh),
-              color: Colors.black,
+              color: kLightText,
             ),
             IconButton(
               onPressed: canGoForward ? () => webViewController?.goForward() : null,
               icon: Icon(Icons.arrow_forward_ios),
-              color: canGoForward ? Colors.black : Colors.grey,
+              color: canGoForward ? kLightText : kLightLightGrayText,
             ),
             IconButton(
               onPressed: () {
@@ -196,7 +199,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
                 );
               },
               icon: Icon(Icons.shopping_bag),
-              color: Colors.black,
+              color: kLightText,
             ),
           ],
         ),
@@ -211,5 +214,15 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
         return AddToBagDialog(storeName: widget.storeName);
       },
     );
+  }
+
+  @override
+  void dispose() {
+    // Clean up webview resources
+    if (webViewController != null) {
+      webViewController = null;
+    }
+    _isWebViewInitialized = false;
+    super.dispose();
   }
 }

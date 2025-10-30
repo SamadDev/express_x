@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:x_express/features/home/new_home_screen.dart';
 import 'package:x_express/features/home/explore_screen.dart';
-import 'package:x_express/features/home/bag_screen.dart';
+import 'package:x_express/features/home/order_history_screen.dart';
 import 'package:x_express/features/home/subscription_screen.dart';
 import 'package:x_express/features/home/profile_screen.dart';
+import 'package:x_express/features/home/services/order_service.dart';
 
 class NavigationBarScreen extends StatefulWidget {
   const NavigationBarScreen({super.key});
@@ -19,7 +21,7 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
   final List<Widget> _screens = [
     NewHomeScreen(),
     ExploreScreen(),
-    BagScreen(),
+    OrderHistoryScreen(),
     SubscriptionScreen(),
     ProfileScreen(),
   ];
@@ -70,8 +72,41 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
             label: 'Stores',
           ),
           BottomNavigationBarItem(
-            icon: FaIcon(FontAwesomeIcons.bagShopping, size: 20),
-            label: 'My Bag',
+            icon: Consumer<OrderService>(
+              builder: (context, orderService, child) {
+                return Stack(
+                  children: [
+                    FaIcon(FontAwesomeIcons.listCheck, size: 20),
+                    if (orderService.orders.isNotEmpty)
+                      Positioned(
+                        right: 0,
+                        top: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            color: Colors.green,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          constraints: BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            '${orderService.orders.length}',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+            label: 'Orders',
           ),
           BottomNavigationBarItem(
             icon: FaIcon(FontAwesomeIcons.creditCard, size: 20),

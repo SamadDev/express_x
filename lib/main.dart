@@ -22,12 +22,7 @@ Future<void> main() async {
   OneSignal.initialize(dotenv.env['APPID']!);
   OneSignal.Notifications.requestPermission(false);
 
-  runApp(
-    DevicePreview(
-      enabled: false,
-      builder: (context) => MyApps(),
-    ),
-  );
+  runApp(MyApps());
 }
 
 

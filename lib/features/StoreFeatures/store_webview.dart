@@ -5,6 +5,7 @@ import 'package:x_express/core/config/theme/color.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
 import 'package:x_express/features/StoreFeatures/add_to_bag_dialog.dart';
 import 'package:x_express/features/StoreFeatures/bag_screen.dart';
+import 'package:x_express/core/config/theme/theme.dart';
 
 
 class StoreWebViewScreen extends StatefulWidget {
@@ -32,14 +33,15 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
   bool isProductPage = false;
   String? productImage;
   String? productTitle;
+  bool _isWebViewInitialized = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.storeName),
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: kLightSurface,
+        foregroundColor: kLightText,
         elevation: 0,
         actions: [
           Consumer<BagService>(
@@ -63,7 +65,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
                       child: Container(
                         padding: EdgeInsets.all(2),
                         decoration: BoxDecoration(
-                          color: Color(0xFFE91E63),
+                          color: kLightPrimary,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         constraints: BoxConstraints(
@@ -91,15 +93,34 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
         children: [
           InAppWebView(
             initialUrlRequest: URLRequest(url: WebUri(widget.baseUrl ?? widget.storeUrl)),
+            initialSettings: InAppWebViewSettings(
+              javaScriptEnabled: true,
+              domStorageEnabled: true,
+              databaseEnabled: true,
+              clearCache: false,
+              cacheEnabled: true,
+              allowsInlineMediaPlayback: true,
+              mediaPlaybackRequiresUserGesture: false,
+              allowsAirPlayForMediaPlayback: true,
+              allowsBackForwardNavigationGestures: true,
+              supportZoom: false,
+              disableHorizontalScroll: false,
+              disableVerticalScroll: false,
+            ),
             onWebViewCreated: (controller) {
-              webViewController = controller;
+              if (!_isWebViewInitialized) {
+                webViewController = controller;
+                _isWebViewInitialized = true;
+              }
             },
             onLoadStart: (controller, url) {
+              print('WebView loading: $url');
               setState(() {
                 isLoading = true;
               });
             },
             onLoadStop: (controller, url) {
+              print('WebView loaded: $url');
               setState(() {
                 isLoading = false;
               });
@@ -126,7 +147,14 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
               });
             },
             onReceivedServerTrustAuthRequest: (controller, challenge) async {
+              print('Server trust auth request: ${challenge.protectionSpace.host}');
               return ServerTrustAuthResponse(action: ServerTrustAuthResponseAction.PROCEED);
+            },
+            onReceivedError: (controller, request, error) {
+              print('WebView Error: ${error.description}');
+              setState(() {
+                isLoading = false;
+              });
             },
             onPermissionRequest: (controller, request) async {
               return PermissionResponse(
@@ -137,36 +165,32 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
             onConsoleMessage: (controller, consoleMessage) {
               print("Console: ${consoleMessage.message}");
             },
-            onReceivedError: (controller, request, error) {
-              print("Error: ${error.description}");
-            },
           ),
           if (isLoading)
             Container(
-              color: Colors.white,
+              color: kLightSurface,
               child: Center(
                 child: CircularProgressIndicator(
                   color: kLightPrimary,
                 ),
               ),
             ),
-          // Custom Add to Bag Button - Only show on product pages
-          if (isProductPage)
+          // Custom Add to Bag Button - Always show
             Positioned(
               bottom: 20,
               right: 20,
               child: GestureDetector(
                 onTap: () {
-                  _showProductDialog();
+                  _showAddToBagDialog();
                 },
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                   decoration: BoxDecoration(
-                    color: Color(0xff5d3ebd),
+                    color: AppTheme.primaryColor,
                     borderRadius: BorderRadius.circular(25),
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xff5d3ebd).withOpacity(0.3),
+                        color: AppTheme.primaryColor.withOpacity(0.3),
                         spreadRadius: 1,
                         blurRadius: 8,
                         offset: Offset(0, 2),
@@ -200,12 +224,12 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
       bottomNavigationBar: Container(
         height: 60,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: kLightSurface,
           boxShadow: [
             BoxShadow(
-              color: Colors.grey.withOpacity(0.3),
-              spreadRadius: 1,
-              blurRadius: 5,
+              color: Colors.black.withOpacity(0.05),
+              spreadRadius: 0,
+              blurRadius: 10,
               offset: Offset(0, -2),
             ),
           ],
@@ -216,17 +240,17 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
             IconButton(
               onPressed: canGoBack ? () => webViewController?.goBack() : null,
               icon: Icon(Icons.arrow_back_ios),
-              color: canGoBack ? Colors.black : Colors.grey,
+              color: canGoBack ? kLightText : kLightLightGrayText,
             ),
             IconButton(
               onPressed: () => webViewController?.reload(),
               icon: Icon(Icons.refresh),
-              color: Colors.black,
+              color: kLightText,
             ),
             IconButton(
               onPressed: canGoForward ? () => webViewController?.goForward() : null,
               icon: Icon(Icons.arrow_forward_ios),
-              color: canGoForward ? Colors.black : Colors.grey,
+              color: canGoForward ? kLightText : kLightLightGrayText,
             ),
             IconButton(
               onPressed: () {
@@ -236,7 +260,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
                 );
               },
               icon: Icon(Icons.shopping_bag),
-              color: Colors.black,
+              color: kLightText,
             ),
           ],
         ),
@@ -324,6 +348,16 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
     );
   }
 
+  @override
+  void dispose() {
+    // Clean up webview resources
+    if (webViewController != null) {
+      webViewController = null;
+    }
+    _isWebViewInitialized = false;
+    super.dispose();
+  }
+
 }
 
 class _ProductDialog extends StatefulWidget {
@@ -345,14 +379,14 @@ class _ProductDialogState extends State<_ProductDialog> {
   final TextEditingController _sizeController = TextEditingController();
   final TextEditingController _colorController = TextEditingController();
 
-  bool _isValidImageUrl(String url) {
-    try {
-      final uri = Uri.parse(url);
-      return uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https') && uri.host.isNotEmpty;
-    } catch (e) {
-      return false;
-    }
-  }
+  // bool _isValidImageUrl(String url) {
+  //   try {
+  //     final uri = Uri.parse(url);
+  //     return uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https') && uri.host.isNotEmpty;
+  //   } catch (e) {
+  //     return false;
+  //   }
+  // }
 
   @override
   void dispose() {
@@ -537,15 +571,13 @@ class _ProductDialogState extends State<_ProductDialog> {
                 SizedBox(width: 12),
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: _sizeController.text.isNotEmpty && _colorController.text.isNotEmpty
-                        ? () {
-                            // Add to bag logic here
+                    onPressed: () {
                             Navigator.pop(context);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Row(
                                   children: [
-                                    if (widget.productImage != null)
+
                                       Container(
                                         width: 30,
                                         height: 30,
@@ -586,7 +618,7 @@ class _ProductDialogState extends State<_ProductDialog> {
                               ),
                             );
                           }
-                        : null,
+                        ,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xff5d3ebd),
                       foregroundColor: Colors.white,

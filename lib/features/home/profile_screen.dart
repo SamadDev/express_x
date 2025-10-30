@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:x_express/core/config/theme/color.dart';
+import 'package:x_express/features/Auth/data/service/auth_service.dart';
+import 'package:x_express/features/Auth/data/repository/local_storage.dart';
+import 'package:x_express/features/home/order_history_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -14,7 +19,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFF5F5F5),
+      backgroundColor: kLightBackground,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -34,12 +39,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget _buildProfileHeader() {
     return Container(
       padding: const EdgeInsets.all(20.0),
-      color: Color(0xFFF5F5F5),
+      color: kLightBackground,
       child: Row(
         children: [
           CircleAvatar(
             radius: 35,
-            backgroundColor: Color(0xFFE8738F),
+            backgroundColor: kLightPrimary,
             child: Text(
               'BL',
               style: TextStyle(
@@ -59,7 +64,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    color: kLightText,
                   ),
                 ),
                 SizedBox(height: 4),
@@ -67,7 +72,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   '0751 434 4915',
                   style: TextStyle(
                     fontSize: 14,
-                    color: Color(0xFF999999),
+                    color: kLightLightGrayText,
                   ),
                 ),
               ],
@@ -75,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Icon(
             Icons.edit,
-            color: Color(0xFF999999),
+            color: kLightLightGrayText,
             size: 20,
           ),
         ],
@@ -96,14 +101,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.black,
+                color: kLightText,
               ),
             ),
           ),
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(6),
+              color: kLightSurface,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.05),
+                  spreadRadius: 0,
+                  blurRadius: 10,
+                  offset: Offset(0, 2),
+                ),
+              ],
             ),
             child: Column(
               children: [
@@ -113,7 +126,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 _buildMenuItemSimple(
                   icon: Icons.receipt_long_outlined,
-                  title: 'Invoices',
+                  title: 'Order History',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OrderHistoryScreen(),
+                      ),
+                    );
+                  },
                 ),
                 _buildMenuItemSimple(
                   icon: Icons.location_on_outlined,
@@ -260,8 +281,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 _buildMenuItemSimple(
                   icon: Icons.contact_support_outlined,
                   title: 'Contact Us',
-                  isLast: true,
                 ),
+                _buildLogoutMenuItem(),
               ],
             ),
           ),
@@ -274,8 +295,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     required IconData icon,
     required String title,
     bool isLast = false,
+    VoidCallback? onTap,
   }) {
-    return Container(
+    Widget menuItem = Container(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
       decoration: BoxDecoration(
         border: isLast
@@ -291,7 +313,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         children: [
           Icon(
             icon,
-            color: Color(0xFF999999),
+            color: kLightPrimary,
             size: 20,
           ),
           SizedBox(width: 12),
@@ -300,18 +322,115 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title,
               style: TextStyle(
                 fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Colors.black,
+                fontWeight: FontWeight.w500,
+                color: kLightText,
               ),
             ),
           ),
           Icon(
             Icons.arrow_forward_ios,
             size: 14,
-            color: Color(0xFFCCCCCC),
+            color: kLightLightGrayText,
           ),
         ],
       ),
     );
+
+    if (onTap != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: menuItem,
+      );
+    }
+
+    return menuItem;
+  }
+
+  Widget _buildLogoutMenuItem() {
+    return GestureDetector(
+      onTap: _handleLogout,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
+        child: Row(
+          children: [
+            Icon(
+              Icons.logout,
+              color: Colors.red,
+              size: 20,
+            ),
+            SizedBox(width: 12),
+            Expanded(
+              child: Text(
+                'Logout',
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.red,
+                ),
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 14,
+              color: Color(0xFFCCCCCC),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _handleLogout() async {
+    // Show confirmation dialog
+    final bool? shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Logout'),
+          content: Text('Are you sure you want to logout?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                foregroundColor: Colors.white,
+              ),
+              child: Text('Logout'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (shouldLogout == true) {
+      try {
+        // Get AuthService from provider
+        final authService = Provider.of<AuthService>(context, listen: false);
+        
+        // Clear session data
+        await LocalStorage.clearSession();
+        
+        // Reset auth service
+        authService.resetData();
+        
+        // Navigate to login screen
+        Navigator.of(context).pushNamedAndRemoveUntil(
+          '/',
+          (Route<dynamic> route) => false,
+        );
+      } catch (e) {
+        // Show error message
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error during logout: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 }

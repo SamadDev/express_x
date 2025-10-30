@@ -6,7 +6,7 @@ class LocalStorage {
   static const String _userDataKey = 'userData';
   static const String _credentialsKey = 'credentialData';
   static const String _rememberMeKey = 'rememberMe';
-  static const String _tokenKey = 'accessToken';
+  static const String _tokenKey = 'authToken';
   static const String _accountDeletedKey = 'accountDeleted';
   static const String _onboardingCompletedKey = 'onboardingCompleted';
 
@@ -30,8 +30,8 @@ class LocalStorage {
     try {
       final userData = json.decode(jsonData);
       print("check user data is: $userData");
-      if (userData['accessToken'] != null) {
-        await prefs.setString(_tokenKey, userData['accessToken']);
+      if (userData['token'] != null) {
+        await prefs.setString(_tokenKey, userData['token']);
       }
     } catch (e) {
       print('Error extracting token from user data: $e');

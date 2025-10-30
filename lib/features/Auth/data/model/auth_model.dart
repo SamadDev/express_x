@@ -1,26 +1,23 @@
 class LoginResponse {
-  String? requertAt;
-  String? expiresIn;
-  String? tokeyType;
-  String? accessToken;
+  String? token;
+  String? tokenType;
+  String? message;
   User? user;
 
-  LoginResponse({this.requertAt, this.expiresIn, this.tokeyType, this.accessToken, this.user});
+  LoginResponse({this.token, this.tokenType, this.message, this.user});
 
   LoginResponse.fromJson(Map<String, dynamic> json) {
-    requertAt = json['requertAt'].toString();
-    expiresIn = json['expiresIn'].toString();
-    tokeyType = json['tokeyType'].toString();
-    accessToken = json['accessToken'].toString();
+    token = json['token']?.toString();
+    tokenType = json['token_type']?.toString();
+    message = json['message']?.toString();
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['requertAt'] = this.requertAt;
-    data['expiresIn'] = this.expiresIn;
-    data['tokeyType'] = this.tokeyType;
-    data['accessToken'] = this.accessToken;
+    data['token'] = this.token;
+    data['token_type'] = this.tokenType;
+    data['message'] = this.message;
     if (this.user != null) {
       data['user'] = this.user!.toJson();
     }
@@ -89,34 +86,34 @@ class User {
       this.newPassword});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'].toString();
-    userName = json['userName'].toString();
-    employeeId = json['employeeId'].toString();
-    password = json['password'].toString();
-    tempPassword = json['tempPassword'].toString();
-    tempSendEmail = json['tempSendEmail'].toString();
-    passwordSalt = json['passwordSalt'].toString();
-    email = json['email'].toString();
-    phoneNo = json['phoneNo'].toString();
-    photo = json['photo'].toString();
-    description = json['description'].toString();
-    isActive = json['isActive'].toString();
-    lastLoginDate = json['lastLoginDate'].toString();
-    lastPasswordChangedDate = json['lastPasswordChangedDate'].toString();
-    roleId = json['roleId'].toString();
-    role = json['role'].toString();
-    roleIdGuid = json['roleIdGuid'].toString();
-    roleName = json['roleName'].toString();
-    expiryDate = json['expiryDate'].toString();
-    signature = json['signature'].toString();
-    token = json['token'].toString();
-    resetCode = json['resetCode'].toString();
-    isTrashed = json['isTrashed'].toString();
-    branches = json['branches'].toString();
-    employee = json['employee'].toString();
-    jobTitle = json['jobTitle'].toString();
-    fullName = json['fullName'].toString();
-    newPassword = json['newPassword'].toString();
+    id = json['id']?.toString();
+    userName = json['userName']?.toString();
+    employeeId = json['employeeId']?.toString();
+    password = json['password']?.toString();
+    tempPassword = json['tempPassword']?.toString();
+    tempSendEmail = json['tempSendEmail']?.toString();
+    passwordSalt = json['passwordSalt']?.toString();
+    email = json['email']?.toString();
+    phoneNo = json['phoneNo']?.toString();
+    photo = json['photo']?.toString();
+    description = json['description']?.toString();
+    isActive = json['isActive']?.toString();
+    lastLoginDate = json['lastLoginDate']?.toString();
+    lastPasswordChangedDate = json['lastPasswordChangedDate']?.toString();
+    roleId = json['roleId']?.toString();
+    role = json['role']?.toString();
+    roleIdGuid = json['roleIdGuid']?.toString();
+    roleName = json['roleName']?.toString();
+    expiryDate = json['expiryDate']?.toString();
+    signature = json['signature']?.toString();
+    token = json['token']?.toString();
+    resetCode = json['resetCode']?.toString();
+    isTrashed = json['isTrashed']?.toString();
+    branches = json['branches']?.toString();
+    employee = json['employee']?.toString();
+    jobTitle = json['jobTitle']?.toString();
+    fullName = json['fullName']?.toString();
+    newPassword = json['newPassword']?.toString();
   }
 
   Map<String, dynamic> toJson() {

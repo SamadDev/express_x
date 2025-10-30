@@ -1,0 +1,83 @@
+[
+  {
+    "id": "ORD-001",
+    "productName": "Lenovo Legion Pro 5i Gaming Laptop",
+    "storeName": "TechStore USA",
+    "price": 1299.99,
+    "orderDate": "2024-01-15T10:30:00Z",
+    "status": "completed",
+    "description": "High-performance gaming laptop with RTX 4060",
+    "imageUrl": "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?w=400"
+  },
+  {
+    "id": "ORD-002", 
+    "productName": "iPhone 15 Pro Max",
+    "storeName": "Apple Store",
+    "price": 1199.00,
+    "orderDate": "2024-01-14T14:20:00Z",
+    "status": "processing",
+    "description": "Latest iPhone with titanium design",
+    "imageUrl": "https://images.unsplash.com/photo-1592750475338-74b7b21085ab?w=400"
+  },
+  {
+    "id": "ORD-003",
+    "productName": "Samsung Galaxy S24 Ultra",
+    "storeName": "Samsung Store",
+    "price": 1299.99,
+    "orderDate": "2024-01-13T09:15:00Z", 
+    "status": "pending",
+    "description": "Premium Android smartphone with S Pen",
+    "imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400"
+  },
+  {
+    "id": "ORD-004",
+    "productName": "MacBook Pro M3",
+    "storeName": "Apple Store",
+    "price": 1999.00,
+    "orderDate": "2024-01-12T16:45:00Z",
+    "status": "cancelled",
+    "description": "Professional laptop for developers",
+    "imageUrl": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400"
+  },
+  {
+    "id": "ORD-005",
+    "productName": "Sony WH-1000XM5 Headphones",
+    "storeName": "Electronics Hub",
+    "price": 399.99,
+    "orderDate": "2024-01-11T11:30:00Z",
+    "status": "completed",
+    "description": "Noise-cancelling wireless headphones",
+    "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"
+  },
+  {
+    "id": "ORD-006",
+    "productName": "Nintendo Switch OLED",
+    "storeName": "Gaming World",
+    "price": 349.99,
+    "orderDate": "2024-01-10T13:20:00Z",
+    "status": "processing",
+    "description": "Portable gaming console with OLED display",
+    "imageUrl": "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?w=400"
+  },
+  {
+    "id": "ORD-007",
+    "productName": "Dell XPS 13 Laptop",
+    "storeName": "Dell Store",
+    "price": 1299.99,
+    "orderDate": "2024-01-09T08:45:00Z",
+    "status": "pending",
+    "description": "Ultrabook with 13-inch 4K display",
+    "imageUrl": "https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400"
+  },
+  {
+    "id": "ORD-008",
+    "productName": "AirPods Pro 2nd Gen",
+    "storeName": "Apple Store", 
+    "price": 249.00,
+    "orderDate": "2024-01-08T15:10:00Z",
+    "status": "completed",
+    "description": "Wireless earbuds with active noise cancellation",
+    "imageUrl": "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?w=400"
+  }
+]
+
