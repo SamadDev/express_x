@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
 import 'package:x_express/features/home/services/order_service.dart';
 import 'package:x_express/features/home/order_history_screen.dart';
+import 'package:x_express/core/config/theme/color.dart';
 
 class BagScreen extends StatelessWidget {
   const BagScreen({super.key});
@@ -19,7 +20,7 @@ class BagScreen extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color(0xFF5C3A9E),
+        backgroundColor: kLightPrimary,
         elevation: 0,
         centerTitle: true,
         actions: [
@@ -108,7 +109,7 @@ class BagScreen extends StatelessWidget {
             icon: Icon(Icons.explore),
             label: Text('Explore Stores'),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color(0xFF5C3A9E),
+              backgroundColor: kLightPrimary,
               foregroundColor: Colors.white,
               padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             ),
@@ -185,7 +186,7 @@ class BagScreen extends StatelessWidget {
                         item.storeName,
                         style: TextStyle(
                           fontSize: 12,
-                          color: Color(0xFF5C3A9E),
+                          color: kLightPrimary,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -249,7 +250,7 @@ class BagScreen extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF5C3A9E),
+                  color: kLightPrimary,
                 ),
               ),
             ],
@@ -263,7 +264,7 @@ class BagScreen extends StatelessWidget {
                 _addOrder(buildContext, bagService);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF5C3A9E),
+                backgroundColor: kLightPrimary,
                 foregroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
@@ -288,8 +289,8 @@ class BagScreen extends StatelessWidget {
                 _viewOrders(buildContext);
               },
               style: OutlinedButton.styleFrom(
-                foregroundColor: Color(0xFF5C3A9E),
-                side: BorderSide(color: Color(0xFF5C3A9E)),
+                foregroundColor: kLightPrimary,
+                side: BorderSide(color: kLightPrimary),
                 padding: EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -357,7 +358,7 @@ class BagScreen extends StatelessWidget {
                 _processOrder(context, bagService);
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color(0xFF5C3A9E),
+                backgroundColor: kLightPrimary,
                 foregroundColor: Colors.white,
               ),
               child: Text('Add Order'),

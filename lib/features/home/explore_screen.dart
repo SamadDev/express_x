@@ -4,6 +4,7 @@ import 'package:x_express/features/home/services/data_cache_service.dart';
 import 'package:x_express/features/home/services/tab_service.dart';
 import 'package:x_express/features/StoreFeatures/store_webview.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:x_express/core/config/theme/color.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({super.key});
@@ -80,7 +81,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color(0xFF5C3A9E),
+        backgroundColor: kLightPrimary,
         elevation: 0,
         centerTitle: true,
       ),
@@ -165,10 +166,10 @@ class _ExploreScreenState extends State<ExploreScreen> {
               margin: const EdgeInsets.only(right: 8),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               decoration: BoxDecoration(
-                color: isSelected ? Color(0xFF5C3A9E) : Colors.white,
+                color: isSelected ? kLightPrimary : Colors.white,
                 borderRadius: BorderRadius.circular(20),
                 border: Border.all(
-                  color: isSelected ? Color(0xFF5C3A9E) : Colors.grey[300]!,
+                  color: isSelected ? kLightPrimary : Colors.grey[300]!,
                 ),
               ),
               child: Center(
@@ -241,7 +242,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
                 onPressed: () => _filterStores(''),
                 child: Text('Clear Search'),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFF5C3A9E),
+                  backgroundColor: kLightPrimary,
                   foregroundColor: Colors.white,
                 ),
               ),

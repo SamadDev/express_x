@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x_express/core/config/theme/color.dart';
 
 class ButtonNotchPainter extends CustomPainter {
   @override
@@ -6,7 +7,7 @@ class ButtonNotchPainter extends CustomPainter {
     var dotPoint = Offset(size.width / 2, 2);
 
     var paint_1 = Paint()
-      ..color = Color(0xFF5C3A9E)
+      ..color = kLightPrimary
       ..style = PaintingStyle.fill;
     var paint_2 = Paint()
       ..color = Colors.white

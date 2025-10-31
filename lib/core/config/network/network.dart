@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:x_express/core/config/constant/api.dart';
 import 'package:x_express/core/config/widgets/global_snakbar.dart';
-import 'package:x_express/features/auth/data/repository/local_storage.dart';
+import 'package:x_express/features/Auth/data/repository/local_storage.dart';
 import 'package:x_express/main.dart';
 import 'package:http/http.dart' as http;
 

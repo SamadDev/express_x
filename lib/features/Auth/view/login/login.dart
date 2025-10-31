@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:x_express/core/config/language/language.dart';
 import 'package:x_express/features/Auth/data/service/auth_service.dart';
 import 'package:x_express/core/config/widgets/phone_input_field.dart';
+import 'package:x_express/core/config/widgets/userTextformfeild.dart';
 import 'package:x_express/core/config/widgets/globalText.dart';
 import 'package:x_express/core/config/theme/color.dart';
-import 'package:x_express/core/config/routes/routes.dart';
 import 'package:x_express/features/Auth/view/register/register.dart';
 import 'package:x_express/features/Auth/view/forgot_password/forgot_password_page.dart';
 
@@ -134,50 +133,17 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         const SizedBox(height: 24),
                         
-                        const GlobalText(
-                          "Password",
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: kLightText,
-                        ),
-                        const SizedBox(height: 12),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: kLightFill,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: authService.isObscure ? kLightStroke : kLightPrimary,
-                              width: 1,
+                        CustomUserTextFormField(
+                          title: "Password",
+                          hintText: "Enter your password",
+                          obscureText: authService.isObscure,
+                          controller: authService.passwordController,
+                          suffix: IconButton(
+                            icon: Icon(
+                              authService.isObscure ? Icons.visibility_off : Icons.visibility,
+                              color: kLightGrayText,
                             ),
-                          ),
-                          child: TextFormField(
-                            controller: authService.passwordController,
-                            obscureText: authService.isObscure,
-                            decoration: InputDecoration(
-                              hintText: "Enter your password",
-                              hintStyle: const TextStyle(
-                                color: kLightLightGrayText,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
-                              ),
-                              border: InputBorder.none,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 16,
-                              ),
-                              suffixIcon: IconButton(
-                                icon: Icon(
-                                  authService.isObscure ? Icons.visibility_off : Icons.visibility,
-                                  color: kLightGrayText,
-                                ),
-                                onPressed: () => authService.setObscure(),
-                              ),
-                            ),
-                            style: const TextStyle(
-                              color: kLightText,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            onPressed: () => authService.setObscure(),
                           ),
                         ),
                         const SizedBox(height: 16),

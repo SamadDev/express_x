@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:x_express/features/auth/view/changePassword/chengePassword.dart';
-import 'package:x_express/features/auth/view/login/login.dart';
-import 'package:x_express/features/auth/view/register/register.dart';
-import 'package:x_express/features/auth/view/forgot_password/forgot_password_page.dart';
-import 'package:x_express/features/auth/view/password_recovery/password_recovery_page.dart';
-import 'package:x_express/features/auth/view/reset_password/reset_password_page.dart';
-import 'package:x_express/features/auth/view/success/success_page.dart';
-import 'package:x_express/features/auth/view/otp_verification/otp_verification_page.dart';
+import 'package:x_express/features/Auth/view/changePassword/chengePassword.dart';
+import 'package:x_express/features/Auth/view/login/login.dart';
+import 'package:x_express/features/Auth/view/register/register.dart';
+import 'package:x_express/features/Auth/view/forgot_password/forgot_password_page.dart';
+import 'package:x_express/features/Auth/view/password_recovery/password_recovery_page.dart';
+import 'package:x_express/features/Auth/view/reset_password/reset_password_page.dart';
+import 'package:x_express/features/Auth/view/success/success_page.dart';
+import 'package:x_express/features/Auth/view/otp_verification/otp_verification_page.dart';
 import 'package:x_express/features/wellcom/splash.dart';
 
 class AppRoute {

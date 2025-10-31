@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:x_express/core/config/theme/color.dart';
 
 class NewSplashScreen extends StatefulWidget {
   const NewSplashScreen({super.key});
@@ -66,11 +67,11 @@ class _NewSplashScreenState extends State<NewSplashScreen>
                       width: 120,
                       height: 120,
                       decoration: BoxDecoration(
-                        color: const Color(0xFF5C3A9E),
+                        color: kLightPrimary,
                         borderRadius: BorderRadius.circular(30),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF5C3A9E).withOpacity(0.3),
+                            color: kLightPrimary.withOpacity(0.3),
                             spreadRadius: 0,
                             blurRadius: 30,
                             offset: const Offset(0, 15),
@@ -116,7 +117,7 @@ class _NewSplashScreenState extends State<NewSplashScreen>
                       child: CircularProgressIndicator(
                         strokeWidth: 3,
                         valueColor: AlwaysStoppedAnimation<Color>(
-                          const Color(0xFF5C3A9E).withOpacity(0.8),
+                          kLightPrimary.withOpacity(0.8),
                         ),
                       ),
                     ),

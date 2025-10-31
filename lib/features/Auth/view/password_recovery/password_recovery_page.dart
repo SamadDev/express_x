@@ -3,7 +3,7 @@ import 'package:x_express/core/config/theme/color.dart';
 import 'package:x_express/core/config/widgets/globalText.dart';
 import 'package:x_express/core/config/widgets/phone_input_field.dart';
 import 'package:x_express/core/config/routes/routes.dart';
-import 'package:x_express/features/auth/data/service/auth_service.dart';
+import 'package:x_express/features/Auth/data/service/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class PasswordRecoveryPage extends StatefulWidget {

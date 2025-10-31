@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:x_express/features/auth/data/model/auth_model.dart';
-import 'package:x_express/features/auth/data/repository/auth_repository.dart';
-import 'package:x_express/features/auth/data/repository/change_password_repository.dart';
-import 'package:x_express/features/auth/data/repository/check_user_type_repository.dart';
-import 'package:x_express/features/auth/data/repository/local_storage.dart';
+import 'package:x_express/features/Auth/data/model/auth_model.dart';
+import 'package:x_express/features/Auth/data/repository/auth_repository.dart';
+import 'package:x_express/features/Auth/data/repository/change_password_repository.dart';
+import 'package:x_express/features/Auth/data/repository/check_user_type_repository.dart';
+import 'package:x_express/features/Auth/data/repository/local_storage.dart';
 
 class AuthService extends ChangeNotifier {
   LoginResponse? _loginResponse;

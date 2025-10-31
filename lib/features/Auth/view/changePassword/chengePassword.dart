@@ -8,8 +8,8 @@ import 'package:x_express/core/config/widgets/globalText.dart';
 import 'package:x_express/core/config/widgets/loading.dart';
 import 'package:x_express/core/config/widgets/success_dialog.dart';
 import 'package:x_express/core/config/widgets/userTextformfeild.dart';
-import 'package:x_express/features/auth/data/repository/local_storage.dart';
-import 'package:x_express/features/auth/data/service/auth_service.dart';
+import 'package:x_express/features/Auth/data/repository/local_storage.dart';
+import 'package:x_express/features/Auth/data/service/auth_service.dart';
 import 'package:provider/provider.dart';
 
 class ChangePasswordPage extends StatefulWidget {

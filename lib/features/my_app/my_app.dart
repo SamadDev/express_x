@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:x_express/core/config/language/language.dart';
+import 'package:x_express/core/config/routes/routes.dart';
 import 'package:x_express/core/config/theme/theme.dart';
 import 'package:x_express/features/Auth/data/service/auth_service.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
@@ -59,8 +60,7 @@ class _MyAppsState extends State<MyApps> {
         title: "X_Express",
         theme: AppTheme.lightTheme,
         home: AuthWrapper(),
-        // Remove routes to prevent LoginPage from being created outside provider context
-        // onGenerateRoute: AppRoute.generateRoute,
+        onGenerateRoute: AppRoute.generateRoute,
       ),
     );
   }

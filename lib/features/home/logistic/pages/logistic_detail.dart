@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:x_express/core/config/widgets/globalText.dart';
+import 'package:x_express/core/config/theme/color.dart';
 
 class Servicedetail extends StatelessWidget {
   const Servicedetail({super.key});
@@ -10,7 +11,7 @@ class Servicedetail extends StatelessWidget {
       appBar: AppBar(
         centerTitle: false,
         iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Color(0xFF5C3A9E),
+        backgroundColor: kLightPrimary,
         title: GlobalText(
          "Service Detail",
           color: Colors.white,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 // Modern E-commerce Design System Colors
-// Primary accent color - vibrant orange/yellow
-const Color kLightPrimary = Color(0xFFFF6B35); // Vibrant orange
-const Color kLightSecondary = Color(0xFFFF8C42); // Lighter orange
-const Color kLightAccent = Color(0xFFFFA726); // Yellow-orange
+// Primary accent color - purple
+const Color kLightPrimary = Color(0xFF8B66FD); // Purple
+const Color kLightSecondary = Color(0xFFA389FF); // Lighter purple
+const Color kLightAccent = Color(0xFFB5A0FF); // Light purple
 
 // Text colors
 const Color kLightText = Color(0xFF2D2D2D); // Main black text
@@ -23,7 +23,7 @@ const Color kLightCardBackground = Color(0xFFFFFFFF); // Card background
 const Color kLightStroke = Color(0xFFE5E5E5); // Border color
 const Color kLightPasswordEyeIcon = Color(0xFF666666); // Icon color
 const Color kLightAppBar = Color(0xFFFFFFFF); // App bar background
-const Color kLightButton = Color(0xFFFF6B35); // Button color
+const Color kLightButton = Color(0xFF8B66FD); // Button color
 const Color kLightSurfacePrimary = Color(0xFFFFFFFF); // Primary surface
 
 // Status colors
@@ -32,7 +32,7 @@ const Color kLightSuccess = Color(0xFF1CB09C); // Success green
 const Color kLightWarning = Color(0xFFFFA726); // Warning orange
 
 // Auth specific colors
-const Color kLightAuthText = Color(0xFFFF6B35); // Auth accent
+const Color kLightAuthText = Color(0xFF8B66FD); // Auth accent
 
 const Color kLightPlatinum950 = Color(0xFF101828);
 const Color kLightPlatinum900 = Color(0xFF0F172A);

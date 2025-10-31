@@ -5,7 +5,6 @@ import 'package:x_express/core/config/widgets/globalText.dart';
 import 'package:x_express/core/config/widgets/userTextformfeild.dart';
 import 'package:x_express/core/config/widgets/phone_input_field.dart';
 import 'package:provider/provider.dart';
-import 'package:x_express/core/config/language/language.dart';
 import 'package:x_express/features/Auth/data/service/auth_service.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -141,58 +140,80 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
-    final language = Provider.of<Language>(context, listen: false).getWords;
     return Scaffold(
       backgroundColor: kLightBackground,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 80),
+                Center(
+                  child: Column(
+                    children: [
+                      GlobalText(
+                        "Getting Started",
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold,
+                        color: kLightText,
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 12),
+                      GlobalText(
+                        "Create an account to continue!",
+                        fontSize: 15,
+                        fontWeight: FontWeight.w500,
+                        color: kLightGrayText,
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 48),
+                
+                // Registration Form
+                Container(
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: kLightSurface,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        spreadRadius: 0,
+                        blurRadius: 20,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 80),
-                      Center(
-                        child: Column(
-                          children: [
-                            GlobalText(
-                              "Getting Started",
-                              fontSize: 25,
-                              fontWeight: FontWeight.bold,
-                              color: kLightText,
-                              textAlign: TextAlign.center,
-                            ),
-                            const SizedBox(height: 12),
-                            GlobalText(
-                              "Create an account to continue!",
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500,
-                              color: kLightGrayText,
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                      const GlobalText(
+                        "Phone Number",
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: kLightText,
                       ),
-                      const SizedBox(height: 48),
+                      const SizedBox(height: 12),
                       PhoneInputField(
-                        label: "phone_number",
-                        hintText: "enter_your_phone_number",
+                        label: null,
+                        hintText: "Enter your phone number",
                         onChanged: (phone, countryCode) {
                           // Remove spaces from phone number
                           String cleanPhone = phone.replaceAll(' ', '');
                           _emailController.text = cleanPhone;
                         },
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
                       CustomUserTextFormField(
                         title: "User name",
                         hintText: "Enter user name",
                         controller: _nameController,
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 24),
                       CustomUserTextFormField(
                         title: "password",
                         hintText: "Enter your password",
@@ -240,37 +261,39 @@ class _RegisterPageState extends State<RegisterPage> {
                                 ),
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GlobalText(
-                              "dont_have_account",
-                              fontSize: 16,
-                              color: kLightGrayText,
-                              fontWeight: FontWeight.w400,
-                            ),
-                            const SizedBox(width: 4),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.pushReplacementNamed(context, AppRoute.login);
-                              },
-                              child: GlobalText(
-                                "sign_in",
-                                fontSize: 16,
-                                color: kLightAuthText,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GlobalText(
+                        "dont_have_account",
+                        fontSize: 16,
+                        color: kLightGrayText,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, AppRoute.login);
+                        },
+                        child: GlobalText(
+                          "sign_in",
+                          fontSize: 16,
+                          color: kLightAuthText,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+                
+                const SizedBox(height: 40),
+              ],
+            ),
           ),
         ),
       ),

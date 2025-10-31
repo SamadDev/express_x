@@ -1,6 +1,6 @@
 import 'package:x_express/core/config/constant/api.dart';
 import 'package:x_express/core/config/network/network.dart';
-import 'package:x_express/features/auth/data/model/auth_model.dart';
+import 'package:x_express/features/Auth/data/model/auth_model.dart';
 
 class AuthRepository {
   Future<LoginResponse> login({username, password}) async {

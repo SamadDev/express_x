@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:x_express/core/config/theme/color.dart';
 
 class AppTheme {
   // Modern E-commerce Design System
-  static const Color primaryColor = Color(0xFFFF6B35); // Vibrant orange
-  static const Color secondaryColor = Color(0xFFFF8C42); // Lighter orange
+  static const Color primaryColor = Color(0xFF8B66FD); // Purple
+  static const Color secondaryColor = Color(0xFFA389FF); // Lighter purple
   static const Color backgroundColor = Color(0xFFF5F5F5); // Light gray background
   static const Color surfaceColor = Colors.white; // White surface
   static const Color textColor = Color(0xFF2D2D2D); // Main text color

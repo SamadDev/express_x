@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:x_express/core/config/widgets/globalText.dart';
 import 'package:x_express/custom_text_form_field.dart';
+import 'package:x_express/core/config/theme/color.dart';
 
 class Address {
   final String id;
@@ -98,7 +99,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF5C3A9E),
+        backgroundColor: kLightPrimary,
         centerTitle: false,
         iconTheme: IconThemeData(color: Colors.white),
         title: GlobalText(
@@ -118,7 +119,7 @@ class _AddressListScreenState extends State<AddressListScreen> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color(0xFF5C3A9E),
+        backgroundColor: kLightPrimary,
         onPressed: _navigateToAddAddress,
         child: const Icon(
           Icons.add,
@@ -179,7 +180,7 @@ class AddressCard extends StatelessWidget {
           padding: EdgeInsets.all(12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(90),
-            color: Color(0xFF5C3A9E),
+            color: kLightPrimary,
           ),
           child: Icon(
             Icons.maps_home_work,
@@ -268,7 +269,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
       appBar: AppBar(
         centerTitle: false,
         iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Color(0xFF5C3A9E),
+        backgroundColor: kLightPrimary,
         title: GlobalText(
            isEditing ? 'Edit Address' : 'Add New Address',
           color: Colors.white,
@@ -364,7 +365,7 @@ class _AddressFormScreenState extends State<AddressFormScreen> {
               onPressed: _saveAddress,
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                backgroundColor: Color(0xFF5C3A9E),
+                backgroundColor: kLightPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 16),
               ),
               child: GlobalText(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:x_express/features/home/new_home_screen.dart';
+import 'package:x_express/features/home/home_screen.dart';
 import 'package:x_express/features/home/explore_screen.dart';
 import 'package:x_express/features/home/order_history_screen.dart';
 import 'package:x_express/features/home/subscription_screen.dart';

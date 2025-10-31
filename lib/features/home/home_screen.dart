@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
-import 'package:x_express/core/config/widgets/safe_webview.dart';
 import 'package:x_express/features/home/address/pages/address_home.dart';
 import 'package:x_express/features/home/advertisement/advertisement.dart';
 import 'package:x_express/features/home/logistic/pages/logistic_list.dart';
@@ -12,6 +11,7 @@ import 'package:x_express/features/home/bag_screen.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:x_express/core/config/theme/color.dart';
 
 class NewHomeScreen extends StatefulWidget {
   const NewHomeScreen({super.key});
@@ -114,16 +114,22 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
                       decoration: BoxDecoration(
                           border: Border(
                         bottom: BorderSide(
-                          color: _selectedIndex == index ? Color(0xff8b66fd) : Colors.transparent,
+                          color: _selectedIndex == index
+                              ? kLightPrimary
+                              : Colors.transparent,
                           width: 2,
                         ),
                       )),
                       child: Text(
                         _tabs[index].name,
                         style: TextStyle(
-                          color: _selectedIndex == index ? Color(0xff5d3ebd) : Colors.grey,
+                          color: _selectedIndex == index
+                              ? kLightPrimary
+                              : Colors.grey,
                           fontSize: 16,
-                          fontWeight: _selectedIndex == index ? FontWeight.bold : FontWeight.normal,
+                          fontWeight: _selectedIndex == index
+                              ? FontWeight.bold
+                              : FontWeight.normal,
                         ),
                       ),
                     ),
@@ -229,11 +235,9 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        SafeWebView(initialUrl: '',);
-      }),
       backgroundColor: Colors.grey.shade50,
-      appBar: PreferredSize(preferredSize: Size(double.infinity, 60), child: _AppBarWidget()),
+      appBar: PreferredSize(
+          preferredSize: Size(double.infinity, 60), child: _AppBarWidget()),
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -260,7 +264,7 @@ class _TimerSelectionWidget extends StatelessWidget {
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Color(0xFF5C3A9E),
+        color: kLightPrimary,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -294,7 +298,7 @@ class _TimerSelectionWidget extends StatelessWidget {
       child: Text(
         time,
         style: const TextStyle(
-          color: Color(0xFF5C3A9E),
+          color: kLightPrimary,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -331,7 +335,7 @@ class _SearchWidget extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: const Color(0xFF5C3A9E),
+              color: kLightPrimary,
               borderRadius: BorderRadius.circular(4),
             ),
             child: const Text(
@@ -355,8 +359,20 @@ class _AppBarWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: false,
-      backgroundColor: const Color(0xFF5C3A9E),
-      title: Image.asset("assets/images/logo.png", height: 30),
+      backgroundColor: kLightPrimary,
+      title: Container(
+        width: 40,
+        height: 40,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: const Icon(
+          Icons.shopping_bag_outlined,
+          color: kLightPrimary,
+          size: 24,
+        ),
+      ),
       actions: [
         // Bag Icon
         Consumer<BagService>(
@@ -370,7 +386,8 @@ class _AppBarWidget extends StatelessWidget {
               child: Stack(
                 children: [
                   IconButton(
-                    icon: Icon(Icons.shopping_bag_outlined, color: Color(0xFF5C3A9E)),
+                    icon:
+                        Icon(Icons.shopping_bag_outlined, color: kLightPrimary),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -418,7 +435,7 @@ class _AppBarWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: IconButton(
-            icon: Icon(Icons.receipt_long_outlined, color: Color(0xFF5C3A9E)),
+            icon: Icon(Icons.receipt_long_outlined, color: kLightPrimary),
             onPressed: () {
               Navigator.push(
                 context,
