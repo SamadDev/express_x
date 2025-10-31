@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:x_express/features/home/services/data_cache_service.dart';
 import 'package:x_express/features/home/services/tab_service.dart';
-import 'package:x_express/features/StoreFeatures/store_webview.dart';
+import 'package:x_express/features/Store/store_webview.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:x_express/core/config/theme/color.dart';
 

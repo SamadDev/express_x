@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:x_express/features/Store/add_to_bag_dialog.dart';
 import 'package:x_express/features/home/address/pages/address_home.dart';
 import 'package:x_express/features/home/advertisement/advertisement.dart';
 import 'package:x_express/features/home/logistic/pages/logistic_list.dart';
-import 'package:x_express/features/StoreFeatures/store_webview.dart';
+import 'package:x_express/features/Store/store_webview.dart';
 import 'package:x_express/features/home/services/data_cache_service.dart';
 import 'package:x_express/features/home/services/tab_service.dart';
 import 'package:x_express/features/home/order_history_screen.dart';
@@ -13,14 +14,14 @@ import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:x_express/core/config/theme/color.dart';
 
-class NewHomeScreen extends StatefulWidget {
-  const NewHomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<NewHomeScreen> createState() => _NewHomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _NewHomeScreenState extends State<NewHomeScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   final PageController _pageController = PageController();
   int _selectedIndex = 0;
   List<TabItem> _tabs = [];
@@ -237,14 +238,16 @@ class _NewHomeScreenState extends State<NewHomeScreen> {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
       appBar: PreferredSize(
-          preferredSize: Size(double.infinity, 60), child: _AppBarWidget()),
+        preferredSize: Size(double.infinity, 60),
+        child: _AppBarWidget(),
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: [
             AddressHome(),
             Logistic(),
             Advertisement(),
-            _SearchWidget(),
+            _OderLinkWidget(),
             _TimerSelectionWidget(),
             customTabWidget(),
             getSelectedTabContent(),
@@ -306,75 +309,64 @@ class _TimerSelectionWidget extends StatelessWidget {
   }
 }
 
-class _SearchWidget extends StatelessWidget {
-  const _SearchWidget({super.key});
+class _OderLinkWidget extends StatelessWidget {
+  const _OderLinkWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.grey[300]!),
-      ),
-      child: Row(
-        children: [
-          Icon(Icons.search, color: Colors.grey[600]),
-          const SizedBox(width: 8),
-          Expanded(
-            child: TextField(
-              decoration: InputDecoration(
-                hintText: 'Search for store name...',
-                hintStyle: TextStyle(color: Colors.grey[600]),
-                border: InputBorder.none,
+    return InkWell(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AddToBagDialog();
+          },
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: Colors.grey[300]!),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+                child: Text(
+              'Enter link to order',
+              style: TextStyle(color: Colors.grey[600]),
+            )),
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: kLightPrimary,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const Text(
+                'Paste Link',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                ),
               ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: kLightPrimary,
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: const Text(
-              'Filter Store',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 12,
-              ),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class _AppBarWidget extends StatelessWidget {
-  const _AppBarWidget({super.key});
-
   @override
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: false,
       backgroundColor: kLightPrimary,
-      title: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: const Icon(
-          Icons.shopping_bag_outlined,
-          color: kLightPrimary,
-          size: 24,
-        ),
-      ),
+      title: Image.asset("assets/images/logo.png",width: 120,),
       actions: [
-        // Bag Icon
         Consumer<BagService>(
           builder: (context, bagService, child) {
             return Container(

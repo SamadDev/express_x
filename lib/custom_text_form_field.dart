@@ -28,8 +28,8 @@ class CustomTextFormField extends StatelessWidget {
     this.contentPadding,
     this.borderDecoration,
     this.fillColor,
-    this.filled = true,
-    this.borderType = false,
+    this.filled,
+    this.borderType,
     this.validator,
     this.title,
     this.onFieldSubmit,
@@ -176,7 +176,7 @@ class CustomTextFormField extends StatelessWidget {
               vertical: 14,
             ),
         fillColor: fillColor ?? Colors.white,
-        filled: filled,
+        filled: filled ?? true,
 
         border: borderDecoration ??
             OutlineInputBorder(
@@ -186,12 +186,12 @@ class CustomTextFormField extends StatelessWidget {
         enabledBorder: borderDecoration ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
-              borderSide: borderType! ? BorderSide(color: Colors.grey.withOpacity(0.5)) : BorderSide.none,
+              borderSide: (borderType == null || borderType == true) ? BorderSide(color: Colors.grey.withOpacity(0.5)) : BorderSide.none,
             ),
         focusedBorder: borderDecoration ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(6),
-              borderSide: borderType! ? BorderSide(color: Colors.deepPurpleAccent.withOpacity(0.5)) : BorderSide.none,
+              borderSide: (borderType == null || borderType == true) ? BorderSide(color: Colors.deepPurpleAccent.withOpacity(0.5)) : BorderSide.none,
             ),
       );
 }

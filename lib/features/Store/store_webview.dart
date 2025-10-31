@@ -4,16 +4,19 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:x_express/core/config/theme/color.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
 import 'package:x_express/features/Store/add_to_bag_dialog.dart';
+import 'package:x_express/core/config/theme/theme.dart';
 import 'package:x_express/features/Store/bag_screen.dart';
 
 class StoreWebViewScreen extends StatefulWidget {
   final String storeUrl;
   final String storeName;
+  final String? baseUrl;
 
   const StoreWebViewScreen({
     Key? key,
     required this.storeUrl,
     required this.storeName,
+    this.baseUrl,
   }) : super(key: key);
 
   @override
@@ -84,7 +87,22 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
       body: Stack(
         children: [
           InAppWebView(
-            initialUrlRequest: URLRequest(url: WebUri(widget.storeUrl)),
+            initialUrlRequest:
+                URLRequest(url: WebUri(widget.baseUrl ?? widget.storeUrl)),
+            initialSettings: InAppWebViewSettings(
+              javaScriptEnabled: true,
+              domStorageEnabled: true,
+              databaseEnabled: true,
+              clearCache: false,
+              cacheEnabled: true,
+              allowsInlineMediaPlayback: true,
+              mediaPlaybackRequiresUserGesture: false,
+              allowsAirPlayForMediaPlayback: true,
+              allowsBackForwardNavigationGestures: true,
+              supportZoom: false,
+              disableHorizontalScroll: false,
+              disableVerticalScroll: false,
+            ),
             onWebViewCreated: (controller) {
               if (!_isWebViewInitialized) {
                 webViewController = controller;
@@ -92,11 +110,13 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
               }
             },
             onLoadStart: (controller, url) {
+              print('WebView loading: $url');
               setState(() {
                 isLoading = true;
               });
             },
             onLoadStop: (controller, url) {
+              print('WebView loaded: $url');
               setState(() {
                 isLoading = false;
               });
@@ -114,7 +134,16 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
               });
             },
             onReceivedServerTrustAuthRequest: (controller, challenge) async {
-              return ServerTrustAuthResponse(action: ServerTrustAuthResponseAction.PROCEED);
+              print(
+                  'Server trust auth request: ${challenge.protectionSpace.host}');
+              return ServerTrustAuthResponse(
+                  action: ServerTrustAuthResponseAction.PROCEED);
+            },
+            onReceivedError: (controller, request, error) {
+              print('WebView Error: ${error.description}');
+              setState(() {
+                isLoading = false;
+              });
             },
             onPermissionRequest: (controller, request) async {
               return PermissionResponse(
@@ -124,9 +153,6 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
             },
             onConsoleMessage: (controller, consoleMessage) {
               print("Console: ${consoleMessage.message}");
-            },
-            onReceivedError: (controller, request, error) {
-              print("Error: ${error.description}");
             },
           ),
           if (isLoading)
@@ -138,22 +164,46 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
                 ),
               ),
             ),
-          // Floating Add to Bag Button
+          // Custom Add to Bag Button - Always show
           Positioned(
             bottom: 20,
             right: 20,
-            child: FloatingActionButton.extended(
-              onPressed: () {
+            child: GestureDetector(
+              onTap: () {
                 _showAddToBagDialog();
               },
-              backgroundColor: kLightPrimary,
-              foregroundColor: Colors.white,
-              icon: Icon(Icons.shopping_bag),
-              label: Text(
-                'Add to Bag',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryColor,
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppTheme.primaryColor.withOpacity(0.3),
+                      spreadRadius: 1,
+                      blurRadius: 8,
+                      offset: Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.shopping_bag,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Add to Bag',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -161,7 +211,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: 60,
+        height: 80,
         decoration: BoxDecoration(
           color: kLightSurface,
           boxShadow: [
@@ -187,19 +237,10 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
               color: kLightText,
             ),
             IconButton(
-              onPressed: canGoForward ? () => webViewController?.goForward() : null,
+              onPressed:
+                  canGoForward ? () => webViewController?.goForward() : null,
               icon: Icon(Icons.arrow_forward_ios),
               color: canGoForward ? kLightText : kLightLightGrayText,
-            ),
-            IconButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BagScreen()),
-                );
-              },
-              icon: Icon(Icons.shopping_bag),
-              color: kLightText,
             ),
           ],
         ),
@@ -211,7 +252,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AddToBagDialog(storeName: widget.storeName);
+        return AddToBagDialog();
       },
     );
   }

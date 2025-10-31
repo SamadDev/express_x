@@ -19,7 +19,7 @@ class _NavigationBarScreenState extends State<NavigationBarScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    NewHomeScreen(),
+    HomeScreen(),
     ExploreScreen(),
     OrderHistoryScreen(),
     SubscriptionScreen(),
