@@ -86,8 +86,8 @@ class AuthService extends ChangeNotifier {
           credentialData: credentialData,
         );
       }
-      await FetchUserType();
       _isLoading = false;
+      print("Login success, isAuthenticated: ${isAuthenticated}, token: ${_loginResponse?.token}");
       notifyListeners();
       return true;
     } catch (e) {
@@ -131,7 +131,6 @@ class AuthService extends ChangeNotifier {
           credentialData: null,
         );
       }
-      await FetchUserType();
       _isLoading = false;
       notifyListeners();
       return true;
@@ -191,17 +190,6 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<void> FetchUserType() async {
-    try {
-      final userTypeData = await CheckUserTypeRepository().fetchCheckUserType();
-
-      _userType = userTypeData;
-      print("check for userTypedata is: $userTypeData");
-      print("check for userType is: $_userType");
-    } catch (e) {
-      print("error is: $e");
-    }
-  }
 
   Future<Map<String, String>?> getSavedCredentials() async {
     return await LocalStorage.getCredentials();

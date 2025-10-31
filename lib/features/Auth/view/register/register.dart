@@ -153,35 +153,23 @@ class _RegisterPageState extends State<RegisterPage> {
                 Center(
                   child: Column(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 15,
-                              offset: const Offset(0, 5),
-                            ),
-                          ],
-                        ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 40.0,),
                         child: Image.asset(
                           'assets/images/logo.png',
                           height: 120,
-                          width: 120,
                           fit: BoxFit.contain,
                         ),
                       ),
-                      const SizedBox(height: 32),
-                      GlobalText(
-                        "Getting Started",
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        color: kLightText,
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 12),
+                      // const SizedBox(height: 32),
+                      // GlobalText(
+                      //   "Getting Started",
+                      //   fontSize: 25,
+                      //   fontWeight: FontWeight.bold,
+                      //   color: kLightText,
+                      //   textAlign: TextAlign.center,
+                      // ),
+                      // const SizedBox(height: 12),
                       GlobalText(
                         "Create an account to continue!",
                         fontSize: 15,

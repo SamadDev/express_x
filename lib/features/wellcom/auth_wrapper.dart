@@ -40,9 +40,12 @@ class _AuthWrapperState extends State<AuthWrapper> {
         return NewSplashScreen();
       }
 
+      print("AuthWrapper build - isAuthenticated: ${authService.isAuthenticated}");
       if (authService.isAuthenticated) {
+        print("AuthWrapper: Navigating to NavigationBarScreen");
         return NavigationBarScreen();
       } else {
+        print("AuthWrapper: Showing LoginPage");
         return LoginPage();
       }
     } catch (e) {

@@ -55,34 +55,22 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 15,
-                                offset: const Offset(0, 5),
-                              ),
-                            ],
-                          ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 40.0,),
                           child: Image.asset(
                             'assets/images/logo.png',
                             height: 120,
-                            width: 120,
                             fit: BoxFit.contain,
                           ),
                         ),
-                        const SizedBox(height: 32),
-                        const GlobalText(
-                          "Welcome Back!",
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
-                          color: kLightText,
-                        ),
-                        const SizedBox(height: 8),
+                        // const SizedBox(height: 32),
+                        // const GlobalText(
+                        //   "Welcome Back!",
+                        //   fontSize: 28,
+                        //   fontWeight: FontWeight.bold,
+                        //   color: kLightText,
+                        // ),
+                        // const SizedBox(height: 8),
                         const GlobalText(
                           "Sign in to continue your shopping journey",
                           fontSize: 16,
