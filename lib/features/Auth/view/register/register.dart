@@ -153,6 +153,13 @@ class _RegisterPageState extends State<RegisterPage> {
                 Center(
                   child: Column(
                     children: [
+                      Image.asset(
+                        'assets/images/logo.png',
+                        height: 80,
+                        width: 80,
+                        fit: BoxFit.contain,
+                      ),
+                      const SizedBox(height: 24),
                       GlobalText(
                         "Getting Started",
                         fontSize: 25,

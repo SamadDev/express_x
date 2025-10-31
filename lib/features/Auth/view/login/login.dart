@@ -55,26 +55,11 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: Column(
                       children: [
-                        Container(
-                          width: 80,
+                        Image.asset(
+                          'assets/images/logo.png',
                           height: 80,
-                          decoration: BoxDecoration(
-                            color: kLightPrimary,
-                            borderRadius: BorderRadius.circular(20),
-                            boxShadow: [
-                              BoxShadow(
-                                color: kLightPrimary.withOpacity(0.3),
-                                spreadRadius: 0,
-                                blurRadius: 20,
-                                offset: const Offset(0, 10),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.shopping_bag_outlined,
-                            color: Colors.white,
-                            size: 40,
-                          ),
+                          width: 80,
+                          fit: BoxFit.contain,
                         ),
                         const SizedBox(height: 24),
                         const GlobalText(
