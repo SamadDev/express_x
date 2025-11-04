@@ -11,6 +11,8 @@ class BagItem {
   final String storeName;
   final String? size;
   final String? color;
+  final int? quantity;
+  final String? storeUrl;
 
   BagItem({
     required this.id,
@@ -20,6 +22,8 @@ class BagItem {
     required this.storeName,
     this.size,
     this.color,
+    this.quantity,
+    this.storeUrl,
   });
 
   Map<String, dynamic> toJson() {
@@ -31,6 +35,8 @@ class BagItem {
       'storeName': storeName,
       'size': size,
       'color': color,
+      'quantity': quantity,
+      'storeUrl': storeUrl,
     };
   }
 
@@ -43,6 +49,32 @@ class BagItem {
       storeName: json['storeName'],
       size: json['size'],
       color: json['color'],
+      quantity: json['quantity'],
+      storeUrl: json['storeUrl'],
+    );
+  }
+
+  BagItem copyWith({
+    String? id,
+    String? name,
+    String? imagePath,
+    DateTime? addedAt,
+    String? storeName,
+    String? size,
+    String? color,
+    int? quantity,
+    String? storeUrl,
+  }) {
+    return BagItem(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      imagePath: imagePath ?? this.imagePath,
+      addedAt: addedAt ?? this.addedAt,
+      storeName: storeName ?? this.storeName,
+      size: size ?? this.size,
+      color: color ?? this.color,
+      quantity: quantity ?? this.quantity,
+      storeUrl: storeUrl ?? this.storeUrl,
     );
   }
 }
@@ -63,7 +95,7 @@ class BagService with ChangeNotifier {
     try {
       final prefs = await SharedPreferences.getInstance();
       final bagData = prefs.getString(_bagKey);
-      
+
       if (bagData != null) {
         final List<dynamic> jsonList = json.decode(bagData);
         _bagItems = jsonList.map((json) => BagItem.fromJson(json)).toList();
@@ -90,6 +122,8 @@ class BagService with ChangeNotifier {
     String storeName = 'Store',
     String? size,
     String? color,
+    int? quantity,
+    String? storeUrl,
   }) async {
     try {
       final bagItem = BagItem(
@@ -100,6 +134,8 @@ class BagService with ChangeNotifier {
         storeName: storeName,
         size: size,
         color: color,
+        quantity: quantity,
+        storeUrl: storeUrl,
       );
 
       _bagItems.add(bagItem);
@@ -118,6 +154,20 @@ class BagService with ChangeNotifier {
       notifyListeners();
     } catch (e) {
       print('Error removing from bag: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateQuantity(String itemId, int newQuantity) async {
+    try {
+      final index = _bagItems.indexWhere((item) => item.id == itemId);
+      if (index != -1) {
+        _bagItems[index] = _bagItems[index].copyWith(quantity: newQuantity);
+        await _saveBagItems();
+        notifyListeners();
+      }
+    } catch (e) {
+      print('Error updating quantity: $e');
       rethrow;
     }
   }
@@ -148,4 +198,3 @@ class BagService with ChangeNotifier {
     return null;
   }
 }
-

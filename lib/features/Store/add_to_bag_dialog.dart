@@ -7,8 +7,11 @@ import 'package:x_express/core/config/theme/theme.dart';
 import 'package:x_express/core/config/theme/color.dart';
 
 class AddToBagDialog extends StatefulWidget {
+  final String? storeUrl;
+  
   const AddToBagDialog({
     Key? key,
+    this.storeUrl,
   }) : super(key: key);
 
   @override
@@ -16,7 +19,6 @@ class AddToBagDialog extends StatefulWidget {
 }
 
 class _AddToBagDialogState extends State<AddToBagDialog> {
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _sizeController = TextEditingController();
   final TextEditingController _colorController = TextEditingController();
   final TextEditingController _linkController = TextEditingController();
@@ -26,7 +28,7 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
   int _quantity = 1;
 
   bool get _isFormValid {
-    return _nameController.text.trim().isNotEmpty &&
+    return _linkController.text.trim().isNotEmpty &&
         _sizeController.text.trim().isNotEmpty &&
         _colorController.text.trim().isNotEmpty;
   }
@@ -34,7 +36,11 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
   @override
   void initState() {
     super.initState();
-    _nameController.addListener(_onFormChanged);
+    // Set the store URL if provided
+    if (widget.storeUrl != null) {
+      _linkController.text = widget.storeUrl!;
+    }
+    _linkController.addListener(_onFormChanged);
     _sizeController.addListener(_onFormChanged);
     _colorController.addListener(_onFormChanged);
   }
@@ -187,7 +193,7 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide:
-                                    BorderSide(color: Color(0xFFE8998D)),
+                                    BorderSide(color: kLightPrimary),
                               ),
                             ),
                           ),
@@ -232,7 +238,7 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8),
                                 borderSide:
-                                    BorderSide(color: Color(0xFFE8998D)),
+                                    BorderSide(color: kLightPrimary),
                               ),
                             ),
                           ),
@@ -377,7 +383,7 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content:
-              Text('Please fill in all required fields (Name, Size, Color)'),
+              Text('Please fill in all required fields (Link, Size, Color)'),
           backgroundColor: Colors.orange,
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(
@@ -395,11 +401,13 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
     try {
       final bagService = Provider.of<BagService>(context, listen: false);
       await bagService.addToBag(
-        name: _nameController.text.trim(),
+        name: _linkController.text.trim(),
         imagePath: _selectedImage?.path,
         storeName: "",
         size: _sizeController.text.trim(),
         color: _colorController.text.trim(),
+        quantity: _quantity,
+        storeUrl: widget.storeUrl,
       );
 
       Navigator.of(context).pop();
@@ -434,13 +442,12 @@ class _AddToBagDialogState extends State<AddToBagDialog> {
 
   @override
   void dispose() {
-    _nameController.removeListener(_onFormChanged);
+    _linkController.removeListener(_onFormChanged);
     _sizeController.removeListener(_onFormChanged);
     _colorController.removeListener(_onFormChanged);
-    _nameController.dispose();
+    _linkController.dispose();
     _sizeController.dispose();
     _colorController.dispose();
-    _linkController.dispose();
     super.dispose();
   }
 }

@@ -20,32 +20,30 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   void initState() {
     super.initState();
     // Trigger initial load
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final orderService = Provider.of<OrderService>(context, listen: false);
-      orderService.loadOrderStatuses();
-      orderService.loadOrderHistory();
+      await orderService.loadOrderStatuses();
+      await orderService.loadOrderHistory();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: kLightBackground,
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Text(
-          'Order History',
+          'My Bookings',
           style: TextStyle(
-            color: kLightText,
+            color: Colors.white,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: kLightSurface,
+        backgroundColor: kLightPrimary,
         elevation: 0,
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: kLightText),
-          onPressed: () => Navigator.pop(context),
-        ),
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
@@ -70,7 +68,7 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                 return RefreshIndicator(
                   onRefresh: () => orderService.refreshOrders(),
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     itemCount: orderService.orders.length + (orderService.hasMorePages ? 1 : 0),
                     itemBuilder: (context, index) {
                       if (index == orderService.orders.length) {
@@ -94,8 +92,13 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   Widget _buildStatusTabs() {
     return Consumer<OrderService>(
       builder: (context, orderService, child) {
-        // Create status tabs from API data
-        final statusTabs = ['All', ...orderService.orderStatuses.map((s) => s['name'].toString().toUpperCase())];
+        // Create status tabs from API data with IDs (removed "All" tab)
+        final statusTabs = orderService.orderStatuses;
+        
+        // If no tabs loaded yet, don't show anything
+        if (statusTabs.isEmpty) {
+          return SizedBox.shrink();
+        }
         
         return Container(
           height: 50,
@@ -106,33 +109,51 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
             itemCount: statusTabs.length,
             itemBuilder: (context, index) {
               final isSelected = _selectedTabIndex == index;
-              final status = index == 0 ? 'all' : statusTabs[index].toLowerCase();
+              final statusTab = statusTabs[index];
+              final statusId = statusTab['id'].toString();
+              final statusName = statusTab['name'].toString();
+              
+              // Capitalize first letter only
+              final displayName = statusName.isEmpty 
+                  ? '' 
+                  : statusName[0].toUpperCase() + statusName.substring(1);
               
               return GestureDetector(
                 onTap: () {
                   setState(() {
                     _selectedTabIndex = index;
                   });
-                  orderService.changeStatusFilter(status);
+                  orderService.changeStatusFilter(statusId);
                 },
                 child: Container(
-                  margin: EdgeInsets.only(right: 12),
-                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: isSelected ? kLightPrimary : kLightSurface,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                      color: isSelected ? kLightPrimary : kLightStroke,
-                      width: 1,
-                    ),
-                  ),
-                  child: Text(
-                    statusTabs[index],
-                    style: TextStyle(
-                      color: isSelected ? Colors.white : kLightGrayText,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                      fontSize: 14,
-                    ),
+                  margin: EdgeInsets.only(right: 24),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+                        child: Text(
+                          displayName,
+                          style: TextStyle(
+                            color: isSelected ? kLightPrimary : Colors.grey[600],
+                            fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
+                      // Underline for active tab
+                      if (isSelected)
+                        Container(
+                          height: 2,
+                          width: displayName.length * 9.0, // Approximate width based on text
+                          decoration: BoxDecoration(
+                            color: kLightPrimary,
+                            borderRadius: BorderRadius.circular(1),
+                          ),
+                        )
+                      else
+                        SizedBox(height: 2),
+                    ],
                   ),
                 ),
               );
@@ -144,152 +165,178 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
   }
 
   Widget _buildOrderItem(BuildContext context, Order order, int index, OrderService orderService) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      decoration: BoxDecoration(
-        color: kLightSurface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            spreadRadius: 0,
-            blurRadius: 10,
-            offset: Offset(0, 2),
+    final statusColor = orderService.getStatusColor(order.status);
+    final statusBgColor = Color.fromARGB(30, statusColor.red, statusColor.green, statusColor.blue);
+    
+    // Format order number (e.g., "SO2024001")
+    final orderNumber = order.id.length > 8 ? order.id : 'SO${order.id.padLeft(7, '0')}';
+    
+    // Format date (e.g., "Oct 15, 2024")
+    final formattedDate = _formatOrderDate(order.orderDate);
+    
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OrderDetailsScreen(order: order),
           ),
-        ],
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                // Product Image
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[100],
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: order.imageUrl != null && order.imageUrl!.isNotEmpty
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
-                          child: CachedNetworkImage(
-                            imageUrl: order.imageUrl!,
-                            fit: BoxFit.cover,
-                            placeholder: (context, url) => Container(
-                              color: Colors.grey[200],
-                              child: Icon(Icons.image, color: Colors.grey[400]),
-                            ),
-                            errorWidget: (context, url, error) => Container(
-                              color: Colors.grey[200],
-                              child: Icon(Icons.image, color: Colors.grey[400]),
-                            ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              spreadRadius: 0,
+              blurRadius: 8,
+              offset: Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header: Order Number and Date
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Order $orderNumber',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black87,
                           ),
-                        )
-                      : Icon(
-                          Icons.shopping_bag,
-                          color: Colors.grey[400],
-                          size: 30,
                         ),
-                ),
-                SizedBox(width: 16),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                        SizedBox(height: 4),
+                        Text(
+                          formattedDate,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Status Badge
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: statusBgColor,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      _getStatusText(order.status),
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: statusColor,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              
+              SizedBox(height: 16),
+              
+              // Divider
+              Divider(height: 1, color: Colors.grey[200]),
+              
+              SizedBox(height: 16),
+              
+              // Product Info
+              Row(
+                children: [
+                  // Product Image
+                  Container(
+                    width: 60,
+                    height: 60,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[100],
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: order.imageUrl != null && order.imageUrl!.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: CachedNetworkImage(
+                              imageUrl: order.imageUrl!,
+                              fit: BoxFit.cover,
+                              placeholder: (context, url) => Container(
+                                color: Colors.grey[200],
+                                child: Icon(Icons.image, color: Colors.grey[400], size: 24),
+                              ),
+                              errorWidget: (context, url, error) => Container(
+                                color: Colors.grey[200],
+                                child: Icon(Icons.image, color: Colors.grey[400], size: 24),
+                              ),
+                            ),
+                          )
+                        : Icon(
+                            Icons.shopping_bag_outlined,
+                            color: Colors.grey[400],
+                            size: 28,
+                          ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          order.productName,
+                          style: TextStyle(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          '1 item',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Total Price
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        order.productName,
+                        '\$${order.price.toStringAsFixed(2)}',
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: kLightText,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
                         ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Order #${order.id}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: kLightGrayText,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Text(
-                            'Store: ',
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: kLightLightGrayText,
-                            ),
-                          ),
-                          Text(
-                            order.storeName,
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: kLightPrimary,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
                       ),
                     ],
                   ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: _getStatusColor(order.status, orderService),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        _getStatusText(order.status),
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: _getStatusTextColor(order.status, orderService),
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      '\$${order.price.toStringAsFixed(2)}',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: kLightPrimary,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-            SizedBox(height: 16),
-            Row(
-              children: [
-                Icon(
-                  Icons.access_time,
-                  size: 16,
-                  color: kLightGrayText,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  'Ordered ${_formatDate(order.orderDate)}',
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: kLightGrayText,
-                  ),
-                ),
-                Spacer(),
-                TextButton(
+                ],
+              ),
+              
+              SizedBox(height: 16),
+              
+              // View Details Button
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
@@ -298,20 +345,36 @@ class _OrderHistoryScreenState extends State<OrderHistoryScreen> {
                       ),
                     );
                   },
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    side: BorderSide(color: Colors.grey[300]!),
+                  ),
                   child: Text(
                     'View Details',
                     style: TextStyle(
-                      color: kLightPrimary,
+                      fontSize: 14,
                       fontWeight: FontWeight.w500,
+                      color: Colors.black87,
                     ),
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );
+  }
+  
+  String _formatOrderDate(DateTime date) {
+    final months = [
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ];
+    return '${months[date.month - 1]} ${date.day}, ${date.year}';
   }
 
   void _showOrderDetails(BuildContext context, Order order, int index) {

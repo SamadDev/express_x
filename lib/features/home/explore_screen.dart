@@ -72,18 +72,20 @@ class _ExploreScreenState extends State<ExploreScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade50,
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'Explore Stores',
           style: TextStyle(
             color: Colors.white,
+            fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
         ),
         backgroundColor: kLightPrimary,
         elevation: 0,
         centerTitle: true,
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         children: [
@@ -97,35 +99,52 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
   Widget _buildSearchBar() {
     return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: Offset(0, 2),
+            color: kLightPrimary.withOpacity(0.08),
+            spreadRadius: 0,
+            blurRadius: 12,
+            offset: Offset(0, 4),
           ),
         ],
       ),
       child: TextField(
         onChanged: _filterStores,
+        style: TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w500,
+        ),
         decoration: InputDecoration(
           hintText: 'Search stores...',
-          hintStyle: TextStyle(color: Colors.grey[600]),
-          prefixIcon: Icon(Icons.search, color: Colors.grey[600]),
+          hintStyle: TextStyle(
+            color: Colors.grey[400],
+            fontSize: 15,
+          ),
+          prefixIcon: Container(
+            margin: EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: kLightPrimary.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Icon(Icons.search, color: kLightPrimary, size: 20),
+          ),
           suffixIcon: _searchQuery.isNotEmpty
-              ? IconButton(
-                  icon: Icon(Icons.clear, color: Colors.grey[600]),
-                  onPressed: () {
-                    _filterStores('');
-                  },
+              ? Container(
+                  margin: EdgeInsets.all(4),
+                  child: IconButton(
+                    icon: Icon(Icons.clear, color: Colors.grey[600], size: 20),
+                    onPressed: () {
+                      _filterStores('');
+                    },
+                  ),
                 )
               : null,
           border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 12),
         ),
       ),
     );
@@ -154,32 +173,46 @@ class _ExploreScreenState extends State<ExploreScreen> {
 
     return Container(
       height: 50,
+      margin: EdgeInsets.symmetric(vertical: 8),
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: tabNames.length,
         itemBuilder: (context, index) {
           final isSelected = _selectedTabIndex == index;
+          final tabName = tabNames[index];
+          
           return GestureDetector(
             onTap: () => _filterByTab(index),
             child: Container(
-              margin: const EdgeInsets.only(right: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: isSelected ? kLightPrimary : Colors.white,
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: isSelected ? kLightPrimary : Colors.grey[300]!,
-                ),
-              ),
-              child: Center(
-                child: Text(
-                  tabNames[index],
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.grey[700],
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+              margin: EdgeInsets.only(right: 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 4, vertical: 12),
+                    child: Text(
+                      tabName,
+                      style: TextStyle(
+                        color: isSelected ? kLightPrimary : Colors.grey[600],
+                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        fontSize: 15,
+                      ),
+                    ),
                   ),
-                ),
+                  // Underline for active tab
+                  if (isSelected)
+                    Container(
+                      height: 2,
+                      width: tabName.length * 9.0, // Approximate width based on text
+                      decoration: BoxDecoration(
+                        color: kLightPrimary,
+                        borderRadius: BorderRadius.circular(1),
+                      ),
+                    )
+                  else
+                    SizedBox(height: 2),
+                ],
               ),
             ),
           );

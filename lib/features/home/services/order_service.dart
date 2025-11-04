@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:x_express/features/home/models/order_model.dart';
 import 'package:x_express/features/home/services/order_api_service.dart';
+import 'package:x_express/features/Bag/bag_service.dart';
 
 class OrderService extends ChangeNotifier {
   List<Order> _orders = [];
@@ -75,6 +77,12 @@ class OrderService extends ChangeNotifier {
     required double price,
     String? description,
     String? imageUrl,
+    String? storeId,
+    String? link,
+    int quantity = 1,
+    String? color,
+    String? size,
+    File? imageFile,
   }) async {
     try {
       final order = await OrderApiService.createOrder(
@@ -83,16 +91,45 @@ class OrderService extends ChangeNotifier {
         price: price,
         description: description,
         imageUrl: imageUrl,
+        storeId: storeId,
+        link: link,
+        quantity: quantity,
+        color: color,
+        size: size,
+        imageFile: imageFile,
       );
 
       if (order != null) {
-        _orders.insert(0, order); // Add to beginning of list
+        _orders.insert(0, order);
         _totalCount++;
         notifyListeners();
       }
 
       return order;
     } catch (e) {
+      _error = e.toString();
+      notifyListeners();
+      return null;
+    }
+  }
+
+  /// Create order from bag items
+  Future<Order?> createOrderFromBagItems(List<BagItem> items) async {
+    try {
+      print('🔄 OrderService: Starting createOrderFromBagItems for ${items.length} items');
+      final order = await OrderApiService.createOrderFromBagItems(items);
+      print('🔄 OrderService: Received order from API: ${order != null}');
+
+      if (order != null) {
+        _orders.insert(0, order); // Add to beginning of list
+        _totalCount++;
+        notifyListeners();
+        print('🔄 OrderService: Added order to list, total orders: ${_orders.length}');
+      }
+
+      return order;
+    } catch (e) {
+      print('❌ OrderService: Error: $e');
       _error = e.toString();
       notifyListeners();
       return null;
@@ -194,6 +231,12 @@ class OrderService extends ChangeNotifier {
   Future<void> loadOrderStatuses() async {
     try {
       _orderStatuses = await OrderApiService.getOrderStatuses();
+      
+      // Set initial status to first status if _selectedStatus is still 'all'
+      if (_selectedStatus == 'all' && _orderStatuses.isNotEmpty) {
+        _selectedStatus = _orderStatuses.first['id'].toString();
+      }
+      
       notifyListeners();
     } catch (e) {
       print('Error loading order statuses: $e');

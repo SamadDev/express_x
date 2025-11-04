@@ -370,16 +370,15 @@ class _AppBarWidget extends StatelessWidget {
         Consumer<BagService>(
           builder: (context, bagService, child) {
             return Container(
-              margin: const EdgeInsets.only(right: 8),
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
+                color: kLightPrimary.withValues(alpha: 0.5),
+                borderRadius: BorderRadius.circular(90),
               ),
               child: Stack(
                 children: [
                   IconButton(
                     icon:
-                        Icon(Icons.shopping_bag_outlined, color: kLightPrimary),
+                        Icon(Icons.shopping_bag_outlined, color: kLightSurface),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -419,25 +418,7 @@ class _AppBarWidget extends StatelessWidget {
             );
           },
         ),
-        // Order History Icon
-        Container(
-          margin: const EdgeInsets.only(right: 16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: IconButton(
-            icon: Icon(Icons.receipt_long_outlined, color: kLightPrimary),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderHistoryScreen(),
-                ),
-              );
-            },
-          ),
-        ),
+
       ],
     );
   }

@@ -5,7 +5,7 @@ import 'package:x_express/core/config/theme/color.dart';
 import 'package:x_express/features/Bag/bag_service.dart';
 import 'package:x_express/features/Store/add_to_bag_dialog.dart';
 import 'package:x_express/core/config/theme/theme.dart';
-import 'package:x_express/features/Store/bag_screen.dart';
+import 'package:x_express/features/home/bag_screen.dart';
 
 class StoreWebViewScreen extends StatefulWidget {
   final String storeUrl;
@@ -29,6 +29,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
   bool canGoBack = false;
   bool canGoForward = false;
   bool _isWebViewInitialized = false;
+  String? currentUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
                   IconButton(
                     icon: Icon(Icons.shopping_bag_outlined),
                     onPressed: () {
-                      // Navigate to bag screen
+                      // Navigate to  bag screen
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => BagScreen()),
@@ -119,9 +120,13 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
               print('WebView loaded: $url');
               setState(() {
                 isLoading = false;
+                currentUrl = url.toString();
               });
             },
             onUpdateVisitedHistory: (controller, url, androidIsReload) {
+              setState(() {
+                currentUrl = url.toString();
+              });
               controller.canGoBack().then((value) {
                 setState(() {
                   canGoBack = value;
@@ -252,7 +257,7 @@ class _StoreWebViewScreenState extends State<StoreWebViewScreen> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AddToBagDialog();
+        return AddToBagDialog(storeUrl: currentUrl);
       },
     );
   }

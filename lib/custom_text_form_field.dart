@@ -162,8 +162,8 @@ class CustomTextFormField extends StatelessWidget {
         hintText: hintText ?? "",
         hintStyle: hintStyle ??
             TextStyle(
-              color: Color(0XFF666666),
-              fontSize: 13,
+              color: Colors.grey[400],
+              fontSize: 14,
             ),
         prefixIcon: prefix,
         prefixIconConstraints: prefixConstraints,
@@ -172,26 +172,26 @@ class CustomTextFormField extends StatelessWidget {
         // isDense: true,
         contentPadding: contentPadding ??
             EdgeInsets.symmetric(
-              horizontal: 12,
-              vertical: 14,
+              horizontal: 20,
+              vertical: 16,
             ),
         fillColor: fillColor ?? Colors.white,
         filled: filled ?? true,
 
         border: borderDecoration ??
             OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: BorderSide(color: Colors.grey.withOpacity(0.5), width: 20),
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey[300]!, width: 1),
             ),
         enabledBorder: borderDecoration ??
             OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: (borderType == null || borderType == true) ? BorderSide(color: Colors.grey.withOpacity(0.5)) : BorderSide.none,
+              borderRadius: BorderRadius.circular(8),
+              borderSide: (borderType == null || borderType == true) ? BorderSide(color: Colors.grey[300]!) : BorderSide.none,
             ),
         focusedBorder: borderDecoration ??
             OutlineInputBorder(
-              borderRadius: BorderRadius.circular(6),
-              borderSide: (borderType == null || borderType == true) ? BorderSide(color: Colors.deepPurpleAccent.withOpacity(0.5)) : BorderSide.none,
+              borderRadius: BorderRadius.circular(8),
+              borderSide: (borderType == null || borderType == true) ? BorderSide(color: const Color(0xFF8B66FD)) : BorderSide.none,
             ),
       );
 }

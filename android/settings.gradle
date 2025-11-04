@@ -23,3 +23,33 @@ plugins {
 }
 
 include ":app"
+
+// Configure namespace for plugins that don't have it specified
+gradle.beforeProject { project ->
+    if (project.path != ":app" && project.path.startsWith(":")) {
+        project.afterEvaluate {
+            if (project.plugins.hasPlugin('com.android.library')) {
+                def android = project.extensions.findByName('android')
+                if (android && (!android.namespace || android.namespace.isEmpty())) {
+                    // Try to get from package in AndroidManifest.xml or use group
+                    def manifestFile = new File(project.projectDir, "src/main/AndroidManifest.xml")
+                    if (manifestFile.exists()) {
+                        def manifest = new XmlParser().parse(manifestFile)
+                        def packageName = manifest['@package']
+                        if (packageName) {
+                            android.namespace = packageName
+                        } else if (project.group) {
+                            android.namespace = project.group.toString()
+                        } else {
+                            android.namespace = "io.flutter.plugins.${project.name.replace(":", "")}"
+                        }
+                    } else if (project.group) {
+                        android.namespace = project.group.toString()
+                    } else {
+                        android.namespace = "io.flutter.plugins.${project.name.replace(":", "")}"
+                    }
+                }
+            }
+        }
+    }
+}

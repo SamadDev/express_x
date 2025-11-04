@@ -90,6 +90,7 @@ flutter:
     - assets/images/
     - assets/icons/
     - assets/lotties/
+    - assets/mock_orders.json
     - .env
 
 
