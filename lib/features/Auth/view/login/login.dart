@@ -49,7 +49,28 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 40),
+                  // Skip Button
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: TextButton(
+                      onPressed: () {
+                        // Navigate to home screen without login
+                        Navigator.of(context).pushNamedAndRemoveUntil(
+                          '/',
+                          (Route<dynamic> route) => false,
+                        );
+                      },
+                      child: Text(
+                        'Skip',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: kLightPrimary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
 
                   // Logo and Welcome Section
                   Center(

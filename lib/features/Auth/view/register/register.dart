@@ -167,7 +167,28 @@ class _RegisterPageState extends State<RegisterPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 80),
+                // Skip Button
+                Align(
+                  alignment: Alignment.topRight,
+                  child: TextButton(
+                    onPressed: () {
+                      // Navigate to home screen without registration
+                      Navigator.of(context).pushNamedAndRemoveUntil(
+                        '/',
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Text(
+                      'Skip',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: kLightPrimary,
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 40),
                 Center(
                   child: Column(
                     children: [
