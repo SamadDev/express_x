@@ -2,7 +2,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class LocalStorage {
-
   static const String _userDataKey = 'userData';
   static const String _credentialsKey = 'credentialData';
   static const String _rememberMeKey = 'rememberMe';
@@ -10,13 +9,11 @@ class LocalStorage {
   static const String _accountDeletedKey = 'accountDeleted';
   static const String _onboardingCompletedKey = 'onboardingCompleted';
 
-
   static Future<void> saveUserData({
     required String jsonData,
     required bool rememberMe,
     String? credentialData,
   }) async {
-
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(_userDataKey, jsonData);
     await prefs.setBool(_rememberMeKey, rememberMe);
@@ -38,14 +35,11 @@ class LocalStorage {
     }
   }
 
-
-
   static Future<String?> getUserData() async {
     final prefs = await SharedPreferences.getInstance();
     print("check for userData: $prefs");
     return prefs.getString(_userDataKey);
   }
-
 
   static Future<Map<String, String>?> getCredentials() async {
     final prefs = await SharedPreferences.getInstance();
@@ -66,7 +60,6 @@ class LocalStorage {
     return null;
   }
 
-
   // Get token for API requests
   static Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
@@ -75,14 +68,11 @@ class LocalStorage {
     return prefs.getString(_tokenKey);
   }
 
-
   // Check if remember me is enabled
   static Future<bool> isRemembered() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_rememberMeKey) ?? false;
   }
-
-
 
   static Future<bool> isLoggedIn() async {
     final token = await getToken();

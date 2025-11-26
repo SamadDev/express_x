@@ -90,7 +90,7 @@ class CustomDropDownFormField extends StatelessWidget {
   final onTap;
   final bool? filled;
 
-  final  validator;
+  final validator;
 
   @override
   Widget build(BuildContext context) {
@@ -103,44 +103,46 @@ class CustomDropDownFormField extends StatelessWidget {
   }
 
   Widget textFormFieldWidget(BuildContext context) => Padding(
-    padding: EdgeInsets.symmetric(vertical: verticalPadding ?? 0.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        if (title != null) ...[
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: Row(
-              children: [
-                GlobalText(
-                  title ?? "",
-                  fontWeight: FontWeight.w500,
-                  color: kLightTitle,
+        padding: EdgeInsets.symmetric(vertical: verticalPadding ?? 0.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (title != null) ...[
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                child: Row(
+                  children: [
+                    GlobalText(
+                      title ?? "",
+                      fontWeight: FontWeight.w500,
+                      color: kLightTitle,
+                    ),
+                    SizedBox(width: 6),
+                    isRequired
+                        ? Icon(Icons.star, color: kLightError, size: 10)
+                        : SizedBox.shrink()
+                  ],
                 ),
-                SizedBox(width: 6),
-                isRequired ? Icon(Icons.star, color: kLightError, size: 10) : SizedBox.shrink()
-              ],
+              ),
+              SizedBox(height: 6),
+            ],
+            SizedBox(
+              height: 58,
+              child: DropdownButtonFormField(
+                validator: validator,
+                value: value,
+                onChanged: onChange,
+                onTap: onTap,
+                autofocus: false,
+                style: TextTheme.of(context).bodyLarge,
+                decoration: decoration,
+                items: items,
+              ),
             ),
-          ),
-          SizedBox(height: 6),
-        ],
-        SizedBox(
-          height: 58,
-          child: DropdownButtonFormField(
-            validator: validator,
-            value: value,
-            onChanged: onChange,
-            onTap: onTap,
-            autofocus: false,
-            style: TextTheme.of(context).bodyLarge,
-            decoration: decoration,
-            items: items,
-          ),
+          ],
         ),
-      ],
-    ),
-  );
+      );
   InputDecoration get decoration => InputDecoration(
         prefix: prefix,
         suffixIcon: suffix,

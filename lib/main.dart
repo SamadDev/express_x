@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:onesignal_flutter/onesignal_flutter.dart";
 import "package:flutter_dotenv/flutter_dotenv.dart";
-import "package:x_express/features/my_app/my_app.dart";
+import "package:x_express/features/MyApp/view/my_app.dart";
 
 late GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -24,5 +24,3 @@ Future<void> main() async {
 
   runApp(MyApps());
 }
-
-

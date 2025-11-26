@@ -17,7 +17,8 @@ class ResetPasswordPage extends StatefulWidget {
 
 class _ResetPasswordPageState extends State<ResetPasswordPage> {
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _isLoading = false;
   bool _isObscurePassword = true;
   bool _isObscureConfirmPassword = true;
@@ -74,7 +75,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
 
     if (!_isValidPassword(_passwordController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password must be at least 9 characters with uppercase and lowercase letters')),
+        const SnackBar(
+            content: Text(
+                'Password must be at least 9 characters with uppercase and lowercase letters')),
       );
       return;
     }
@@ -108,7 +111,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
           AppRoute.success,
           arguments: {
             'title': 'Congratulations!',
-            'message': 'You successfully reset your password.\nNow you are good to go',
+            'message':
+                'You successfully reset your password.\nNow you are good to go',
             'buttonText': 'Go to Log In',
             'nextRoute': AppRoute.login,
             'isPasswordReset': true,
@@ -116,7 +120,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to reset password. Please try again.')),
+          const SnackBar(
+              content: Text('Failed to reset password. Please try again.')),
         );
       }
     } catch (e) {
@@ -186,7 +191,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                         obscureText: _isObscurePassword,
                         suffix: IconButton(
                           icon: Icon(
-                            _isObscurePassword ? Icons.visibility_off : Icons.visibility,
+                            _isObscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: _togglePasswordVisibility,
                           color: kLightPasswordEyeIcon,
@@ -206,14 +213,17 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                               obscureText: _isObscureConfirmPassword,
                               suffix: IconButton(
                                 icon: Icon(
-                                  _isObscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+                                  _isObscureConfirmPassword
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
                                 ),
                                 onPressed: _toggleConfirmPasswordVisibility,
                                 color: kLightPasswordEyeIcon,
                               ),
                             ),
                           ),
-                          if (_passwordsMatch && _confirmPasswordController.text.isNotEmpty)
+                          if (_passwordsMatch &&
+                              _confirmPasswordController.text.isNotEmpty)
                             Container(
                               margin: const EdgeInsets.only(left: 12, top: 32),
                               child: Container(
@@ -258,7 +268,8 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                                   width: 20,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
                                   ),
                                 )
                               : GlobalText(

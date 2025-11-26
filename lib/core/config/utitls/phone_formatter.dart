@@ -6,7 +6,7 @@ class PhoneFormatter {
   static String formatPhoneNumber(String phoneNumber, String countryCode) {
     // Remove all non-digit characters
     String digits = phoneNumber.replaceAll(RegExp(r'[^\d]'), '');
-    
+
     // Handle different country formats
     switch (countryCode) {
       case '+1': // US/Canada
@@ -104,9 +104,12 @@ class PhoneFormatter {
   // France format: X XX XX XX XX
   static String _formatFrance(String digits) {
     if (digits.length <= 1) return digits;
-    if (digits.length <= 3) return '${digits.substring(0, 1)} ${digits.substring(1)}';
-    if (digits.length <= 5) return '${digits.substring(0, 1)} ${digits.substring(1, 3)} ${digits.substring(3)}';
-    if (digits.length <= 7) return '${digits.substring(0, 1)} ${digits.substring(1, 3)} ${digits.substring(3, 5)} ${digits.substring(5)}';
+    if (digits.length <= 3)
+      return '${digits.substring(0, 1)} ${digits.substring(1)}';
+    if (digits.length <= 5)
+      return '${digits.substring(0, 1)} ${digits.substring(1, 3)} ${digits.substring(3)}';
+    if (digits.length <= 7)
+      return '${digits.substring(0, 1)} ${digits.substring(1, 3)} ${digits.substring(3, 5)} ${digits.substring(5)}';
     return '${digits.substring(0, 1)} ${digits.substring(1, 3)} ${digits.substring(3, 5)} ${digits.substring(5, 7)} ${digits.substring(7, 9)}';
   }
 
@@ -350,7 +353,7 @@ class PhoneFormatter {
   /// Validates phone number based on country-specific rules
   static bool isValidPhoneNumber(String phoneNumber, String countryCode) {
     String digits = phoneNumber.replaceAll(RegExp(r'[^\d]'), '');
-    
+
     switch (countryCode) {
       case '+1': // US/Canada - 10 digits
         return digits.length == 10;
@@ -467,4 +470,3 @@ class PhoneFormatter {
     }
   }
 }
-

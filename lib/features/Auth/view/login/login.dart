@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     try {
       final authService = Provider.of<AuthService>(context, listen: true);
-      
+
       // Load saved credentials only once when the widget first builds
       if (!_hasLoadedCredentials) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -50,13 +50,15 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 40),
-                  
+
                   // Logo and Welcome Section
                   Center(
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 40.0,),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40.0,
+                          ),
                           child: Image.asset(
                             'assets/images/logo.png',
                             height: 120,
@@ -81,9 +83,9 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 48),
-                  
+
                   // Login Form
                   Container(
                     padding: const EdgeInsets.all(24),
@@ -115,11 +117,12 @@ class _LoginPageState extends State<LoginPage> {
                           onChanged: (phone, countryCode) {
                             // Remove spaces from phone number before storing
                             String cleanPhone = phone.replaceAll(' ', '');
-                            authService.usernameController.text = '$countryCode$cleanPhone';
+                            authService.usernameController.text =
+                                '$countryCode$cleanPhone';
                           },
                         ),
                         const SizedBox(height: 24),
-                        
+
                         CustomUserTextFormField(
                           title: "Password",
                           hintText: "Enter your password",
@@ -127,14 +130,16 @@ class _LoginPageState extends State<LoginPage> {
                           controller: authService.passwordController,
                           suffix: IconButton(
                             icon: Icon(
-                              authService.isObscure ? Icons.visibility_off : Icons.visibility,
+                              authService.isObscure
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                               color: kLightGrayText,
                             ),
                             onPressed: () => authService.setObscure(),
                           ),
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Remember Me & Forgot Password
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,18 +147,18 @@ class _LoginPageState extends State<LoginPage> {
                             Row(
                               children: [
                                 SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: Checkbox(
-                                    value: authService.rememberMe,
-                                    activeColor: kLightPrimary,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4),
-                                    ),
-                                    onChanged: (value) {
-                                      authService.setRememberMe(value);
-                                    },
-                                  )),
+                                    height: 20,
+                                    width: 20,
+                                    child: Checkbox(
+                                      value: authService.rememberMe,
+                                      activeColor: kLightPrimary,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      onChanged: (value) {
+                                        authService.setRememberMe(value);
+                                      },
+                                    )),
                                 const SizedBox(width: 8),
                                 const GlobalText(
                                   "Remember me",
@@ -168,7 +173,8 @@ class _LoginPageState extends State<LoginPage> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => const ForgotPasswordPage(),
+                                    builder: (context) =>
+                                        const ForgotPasswordPage(),
                                   ),
                                 );
                               },
@@ -182,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                         const SizedBox(height: 32),
-                        
+
                         // Login Button
                         Container(
                           width: double.infinity,
@@ -210,30 +216,40 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: authService.isLoading
                                 ? null
                                 : () async {
-                                    if (authService.usernameController.text.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                    if (authService
+                                        .usernameController.text.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
-                                          content: Text('Please enter your phone number'),
+                                          content: Text(
+                                              'Please enter your phone number'),
                                           backgroundColor: Colors.red,
                                         ),
                                       );
                                       return;
                                     }
 
-                                    if (authService.passwordController.text.isEmpty) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                    if (authService
+                                        .passwordController.text.isEmpty) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
-                                          content: Text('Please enter your password'),
+                                          content: Text(
+                                              'Please enter your password'),
                                           backgroundColor: Colors.red,
                                         ),
                                       );
                                       return;
                                     }
 
-                                    if (authService.passwordController.text.length < 6) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                    if (authService
+                                            .passwordController.text.length <
+                                        6) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         const SnackBar(
-                                          content: Text('Password must be at least 6 characters'),
+                                          content: Text(
+                                              'Password must be at least 6 characters'),
                                           backgroundColor: Colors.red,
                                         ),
                                       );
@@ -241,20 +257,30 @@ class _LoginPageState extends State<LoginPage> {
                                     }
 
                                     // Clean the phone number before sending to API
-                                    String cleanUsername = authService.usernameController.text.replaceAll(' ', '');
-                                    
+                                    String cleanUsername = authService
+                                        .usernameController.text
+                                        .replaceAll(' ', '');
+
                                     bool success = await authService.login(
                                       username: cleanUsername,
-                                      password: authService.passwordController.text,
+                                      password:
+                                          authService.passwordController.text,
                                       rememberMe: authService.rememberMe,
                                     );
-                                    
+
                                     if (success) {
-                                      // Login successful - AuthWrapper will automatically navigate
+                                      // Clear post-login redirect after successful login
+                                      authService.clearPostLoginRedirect();
+                                      
+                                      // Navigate back with success result
+                                      // This will trigger the auth check to re-evaluate
+                                      Navigator.pop(context, true);
                                     } else {
-                                      ScaffoldMessenger.of(context).showSnackBar(
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(
                                         SnackBar(
-                                          content: Text(authService.error ?? 'Login failed'),
+                                          content: Text(authService.error ??
+                                              'Login failed'),
                                           backgroundColor: Colors.red,
                                         ),
                                       );
@@ -266,7 +292,8 @@ class _LoginPageState extends State<LoginPage> {
                                     width: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 2,
-                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                          Colors.white),
                                     ),
                                   )
                                 : const GlobalText(
@@ -280,9 +307,9 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 32),
-                  
+
                   // Sign Up Link
                   Center(
                     child: Row(
@@ -313,7 +340,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                   ),
-                  
+
                   const SizedBox(height: 40),
                 ],
               ),

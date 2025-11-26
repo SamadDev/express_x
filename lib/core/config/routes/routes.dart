@@ -7,7 +7,7 @@ import 'package:x_express/features/Auth/view/password_recovery/password_recovery
 import 'package:x_express/features/Auth/view/reset_password/reset_password_page.dart';
 import 'package:x_express/features/Auth/view/success/success_page.dart';
 import 'package:x_express/features/Auth/view/otp_verification/otp_verification_page.dart';
-import 'package:x_express/features/wellcom/splash.dart';
+import 'package:x_express/features/Wellcom/view/splash.dart';
 
 class AppRoute {
   static const String splash = '/';
@@ -59,15 +59,17 @@ class AppRoute {
   static const String managerOvertimePage = 'managerOvertimePage';
   static const String managerOvertimeDetailPage = 'managerOvertimeDetailPage';
   static const String managerEprListPage = 'managerEprListPage';
-  static const String managerLeaveBalanceListPage = 'managerLeaveBalanceListPage';
-  static const String managerLeaveBalanceDetailPage = 'managerLeaveBalanceDetailPage';
+  static const String managerLeaveBalanceListPage =
+      'managerLeaveBalanceListPage';
+  static const String managerLeaveBalanceDetailPage =
+      'managerLeaveBalanceDetailPage';
 
   AppRoute._();
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case splash:
-        return MaterialPageRoute(builder: (_) =>  SplashScreen());
+        return MaterialPageRoute(builder: (_) => SplashScreen());
 
       case login:
         return MaterialPageRoute(builder: (_) => const LoginPage());
@@ -79,10 +81,12 @@ class AppRoute {
         return MaterialPageRoute(builder: (_) => const PasswordRecoveryPage());
       case resetPassword:
         final email = settings.arguments as String? ?? '';
-        return MaterialPageRoute(builder: (_) => ResetPasswordPage(email: email));
+        return MaterialPageRoute(
+            builder: (_) => ResetPasswordPage(email: email));
       case otpVerification:
         final phoneNumber = settings.arguments as String? ?? '';
-        return MaterialPageRoute(builder: (_) => OtpVerificationPage(phoneNumber: phoneNumber));
+        return MaterialPageRoute(
+            builder: (_) => OtpVerificationPage(phoneNumber: phoneNumber));
       case success:
         final args = settings.arguments as Map<String, dynamic>? ?? {};
         return MaterialPageRoute(
@@ -97,8 +101,6 @@ class AppRoute {
 
       case changePassword:
         return MaterialPageRoute(builder: (_) => const ChangePasswordPage());
-
-
 
       default:
         throw const Scaffold();

@@ -53,6 +53,4 @@ class AppImages {
   static const team = '${basePath}team.png';
   static const balance = '${basePath}balance.png';
   static const filter = '${basePath}filter.png';
-
-
 }

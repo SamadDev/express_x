@@ -48,7 +48,8 @@ class BlurredDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: titlePadding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+                padding: titlePadding ??
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                 child: GlobalText(
                   title,
                   fontSize: 16,
@@ -56,7 +57,8 @@ class BlurredDialog extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: contentPadding ?? const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                padding: contentPadding ??
+                    const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                 child: GlobalText(
                   content,
                   fontWeight: FontWeight.w500,
@@ -97,4 +99,3 @@ class BlurredDialog extends StatelessWidget {
     );
   }
 }
-

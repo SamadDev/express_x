@@ -52,7 +52,9 @@ class SuccessPage extends StatelessWidget {
                                 color: Colors.green[100],
                               ),
                               child: Icon(
-                                isPasswordReset ? Icons.lock_reset : Icons.check_circle,
+                                isPasswordReset
+                                    ? Icons.lock_reset
+                                    : Icons.check_circle,
                                 size: 60,
                                 color: Colors.green[600],
                               ),
@@ -64,7 +66,7 @@ class SuccessPage extends StatelessWidget {
                             final radius = 90.0;
                             final x = 100 + radius * (angle / 3.14159);
                             final y = 100 + radius * (angle / 3.14159);
-                            
+
                             return Positioned(
                               left: x - 8,
                               top: y - 8,
@@ -73,7 +75,9 @@ class SuccessPage extends StatelessWidget {
                                 height: 16,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: index % 2 == 0 ? Colors.green[300] : Colors.orange[300],
+                                  color: index % 2 == 0
+                                      ? Colors.green[300]
+                                      : Colors.orange[300],
                                 ),
                               ),
                             );
@@ -81,9 +85,9 @@ class SuccessPage extends StatelessWidget {
                         ],
                       ),
                     ),
-                    
+
                     const SizedBox(height: 40),
-                    
+
                     // Title
                     GlobalText(
                       title,
@@ -92,9 +96,9 @@ class SuccessPage extends StatelessWidget {
                       color: kLightTitle,
                       textAlign: TextAlign.center,
                     ),
-                    
+
                     const SizedBox(height: 16),
-                    
+
                     // Message
                     GlobalText(
                       message,
@@ -106,7 +110,7 @@ class SuccessPage extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Action button
               Container(
                 width: double.infinity,
@@ -126,10 +130,7 @@ class SuccessPage extends StatelessWidget {
                   ),
                   onPressed: () {
                     Navigator.pushNamedAndRemoveUntil(
-                      context, 
-                      nextRoute, 
-                      (route) => false
-                    );
+                        context, nextRoute, (route) => false);
                   },
                   child: GlobalText(
                     buttonText,

@@ -50,14 +50,18 @@ class _RegisterPageState extends State<RegisterPage> {
     // Name validation
     if (_nameController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your name'), backgroundColor: Colors.red),
+        const SnackBar(
+            content: Text('Please enter your name'),
+            backgroundColor: Colors.red),
       );
       return;
     }
-    
+
     if (_nameController.text.length < 2) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Name must be at least 2 characters'), backgroundColor: Colors.red),
+        const SnackBar(
+            content: Text('Name must be at least 2 characters'),
+            backgroundColor: Colors.red),
       );
       return;
     }
@@ -65,14 +69,18 @@ class _RegisterPageState extends State<RegisterPage> {
     // Phone validation
     if (_emailController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your phone number'), backgroundColor: Colors.red),
+        const SnackBar(
+            content: Text('Please enter your phone number'),
+            backgroundColor: Colors.red),
       );
       return;
     }
-    
+
     if (!_isValidPhone(_emailController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter a valid phone number'), backgroundColor: Colors.red),
+        const SnackBar(
+            content: Text('Please enter a valid phone number'),
+            backgroundColor: Colors.red),
       );
       return;
     }
@@ -80,21 +88,29 @@ class _RegisterPageState extends State<RegisterPage> {
     // Password validation
     if (_passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter your password'), backgroundColor: Colors.red),
+        const SnackBar(
+            content: Text('Please enter your password'),
+            backgroundColor: Colors.red),
       );
       return;
     }
-    
+
     if (_passwordController.text.length < 8) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password must be at least 8 characters'), backgroundColor: Colors.red),
+        const SnackBar(
+            content: Text('Password must be at least 8 characters'),
+            backgroundColor: Colors.red),
       );
       return;
     }
-    
-    if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)').hasMatch(_passwordController.text)) {
+
+    if (!RegExp(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)')
+        .hasMatch(_passwordController.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Password must contain uppercase, lowercase, and number'), backgroundColor: Colors.red),
+        const SnackBar(
+            content:
+                Text('Password must contain uppercase, lowercase, and number'),
+            backgroundColor: Colors.red),
       );
       return;
     }
@@ -117,11 +133,12 @@ class _RegisterPageState extends State<RegisterPage> {
     if (success) {
       // Show success screen
       Navigator.pushNamed(
-        context, 
+        context,
         AppRoute.success,
         arguments: {
           'title': 'Congratulations!',
-          'message': 'You successfully created your account.\nNow you are good to go',
+          'message':
+              'You successfully created your account.\nNow you are good to go',
           'buttonText': 'Go to Home',
           'nextRoute': AppRoute.navigationBar,
           'isPasswordReset': false,
@@ -131,7 +148,8 @@ class _RegisterPageState extends State<RegisterPage> {
       // Show error message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(authService.error ?? 'Registration failed. Please try again.'),
+          content: Text(
+              authService.error ?? 'Registration failed. Please try again.'),
           backgroundColor: Colors.red,
         ),
       );
@@ -154,7 +172,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   child: Column(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 40.0,),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 40.0,
+                        ),
                         child: Image.asset(
                           'assets/images/logo.png',
                           height: 120,
@@ -181,7 +201,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
                 const SizedBox(height: 48),
-                
+
                 // Registration Form
                 Container(
                   padding: const EdgeInsets.all(24),
@@ -230,7 +250,9 @@ class _RegisterPageState extends State<RegisterPage> {
                         controller: _passwordController,
                         suffix: IconButton(
                           icon: Icon(
-                            _isObscurePassword ? Icons.visibility_off : Icons.visibility,
+                            _isObscurePassword
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
                           onPressed: _setObscurePassword,
                           color: kLightPasswordEyeIcon,
@@ -259,7 +281,8 @@ class _RegisterPageState extends State<RegisterPage> {
                                   width: 20,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
                                   ),
                                 )
                               : GlobalText(
@@ -287,7 +310,8 @@ class _RegisterPageState extends State<RegisterPage> {
                       const SizedBox(width: 4),
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacementNamed(context, AppRoute.login);
+                          Navigator.pushReplacementNamed(
+                              context, AppRoute.login);
                         },
                         child: GlobalText(
                           "sign_in",
@@ -299,7 +323,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ],
                   ),
                 ),
-                
+
                 const SizedBox(height: 40),
               ],
             ),

@@ -49,7 +49,8 @@ class CustomUserTextFormField extends StatefulWidget {
   });
 
   @override
-  State<CustomUserTextFormField> createState() => _CustomUserTextFormFieldState();
+  State<CustomUserTextFormField> createState() =>
+      _CustomUserTextFormFieldState();
 }
 
 class _CustomUserTextFormFieldState extends State<CustomUserTextFormField> {
@@ -110,9 +111,13 @@ class _CustomUserTextFormFieldState extends State<CustomUserTextFormField> {
               isDense: widget.dense,
               suffixIcon: widget.suffix,
               hintText: widget.hintText,
-              hintStyle: TextStyle(color: kLightPlatinum300, fontSize: 14, fontWeight: FontWeight.w400),
+              hintStyle: TextStyle(
+                  color: kLightPlatinum300,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400),
               filled: true,
-              fillColor: widget.fillColor ?? (_isFocused ? Colors.white : const Color(0xFFF2F5FF)),
+              fillColor: widget.fillColor ??
+                  (_isFocused ? Colors.white : const Color(0xFFF2F5FF)),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(width: 1, color: kLightPrimary),
                 borderRadius: BorderRadius.circular(12),
@@ -125,7 +130,8 @@ class _CustomUserTextFormFieldState extends State<CustomUserTextFormField> {
                 borderSide: BorderSide.none,
                 borderRadius: BorderRadius.circular(12),
               ),
-              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
             ),
           ),
         ],

@@ -9,7 +9,7 @@ class AuthRepository {
       "password": password,
     };
     final response = await Request.postJson(AppUrl.login, loginData);
-    
+
     // Handle different response structures
     Map<String, dynamic> responseData;
     if (response is Map<String, dynamic>) {
@@ -23,18 +23,21 @@ class AuthRepository {
     } else {
       throw Exception('Invalid response format from server');
     }
-    
+
     return LoginResponse.fromJson(responseData);
   }
 
-  Future<LoginResponse> register({required String username, required String phoneNumber, required String password}) async {
+  Future<LoginResponse> register(
+      {required String username,
+      required String phoneNumber,
+      required String password}) async {
     final registerData = {
       "username": username,
       "phone_number": phoneNumber,
       "password": password,
     };
     final response = await Request.postJson(AppUrl.register, registerData);
-    
+
     // Handle different response structures
     Map<String, dynamic> responseData;
     if (response is Map<String, dynamic>) {
@@ -48,7 +51,7 @@ class AuthRepository {
     } else {
       throw Exception('Invalid response format from server');
     }
-    
+
     return LoginResponse.fromJson(responseData);
   }
 }

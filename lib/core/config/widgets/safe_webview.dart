@@ -7,10 +7,13 @@ class SafeWebView extends StatefulWidget {
   final Function(InAppWebViewController, WebUri)? onLoadStart;
   final Function(InAppWebViewController, WebUri)? onLoadStop;
   final Function(InAppWebViewController, WebUri?, bool)? onUpdateVisitedHistory;
-  final Function(InAppWebViewController, URLAuthenticationChallenge)? onReceivedServerTrustAuthRequest;
-  final Function(InAppWebViewController, PermissionRequest)? onPermissionRequest;
+  final Function(InAppWebViewController, URLAuthenticationChallenge)?
+      onReceivedServerTrustAuthRequest;
+  final Function(InAppWebViewController, PermissionRequest)?
+      onPermissionRequest;
   final Function(InAppWebViewController, ConsoleMessage)? onConsoleMessage;
-  final Function(InAppWebViewController, WebResourceRequest, WebResourceError)? onReceivedError;
+  final Function(InAppWebViewController, WebResourceRequest, WebResourceError)?
+      onReceivedError;
 
   const SafeWebView({
     Key? key,
@@ -60,11 +63,14 @@ class _SafeWebViewState extends State<SafeWebView> {
         }
       },
       onUpdateVisitedHistory: (controller, url, androidIsReload) {
-        widget.onUpdateVisitedHistory?.call(controller, url, androidIsReload ?? false);
+        widget.onUpdateVisitedHistory
+            ?.call(controller, url, androidIsReload ?? false);
       },
       onReceivedServerTrustAuthRequest: (controller, challenge) async {
-        return widget.onReceivedServerTrustAuthRequest?.call(controller, challenge) ??
-            ServerTrustAuthResponse(action: ServerTrustAuthResponseAction.PROCEED);
+        return widget.onReceivedServerTrustAuthRequest
+                ?.call(controller, challenge) ??
+            ServerTrustAuthResponse(
+                action: ServerTrustAuthResponseAction.PROCEED);
       },
       onPermissionRequest: (controller, request) async {
         return widget.onPermissionRequest?.call(controller, request) ??

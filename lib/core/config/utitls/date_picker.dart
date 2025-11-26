@@ -68,8 +68,8 @@ Future<void> selectTime({
       return Theme(
         data: Theme.of(context).copyWith(
           colorScheme: Theme.of(context).colorScheme.copyWith(
-            primary: kLightPrimary,
-          ),
+                primary: kLightPrimary,
+              ),
         ),
         child: child!,
       );
@@ -78,7 +78,7 @@ Future<void> selectTime({
 
   if (picked != null) {
     controller.text =
-    "${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}";
+        "${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}";
   }
 }
 
@@ -98,8 +98,8 @@ Future<void> selectDate({
       return Theme(
         data: Theme.of(context).copyWith(
           colorScheme: Theme.of(context).colorScheme.copyWith(
-            primary: kLightPrimary,
-          ),
+                primary: kLightPrimary,
+              ),
         ),
         child: child!,
       );

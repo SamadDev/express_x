@@ -10,19 +10,20 @@ class EmptyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(
-              child: Lottie.asset(
-                AppLotties.empty,
-              ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Center(
+            child: Lottie.asset(
+              AppLotties.empty,
             ),
-            GlobalText(
-              "There is no data at that time",
-            )
-          ],
-        ),);
+          ),
+          GlobalText(
+            "There is no data at that time",
+          )
+        ],
+      ),
+    );
   }
 }

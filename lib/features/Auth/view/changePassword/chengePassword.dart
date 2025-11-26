@@ -82,7 +82,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           obscureText: state.isObscure,
                           suffix: IconButton(
                             icon: Icon(
-                              state.isObscure ? Icons.visibility_off : Icons.visibility,
+                              state.isObscure
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                             ),
                             onPressed: () => state.setObscure(),
                             color: kLightPasswordEyeIcon,
@@ -96,7 +98,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           obscureText: state.isObscureConfirm,
                           suffix: IconButton(
                             icon: Icon(
-                              state.isObscureConfirm ? Icons.visibility_off : Icons.visibility,
+                              state.isObscureConfirm
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                             ),
                             onPressed: () => state.setObscureConfirm(),
                             color: kLightPasswordEyeIcon,
@@ -110,7 +114,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           obscureText: state.isObscureConfirm,
                           suffix: IconButton(
                             icon: Icon(
-                              state.isObscureConfirm ? Icons.visibility_off : Icons.visibility,
+                              state.isObscureConfirm
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                             ),
                             onPressed: () => state.setObscureConfirm(),
                             color: kLightPasswordEyeIcon,
@@ -123,13 +129,18 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                 text: "Change Password",
                                 onPress: () async {
                                   bool success = await state.changePassword(
-                                    currentPassword: state.currentPasswordController.text,
-                                    newPassword: state.newPasswordController.text,
-                                    confirmPassword: state.confirmPasswordController.text,
+                                    currentPassword:
+                                        state.currentPasswordController.text,
+                                    newPassword:
+                                        state.newPasswordController.text,
+                                    confirmPassword:
+                                        state.confirmPasswordController.text,
                                   );
                                   if (success) {
                                     LocalStorage.clear();
-                                    showSuccessDialog(context,message: "password has been updated successfully");
+                                    showSuccessDialog(context,
+                                        message:
+                                            "password has been updated successfully");
                                   }
                                 },
                               )

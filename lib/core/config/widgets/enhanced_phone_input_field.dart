@@ -32,7 +32,8 @@ class EnhancedPhoneInputField extends StatefulWidget {
   });
 
   @override
-  State<EnhancedPhoneInputField> createState() => _EnhancedPhoneInputFieldState();
+  State<EnhancedPhoneInputField> createState() =>
+      _EnhancedPhoneInputFieldState();
 }
 
 class _EnhancedPhoneInputFieldState extends State<EnhancedPhoneInputField> {
@@ -88,7 +89,8 @@ class _EnhancedPhoneInputFieldState extends State<EnhancedPhoneInputField> {
                 fontWeight: FontWeight.w400,
               ),
               border: InputBorder.none,
-              contentPadding: widget.contentPadding ?? const EdgeInsets.fromLTRB(16, 16, 16, 16),
+              contentPadding: widget.contentPadding ??
+                  const EdgeInsets.fromLTRB(16, 16, 16, 16),
               counterText: '', // Hide character counter
             ),
             style: TextStyle(

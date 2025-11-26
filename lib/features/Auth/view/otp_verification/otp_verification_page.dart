@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   final String phoneNumber;
-  
+
   const OtpVerificationPage({super.key, required this.phoneNumber});
 
   @override
@@ -15,7 +15,8 @@ class OtpVerificationPage extends StatefulWidget {
 }
 
 class _OtpVerificationPageState extends State<OtpVerificationPage> {
-  final List<TextEditingController> _otpControllers = List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _otpControllers =
+      List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
   bool _isLoading = false;
   int _resendTimer = 60;
@@ -31,7 +32,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     _resendTimer = 60;
     _canResend = false;
     setState(() {});
-    
+
     Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
         if (_resendTimer > 0) {
@@ -67,7 +68,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
   Future<void> _verifyOTP() async {
     final otpCode = _getOTPCode();
-    
+
     if (otpCode.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter the OTP code')),
@@ -89,18 +90,19 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     try {
       final authService = Provider.of<AuthService>(context, listen: false);
       bool success = await authService.verifyOTP(widget.phoneNumber, otpCode);
-      
+
       setState(() {
         _isLoading = false;
       });
 
       if (success) {
         Navigator.pushNamed(
-          context, 
+          context,
           AppRoute.success,
           arguments: {
             'title': 'Congratulations!',
-            'message': 'You successfully verified your phone number.\nNow you can reset your password',
+            'message':
+                'You successfully verified your phone number.\nNow you can reset your password',
             'buttonText': 'Reset Password',
             'nextRoute': AppRoute.resetPassword,
             'isPasswordReset': true,
@@ -130,8 +132,9 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
 
     try {
       final authService = Provider.of<AuthService>(context, listen: false);
-      bool success = await authService.sendPasswordRecoverySMS(widget.phoneNumber);
-      
+      bool success =
+          await authService.sendPasswordRecoverySMS(widget.phoneNumber);
+
       setState(() {
         _isLoading = false;
       });
@@ -143,7 +146,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to resend OTP. Please try again.')),
+          const SnackBar(
+              content: Text('Failed to resend OTP. Please try again.')),
         );
       }
     } catch (e) {
@@ -183,7 +187,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 40),
-
                       Center(
                         child: GlobalText(
                           "OTP Authentication",
@@ -192,9 +195,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      
                       const SizedBox(height: 12),
-
                       Center(
                         child: GlobalText(
                           "An authentication code has been sent to ${widget.phoneNumber}",
@@ -204,9 +205,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      
                       const SizedBox(height: 48),
-                      
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: List.generate(6, (index) {
@@ -216,8 +215,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: _otpControllers[index].text.isNotEmpty 
-                                    ? kLightPrimary 
+                                color: _otpControllers[index].text.isNotEmpty
+                                    ? kLightPrimary
                                     : Colors.grey[300]!,
                                 width: 1,
                               ),
@@ -248,9 +247,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           );
                         }),
                       ),
-                      
                       const SizedBox(height: 24),
-                      
                       Center(
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -263,23 +260,23 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                             GestureDetector(
                               onTap: _canResend ? _resendOTP : null,
                               child: GlobalText(
-                                _canResend 
-                                    ? "Resend" 
+                                _canResend
+                                    ? "Resend"
                                     : "Resend (${_resendTimer}s)",
                                 fontSize: 14,
-                                color: _canResend ? kLightPrimary : kLightGrayText,
+                                color:
+                                    _canResend ? kLightPrimary : kLightGrayText,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      
                     ],
                   ),
                 ),
               ),
-              
+
               // Bottom section with continue button and terms
               Column(
                 children: [
@@ -305,7 +302,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                               width: 20,
                               child: CircularProgressIndicator(
                                 strokeWidth: 2,
-                                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                valueColor:
+                                    AlwaysStoppedAnimation<Color>(Colors.white),
                               ),
                             )
                           : GlobalText(
@@ -316,9 +314,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                             ),
                     ),
                   ),
-                  
                   const SizedBox(height: 24),
-                  
                   Center(
                     child: RichText(
                       textAlign: TextAlign.center,
@@ -328,7 +324,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                           color: kLightGrayText,
                         ),
                         children: [
-                          const TextSpan(text: "By Signing up, you agree to our. "),
+                          const TextSpan(
+                              text: "By Signing up, you agree to our. "),
                           TextSpan(
                             text: "Term and Conditions",
                             style: TextStyle(
@@ -340,7 +337,6 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                       ),
                     ),
                   ),
-                  
                   const SizedBox(height: 32),
                 ],
               ),

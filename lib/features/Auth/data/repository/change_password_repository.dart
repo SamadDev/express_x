@@ -13,7 +13,8 @@ class ChangePasswordRepository {
       "confirmPassword": confirmPassword,
     };
 
-    final response = await Request.postJson(AppUrl.changePassword, changePasswordData);
+    final response =
+        await Request.postJson(AppUrl.changePassword, changePasswordData);
 
     print("🔐 Change password response: $response");
 

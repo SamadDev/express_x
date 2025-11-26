@@ -1,7 +1,4 @@
-
-
 class FormValidator {
-
   static String? isEmpty(String? value) {
     if (value!.isEmpty) {
       // return Language().getWords['required_field'];
@@ -35,7 +32,8 @@ class FormValidator {
 
   static String? isUrl(String? value) {
     {
-      var urlPattern =r"https?://[A-Za-z0-9.-]+(/[A-Za-z0-9\-._~:/?#[\]@!$&'()*+,;=%]*)?";
+      var urlPattern =
+          r"https?://[A-Za-z0-9.-]+(/[A-Za-z0-9\-._~:/?#[\]@!$&'()*+,;=%]*)?";
       // r"(https?|http)://(.[A-Z0-9.-]+\.[A-Z]{2,63})(/[-A-Z0-9+&@#/%=~_|!:,.;]*)?(\?[A-Z0-9+&@#/%=~_|!:,.;]*)?";
       var match = RegExp(urlPattern, caseSensitive: false).firstMatch(value!);
       if (value.isEmpty) {
@@ -50,7 +48,8 @@ class FormValidator {
 
   static String? isUrlEmpty(String? value) {
     {
-      String pattern = r"https?://[A-Za-z0-9.-]+(/[A-Za-z0-9\-._~:/?#[\]@!$&'()*+,;=%]*)?";
+      String pattern =
+          r"https?://[A-Za-z0-9.-]+(/[A-Za-z0-9\-._~:/?#[\]@!$&'()*+,;=%]*)?";
       RegExp regExp = RegExp(
         pattern,
         caseSensitive: false,
@@ -79,7 +78,6 @@ class FormValidator {
     }
     return null;
   }
-
 
   static String? isNumber(String? value) {
     if (value == null || value.isEmpty) return null;

@@ -29,7 +29,8 @@ class Language with ChangeNotifier {
   Future<void> getLanguageDataInLocal() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     languageCode = sharedPreferences.getString('languageCode') ?? languageCode;
-    languageDirection = sharedPreferences.getString('languageDirection') ?? languageDirection;
+    languageDirection =
+        sharedPreferences.getString('languageDirection') ?? languageDirection;
     notifyListeners();
   }
 
@@ -43,7 +44,8 @@ class Language with ChangeNotifier {
 
   Future<void> _loadLanguageData() async {
     try {
-      final String jsonString = await rootBundle.loadString('lib/core/config/language/en.json');
+      final String jsonString =
+          await rootBundle.loadString('lib/core/config/language/en.json');
       final Map<String, dynamic> jsonData = json.decode(jsonString);
       _jsonWords = jsonData;
       notifyListeners();
@@ -124,7 +126,8 @@ class Language with ChangeNotifier {
       "select_your_job": "Select your job",
       "select_on_employ": "Select on Employ",
       "select_date_range": "Select Date Range",
-      "please_select_both_start_and_end_dates": "Please select both start and end dates",
+      "please_select_both_start_and_end_dates":
+          "Please select both start and end dates",
       "form_submitted": "Form submitted!",
       "you_do_not_have_permission": "You do not have permission",
       "preferences": "Preferences",
@@ -193,11 +196,14 @@ class Language with ChangeNotifier {
       "please_select_an_employee": "Please select an employee",
       "please_select_a_date_first": "Please select a date first",
       "from_time_cannot_be_in_the_past": "From time cannot be in the past",
-      "from_time_cannot_be_before_shift_end": "From time cannot be before shift end",
+      "from_time_cannot_be_before_shift_end":
+          "From time cannot be before shift end",
       "please_select_from_time_first": "Please select 'From time' first",
       "to_time_must_be_after_from_time": "To time must be after From time",
-      "duration_must_be_at_least_30_minutes": "Duration must be at least 30 minutes",
-      "to_time_should_be_after_last_punch": "To time should be after last punch",
+      "duration_must_be_at_least_30_minutes":
+          "Duration must be at least 30 minutes",
+      "to_time_should_be_after_last_punch":
+          "To time should be after last punch",
       "from_time": "From time",
       "to_time": "To time",
       "shift_end": "Shift end",
@@ -205,7 +211,8 @@ class Language with ChangeNotifier {
       "no_dates_selected": "No dates selected",
       "remaining": "Remaining:",
       "taken": "Taken:",
-      "salary_deposit_msg": "Your salary for has been deposited. You can now collect it or check your account for details",
+      "salary_deposit_msg":
+          "Your salary for has been deposited. You can now collect it or check your account for details",
       "balance": "Balance",
       "my_team_jd": "My Team JD",
       "erp": "ERP",
@@ -224,7 +231,8 @@ class Language with ChangeNotifier {
       "who_are_you_traveling_with": "Who are you Traveling with",
       "alone": "Alone",
       "group": "Group",
-      "personal_travel_combine_business": "Personal travel combine Business Travel?",
+      "personal_travel_combine_business":
+          "Personal travel combine Business Travel?",
       "days_on_personal_expense": "Days on personal expense",
       "travel_departure_date": "Travel Departure Date",
       "travel_return_date": "Travel Return Date",
@@ -240,21 +248,32 @@ class Language with ChangeNotifier {
       "and": "and",
       "confirm_rejection": "Confirm Rejection",
       "reject": "Reject",
-      "travel_request_rejected_successfully": "Travel request rejected successfully",
-      "overtime_request_rejected_successfully": "Overtime request rejected successfully",
-      "reward_request_rejected_successfully": "Reward request rejected successfully",
-      "status_change_request_rejected_successfully": "Status change request rejected successfully",
-      "leave_request_rejected_successfully": "Leave request rejected successfully",
+      "travel_request_rejected_successfully":
+          "Travel request rejected successfully",
+      "overtime_request_rejected_successfully":
+          "Overtime request rejected successfully",
+      "reward_request_rejected_successfully":
+          "Reward request rejected successfully",
+      "status_change_request_rejected_successfully":
+          "Status change request rejected successfully",
+      "leave_request_rejected_successfully":
+          "Leave request rejected successfully",
       "request_rejected_successfully": "Request rejected successfully",
       "confirm_approval": "Confirm Approval",
-      "travel_request_approved_successfully": "Travel request approved successfully",
-      "overtime_request_approved_successfully": "Overtime request approved successfully",
-      "reward_request_approved_successfully": "Reward request approved successfully",
-      "status_change_request_approved_successfully": "Status change request approved successfully",
-      "leave_request_approved_successfully": "Leave request approved successfully",
+      "travel_request_approved_successfully":
+          "Travel request approved successfully",
+      "overtime_request_approved_successfully":
+          "Overtime request approved successfully",
+      "reward_request_approved_successfully":
+          "Reward request approved successfully",
+      "status_change_request_approved_successfully":
+          "Status change request approved successfully",
+      "leave_request_approved_successfully":
+          "Leave request approved successfully",
       "request_approved_successfully": "Request approved successfully",
       "confirm_reject_request": "Are you sure you want to reject this request?",
-      "confirm_approve_request": "Are you sure you want to approve this request?",
+      "confirm_approve_request":
+          "Are you sure you want to approve this request?",
       "please_select_a_country": "Please select a country",
       "please_select_a_city": "Please select a city",
       "please_select_a_city_from_list": "Please select a city from the list",
@@ -294,7 +313,6 @@ class Language with ChangeNotifier {
       "meal": "Meal",
       "travel_hotel": "Travel Hotel",
       "approval_timeline": "Approval Timeline",
-
     },
   };
 }

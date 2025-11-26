@@ -27,7 +27,8 @@ class CustomerButton extends StatelessWidget {
       height: 48,
       width: double.infinity,
       decoration: BoxDecoration(
-          border: Border.all(color: kLightPlatinum700, width: isBorder ? 1.5 : 0),
+          border:
+              Border.all(color: kLightPlatinum700, width: isBorder ? 1.5 : 0),
           borderRadius: BorderRadius.circular(8)),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(

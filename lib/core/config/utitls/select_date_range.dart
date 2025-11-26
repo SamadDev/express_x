@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:x_express/core/config/language/language.dart';
 import 'package:provider/provider.dart';
 
-
-Future<Map<String, DateTime?>?> showDateRangePickerWidget(BuildContext context) async {
+Future<Map<String, DateTime?>?> showDateRangePickerWidget(
+    BuildContext context) async {
   DateTime? startDate;
   DateTime? endDate;
 
@@ -14,7 +14,6 @@ Future<Map<String, DateTime?>?> showDateRangePickerWidget(BuildContext context) 
       final language = Provider.of<Language>(context, listen: false).getWords;
       return StatefulBuilder(
         builder: (context, setState) {
-
           return AlertDialog(
             title: Text(language['select_date_range']),
             content: Container(
@@ -41,7 +40,9 @@ Future<Map<String, DateTime?>?> showDateRangePickerWidget(BuildContext context) 
                     });
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(language['please_select_both_start_and_end_dates'])),
+                      SnackBar(
+                          content: Text(language[
+                              'please_select_both_start_and_end_dates'])),
                     );
                   }
                 },

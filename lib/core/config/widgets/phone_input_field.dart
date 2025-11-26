@@ -105,7 +105,8 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
   @override
   void initState() {
     super.initState();
-    if (widget.initialCountry != null && _countries.containsKey(widget.initialCountry)) {
+    if (widget.initialCountry != null &&
+        _countries.containsKey(widget.initialCountry)) {
       _selectedCountry = widget.initialCountry!;
       _selectedCountryCode = _countries[widget.initialCountry!]!['code']!;
     } else {
@@ -127,7 +128,8 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
 
   void _validatePhone() {
     String phone = _phoneController.text;
-    bool isValid = PhoneFormatter.isValidPhoneNumber(phone, _selectedCountryCode);
+    bool isValid =
+        PhoneFormatter.isValidPhoneNumber(phone, _selectedCountryCode);
 
     if (_isValid != isValid) {
       setState(() {
@@ -173,7 +175,8 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                 onTap: () => _showCountryPicker(context),
                 child: Container(
                   width: 100,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -195,46 +198,52 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                   ),
                 ),
               ),
-              
+
               // Divider line
               Container(
                 height: 20,
                 width: 1,
                 color: kLightPlatinum500.withOpacity(0.3),
               ),
-              
+
               // Phone number input - no individual border
               Expanded(
                 child: TextFormField(
                   controller: _phoneController,
                   focusNode: _focusNode,
                   keyboardType: TextInputType.phone,
-                  inputFormatters: PhoneFormatter.getInputFormatters(_selectedCountryCode),
+                  inputFormatters:
+                      PhoneFormatter.getInputFormatters(_selectedCountryCode),
                   onChanged: (value) {
                     String formatted = _formatPhoneNumber(value);
                     if (formatted != value) {
                       _phoneController.value = TextEditingValue(
                         text: formatted,
-                        selection: TextSelection.collapsed(offset: formatted.length),
+                        selection:
+                            TextSelection.collapsed(offset: formatted.length),
                       );
                     }
                     _validatePhone();
                   },
                   decoration: InputDecoration(
                     hintText: widget.hintText ?? "750",
-                    hintStyle: TextStyle(color: kLightPlatinum300, fontSize: 14, fontWeight: FontWeight.w400),
+                    hintStyle: TextStyle(
+                        color: kLightPlatinum300,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400),
                     filled: false,
                     suffixIcon: _phoneController.text.isNotEmpty
-                      ? Icon(
-                          _isValid ? Icons.check_circle : Icons.error,
-                          color: _isValid ? kLightPrimary : kLightError,
-                          size: 20,
-                        )
-                      : null,
+                        ? Icon(
+                            _isValid ? Icons.check_circle : Icons.error,
+                            color: _isValid ? kLightPrimary : kLightError,
+                            size: 20,
+                          )
+                        : null,
                     border: InputBorder.none,
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
                   ),
                   style: TextTheme.of(context).bodyLarge,
                 ),
@@ -282,8 +291,9 @@ class _PhoneInputFieldState extends State<PhoneInputField> {
                     onChanged: (value) {
                       setModalState(() {
                         filteredCountries = _countries.keys
-                            .where(
-                                (country) => _countries[country]!['name']!.toLowerCase().contains(value.toLowerCase()))
+                            .where((country) => _countries[country]!['name']!
+                                .toLowerCase()
+                                .contains(value.toLowerCase()))
                             .toList();
                       });
                     },

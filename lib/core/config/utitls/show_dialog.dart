@@ -21,7 +21,6 @@ class AreYouSureDialog extends StatelessWidget {
     this.showNoteField = false,
     this.noteController,
     this.confirmButtonText = "Approval",
-
   });
 
   @override
@@ -42,37 +41,39 @@ class AreYouSureDialog extends StatelessWidget {
       ),
       content: SizedBox(
         child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            description,
-            style: const TextStyle(fontSize: 14, color: kLightPlatinum500),
-          ),
-          if (showNoteField && noteController != null)
-            Container(
-              width: double.infinity,
-              height: 150,
-              padding: const EdgeInsets.all(8),
-              margin: const EdgeInsets.only(top: 16),
-              decoration: BoxDecoration(
-                color: kLightFill,
-                borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: kLightStroke),
-              ),
-              child: TextFormField(
-                controller: noteController,
-                maxLines: null,
-                expands: true,
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              description,
+              style: const TextStyle(fontSize: 14, color: kLightPlatinum500),
+            ),
+            if (showNoteField && noteController != null)
+              Container(
+                width: double.infinity,
+                height: 150,
+                padding: const EdgeInsets.all(8),
+                margin: const EdgeInsets.only(top: 16),
+                decoration: BoxDecoration(
+                  color: kLightFill,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: kLightStroke),
+                ),
+                child: TextFormField(
+                  controller: noteController,
+                  maxLines: null,
+                  expands: true,
                   decoration: InputDecoration(
-                    hintText: language['rejection_reason'] ?? 'Reason for rejection',
-                  border: InputBorder.none,
-                    hintStyle: const TextStyle(fontSize: 12, color: kLightPlatinum600),
+                    hintText:
+                        language['rejection_reason'] ?? 'Reason for rejection',
+                    border: InputBorder.none,
+                    hintStyle:
+                        const TextStyle(fontSize: 12, color: kLightPlatinum600),
+                  ),
                 ),
               ),
-            ),
-        ],
-            ),
+          ],
+        ),
       ),
       actions: [
         ElevatedButton(
@@ -100,7 +101,8 @@ class AreYouSureDialog extends StatelessWidget {
               if (note.isEmpty) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(language['rejection_reason_required'] ?? 'Rejection reason is required'),
+                    content: Text(language['rejection_reason_required'] ??
+                        'Rejection reason is required'),
                     backgroundColor: kLightError,
                   ),
                 );

@@ -72,7 +72,9 @@ class _PageBuilderState extends State<PageBuilder> {
     }
 
     return SingleChildScrollView(
-      physics: widget.isRefreshActive ? AlwaysScrollableScrollPhysics() : NeverScrollableScrollPhysics(),
+      physics: widget.isRefreshActive
+          ? AlwaysScrollableScrollPhysics()
+          : NeverScrollableScrollPhysics(),
       child: child,
     );
   }

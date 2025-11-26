@@ -172,7 +172,7 @@ class _OtpInputFieldState extends State<OtpInputField> {
                 textInputAction: TextInputAction.done,
               ),
               const SizedBox(height: 32),
-              
+
               // Resend Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -190,21 +190,24 @@ class _OtpInputFieldState extends State<OtpInputField> {
                       fontSize: 14,
                       color: _canResend ? kLightPrimary : kLightPlatinum400,
                       fontWeight: FontWeight.w500,
-                      decoration: _canResend ? TextDecoration.underline : TextDecoration.none,
+                      decoration: _canResend
+                          ? TextDecoration.underline
+                          : TextDecoration.none,
                     ),
                   ),
                 ],
               ),
-              
+
               const Spacer(),
-              
+
               // Continue Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _isOtpComplete ? widget.onContinue : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: _isOtpComplete ? kLightPrimary : kLightPlatinum300,
+                    backgroundColor:
+                        _isOtpComplete ? kLightPrimary : kLightPlatinum300,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -221,7 +224,7 @@ class _OtpInputFieldState extends State<OtpInputField> {
                 ),
               ),
               const SizedBox(height: 24),
-              
+
               // Terms and Conditions
               RichText(
                 textAlign: TextAlign.center,

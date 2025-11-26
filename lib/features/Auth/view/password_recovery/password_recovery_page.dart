@@ -44,17 +44,20 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
 
     try {
       final authService = Provider.of<AuthService>(context, listen: false);
-      bool success = await authService.sendPasswordRecoverySMS(_phoneController.text);
-      
+      bool success =
+          await authService.sendPasswordRecoverySMS(_phoneController.text);
+
       setState(() {
         _isLoading = false;
       });
 
       if (success) {
-        Navigator.pushNamed(context, AppRoute.otpVerification, arguments: _phoneController.text);
+        Navigator.pushNamed(context, AppRoute.otpVerification,
+            arguments: _phoneController.text);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to send SMS. Please try again.')),
+          const SnackBar(
+              content: Text('Failed to send SMS. Please try again.')),
         );
       }
     } catch (e) {
@@ -105,7 +108,7 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 40),
-                      
+
                       // Title
                       Center(
                         child: GlobalText(
@@ -116,9 +119,9 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      
+
                       const SizedBox(height: 12),
-                      
+
                       // Subtitle
                       Center(
                         child: GlobalText(
@@ -129,9 +132,9 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                           textAlign: TextAlign.center,
                         ),
                       ),
-                      
+
                       const SizedBox(height: 48),
-                      
+
                       // Phone input field
                       PhoneInputField(
                         label: "Phone Number",
@@ -142,9 +145,9 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                           _phoneController.text = cleanPhone;
                         },
                       ),
-                      
+
                       const SizedBox(height: 32),
-                      
+
                       // Send SMS button
                       Container(
                         width: double.infinity,
@@ -168,7 +171,8 @@ class _PasswordRecoveryPageState extends State<PasswordRecoveryPage> {
                                   width: 20,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
                                   ),
                                 )
                               : GlobalText(

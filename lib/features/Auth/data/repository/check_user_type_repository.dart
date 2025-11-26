@@ -6,7 +6,7 @@ class CheckUserTypeRepository {
   Future<String> fetchCheckUserType() async {
     final response = await Request.get(AppUrl.checkUserType);
     print("check for response is: $response");
-    String userType= response.isNotEmpty?"manager":"employee";
-     return userType;
+    String userType = response.isNotEmpty ? "manager" : "employee";
+    return userType;
   }
 }

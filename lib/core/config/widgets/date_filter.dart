@@ -14,8 +14,10 @@ class DateFilterService {
   DateTime? _endDate;
 
   // Stream controllers for reactive updates
-  final ValueNotifier<DateTime?> startDateNotifier = ValueNotifier<DateTime?>(null);
-  final ValueNotifier<DateTime?> endDateNotifier = ValueNotifier<DateTime?>(null);
+  final ValueNotifier<DateTime?> startDateNotifier =
+      ValueNotifier<DateTime?>(null);
+  final ValueNotifier<DateTime?> endDateNotifier =
+      ValueNotifier<DateTime?>(null);
 
   // Getters
   DateTime? get startDate => _startDate;
@@ -99,8 +101,10 @@ class _DateFilterButtonState extends State<DateFilterButton> {
               view: DateRangePickerView.month,
               selectionMode: DateRangePickerSelectionMode.range,
               onSelectionChanged: _onSelectionChanged,
-              initialSelectedRange:
-                  _dateService.hasDateRange ? PickerDateRange(_dateService.startDate, _dateService.endDate) : null,
+              initialSelectedRange: _dateService.hasDateRange
+                  ? PickerDateRange(
+                      _dateService.startDate, _dateService.endDate)
+                  : null,
               showActionButtons: true,
               onSubmit: (value) {
                 Navigator.of(context).pop();
@@ -124,7 +128,7 @@ class _DateFilterButtonState extends State<DateFilterButton> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         InkWell(
-          onTap:()=> _showDatePicker,
+          onTap: () => _showDatePicker,
           child: Image.asset(AppImages.filter),
         ),
         if (widget.showSelectedDates) ...[

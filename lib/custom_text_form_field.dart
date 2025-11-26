@@ -1,7 +1,5 @@
-
 import 'package:flutter/material.dart';
 import 'package:x_express/core/config/widgets/globalText.dart';
-
 
 class CustomTextFormField extends StatelessWidget {
   CustomTextFormField({
@@ -114,7 +112,7 @@ class CustomTextFormField extends StatelessWidget {
                   child: Row(
                     children: [
                       GlobalText(
-                         title ?? "",
+                        title ?? "",
                         maxLines: 1,
                         fontSize: 13,
                         fontFamily: 'nrt-reg',
@@ -122,7 +120,9 @@ class CustomTextFormField extends StatelessWidget {
                         color: Colors.black,
                       ),
                       SizedBox(width: 6),
-                      isRequired ? Icon(Icons.star, color: Colors.red, size: 10) : SizedBox.shrink()
+                      isRequired
+                          ? Icon(Icons.star, color: Colors.red, size: 10)
+                          : SizedBox.shrink()
                     ],
                   ),
                 ),
@@ -186,12 +186,16 @@ class CustomTextFormField extends StatelessWidget {
         enabledBorder: borderDecoration ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: (borderType == null || borderType == true) ? BorderSide(color: Colors.grey[300]!) : BorderSide.none,
+              borderSide: (borderType == null || borderType == true)
+                  ? BorderSide(color: Colors.grey[300]!)
+                  : BorderSide.none,
             ),
         focusedBorder: borderDecoration ??
             OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: (borderType == null || borderType == true) ? BorderSide(color: const Color(0xFF8B66FD)) : BorderSide.none,
+              borderSide: (borderType == null || borderType == true)
+                  ? BorderSide(color: const Color(0xFF8B66FD))
+                  : BorderSide.none,
             ),
       );
 }
@@ -226,7 +230,9 @@ class TextFormFieldWidget extends StatelessWidget {
         padding: EdgeInsets.only(right: 10, left: 10),
         margin: EdgeInsets.only(top: 10),
         height: 70,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(3), color: Colors.grey.shade100),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(3),
+            color: Colors.grey.shade100),
         child: Row(
           children: [
             buttonPrefix ?? SizedBox(),
@@ -238,13 +244,15 @@ class TextFormFieldWidget extends StatelessWidget {
                 validator: formValidator,
                 textInputAction: textInputAction,
                 keyboardType: textInputType,
-                style: TextStyle(color: Colors.grey, fontSize: 18, fontFamily: "nrt-reg"),
+                style: TextStyle(
+                    color: Colors.grey, fontSize: 18, fontFamily: "nrt-reg"),
                 maxLines: 1,
                 obscureText: obscureText,
                 decoration: InputDecoration(
                   contentPadding: EdgeInsets.only(top: 5),
                   hintText: hintText,
-                  hintStyle: TextStyle(color: Colors.black, fontSize: 18, fontFamily: "nrt-reg"),
+                  hintStyle: TextStyle(
+                      color: Colors.black, fontSize: 18, fontFamily: "nrt-reg"),
                   border: InputBorder.none,
                 ),
               ),

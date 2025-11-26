@@ -68,13 +68,14 @@ class Request {
     }
   }
 
-  static Future<Map<String, String>> _buildHeaders({bool includeContentType = false}) async {
+  static Future<Map<String, String>> _buildHeaders(
+      {bool includeContentType = false}) async {
     try {
       final token = await LocalStorage.getToken();
       final headers = <String, String>{
         if (token != null) 'Authorization': 'Bearer $token',
       };
-
+      headers['Accept'] = 'application/json';
       if (includeContentType) {
         headers['Content-Type'] = 'application/json';
       }
@@ -98,7 +99,8 @@ class Request {
     if (body != null && body is! FormData) {
       print('📤 Request Body: ${body is String ? body : jsonEncode(body)}');
     } else if (body is FormData) {
-      print('📤 Request Body: FormData with ${body.fields.length} fields and ${body.files.length} files');
+      print(
+          '📤 Request Body: FormData with ${body.fields.length} fields and ${body.files.length} files');
     }
   }
 
@@ -133,8 +135,9 @@ class Request {
         break;
 
       case DioExceptionType.badResponse:
-        errorMessage =
-            error.response?.data?['message'] ?? error.response?.data?['msg'] ?? 'Request failed. Please try again.';
+        errorMessage = error.response?.data?['message'] ??
+            error.response?.data?['msg'] ??
+            'Request failed. Please try again.';
         break;
 
       case DioExceptionType.cancel:
@@ -158,12 +161,15 @@ class Request {
 
   // Method to handle status -1 responses
   static void _handleStatusMinusOne(dynamic responseData) {
-    String message = responseData?['msg'] ?? responseData?['message'] ?? 'Something went wrong';
+    String message = responseData?['msg'] ??
+        responseData?['message'] ??
+        'Something went wrong';
     // SnackBarHelper.show(message);
   }
 
   // GET request with Dio
-  static Future<dynamic> get(String route, {Map<String, dynamic>? queryParameters}) async {
+  static Future<dynamic> get(String route,
+      {Map<String, dynamic>? queryParameters}) async {
     try {
       final headers = await _buildHeaders(includeContentType: true);
 
@@ -174,10 +180,14 @@ class Request {
       );
 
       // Check for state -1 in response (your API uses 'state' not 'status')
-      if (response.data != null && response.data is Map && response.data['state'] == -1) {
+      if (response.data != null &&
+          response.data is Map &&
+          response.data['state'] == -1) {
         // Fallback: If state: -1 and msg is null, this might indicate success for any operation
-        if (response.data['msg'] == null || response.data['msg'].toString().isEmpty) {
-          print('✅ GET operation successful (state: -1 with no error message) - treating as success');
+        if (response.data['msg'] == null ||
+            response.data['msg'].toString().isEmpty) {
+          print(
+              '✅ GET operation successful (state: -1 with no error message) - treating as success');
           return response.data; // Return success without showing error dialog
         }
 
@@ -197,7 +207,9 @@ class Request {
       if (e is! RequestException) {
         // SnackBarHelper.show('Unexpected error occurred');
       }
-      throw e is RequestException ? e : RequestException('Unexpected error for GET $route: $e');
+      throw e is RequestException
+          ? e
+          : RequestException('Unexpected error for GET $route: $e');
     }
   }
 
@@ -236,7 +248,8 @@ class Request {
           for (int i = 0; i < images.length; i++) {
             final file = images[i];
             final fileName = file.path.split('/').last;
-            String fieldName = images.length == 1 ? imageFieldName : '${imageFieldName}[$i]';
+            String fieldName =
+                images.length == 1 ? imageFieldName : '${imageFieldName}[$i]';
 
             formData.files.add(MapEntry(
               fieldName,
@@ -249,7 +262,8 @@ class Request {
         }
 
         requestData = formData;
-        headers.remove('Content-Type'); // Let Dio set the correct multipart boundary
+        headers.remove(
+            'Content-Type'); // Let Dio set the correct multipart boundary
       } else {
         requestData = body;
         headers['Content-Type'] = 'application/json';
@@ -262,27 +276,40 @@ class Request {
         onSendProgress: onSendProgress,
       );
 
-      if (response.data != null && response.data is Map && response.data['state'] == -1) {
+      if (response.data != null &&
+          response.data is Map &&
+          response.data['state'] == -1) {
         print('🔍 Processing state: -1 response for route: "$route"');
         print('🔍 Route contains overtime: ${route.contains('overtime')}');
-        print('🔍 Route contains ApplyApproval: ${route.contains('ApplyApproval')}');
-        print('🔍 Route contains hr/mypage/overtime: ${route.contains('hr/mypage/overtime')}');
-        print('🔍 Route contains hr/mypage/overtime/ApplyApproval: ${route.contains('hr/mypage/overtime/ApplyApproval')}');
+        print(
+            '🔍 Route contains ApplyApproval: ${route.contains('ApplyApproval')}');
+        print(
+            '🔍 Route contains hr/mypage/overtime: ${route.contains('hr/mypage/overtime')}');
+        print(
+            '🔍 Route contains hr/mypage/overtime/ApplyApproval: ${route.contains('hr/mypage/overtime/ApplyApproval')}');
         print('🔍 Response msg: ${response.data['msg']}');
 
         // For overtime approval, state: -1 with no error message indicates success
         // Don't show error dialog for these cases
-        bool isOvertimeApproval = (route.toLowerCase().contains('overtime') && route.toLowerCase().contains('applyapproval')) || route.toLowerCase().contains('hr/mypage/overtime/applyapproval') || route.toLowerCase().contains('hr/mypage/overtime/applyapproval/');
+        bool isOvertimeApproval = (route.toLowerCase().contains('overtime') &&
+                route.toLowerCase().contains('applyapproval')) ||
+            route.toLowerCase().contains('hr/mypage/overtime/applyapproval') ||
+            route.toLowerCase().contains('hr/mypage/overtime/applyapproval/');
 
-        if (isOvertimeApproval && (response.data['msg'] == null || response.data['msg'].toString().isEmpty)) {
-          print('✅ Overtime approval successful (state: -1 with no error message)');
+        if (isOvertimeApproval &&
+            (response.data['msg'] == null ||
+                response.data['msg'].toString().isEmpty)) {
+          print(
+              '✅ Overtime approval successful (state: -1 with no error message)');
           return response.data; // Return success without showing error dialog
         }
 
         // Fallback: If state: -1 and msg is null, this might indicate success for any approval operation
         // Check if this looks like a successful approval response
-        if (response.data['msg'] == null || response.data['msg'].toString().isEmpty) {
-          print('✅ Approval operation successful (state: -1 with no error message) - treating as success');
+        if (response.data['msg'] == null ||
+            response.data['msg'].toString().isEmpty) {
+          print(
+              '✅ Approval operation successful (state: -1 with no error message) - treating as success');
           return response.data; // Return success without showing error dialog
         }
 
@@ -303,19 +330,21 @@ class Request {
         print('Unexpected POST error: $e');
         // SnackBarHelper.show('Unexpected error occurred');
       }
-      throw e is RequestException ? e : RequestException('Unexpected error for POST $route: $e');
+      throw e is RequestException
+          ? e
+          : RequestException('Unexpected error for POST $route: $e');
     }
   }
 
   static Future<dynamic> put(
-      String route,
-      dynamic body, {
-        List<File>? images,
-        String imageFieldName = 'images',
-        Map<String, dynamic>? additionalFields,
-        ProgressCallback? onSendProgress,
-        bool forceFormData = false,
-      }) async {
+    String route,
+    dynamic body, {
+    List<File>? images,
+    String imageFieldName = 'images',
+    Map<String, dynamic>? additionalFields,
+    ProgressCallback? onSendProgress,
+    bool forceFormData = false,
+  }) async {
     try {
       // print('📡 PUT request to: $route');
 
@@ -324,7 +353,8 @@ class Request {
 
       dynamic requestData;
 
-      final isMultipart = (images != null && images.isNotEmpty) || forceFormData;
+      final isMultipart =
+          (images != null && images.isNotEmpty) || forceFormData;
 
       if (isMultipart) {
         final formData = FormData();
@@ -349,7 +379,8 @@ class Request {
           for (int i = 0; i < images.length; i++) {
             final file = images[i];
             final fileName = file.path.split('/').last;
-            final fieldName = images.length == 1 ? imageFieldName : '$imageFieldName[$i]';
+            final fieldName =
+                images.length == 1 ? imageFieldName : '$imageFieldName[$i]';
 
             formData.files.add(MapEntry(
               fieldName,
@@ -376,14 +407,20 @@ class Request {
           response.data is Map &&
           response.data['state'] == -1) {
         // For travel tracking, state: -1 with no error message indicates success
-        if (route.contains('travel') && route.contains('track') && (response.data['msg'] == null || response.data['msg'].toString().isEmpty)) {
-          print('✅ Travel tracking successful (state: -1 with no error message)');
+        if (route.contains('travel') &&
+            route.contains('track') &&
+            (response.data['msg'] == null ||
+                response.data['msg'].toString().isEmpty)) {
+          print(
+              '✅ Travel tracking successful (state: -1 with no error message)');
           return response.data; // Return success without showing error dialog
         }
 
         // Fallback: If state: -1 and msg is null, this might indicate success for any operation
-        if (response.data['msg'] == null || response.data['msg'].toString().isEmpty) {
-          print('✅ Operation successful (state: -1 with no error message) - treating as success');
+        if (response.data['msg'] == null ||
+            response.data['msg'].toString().isEmpty) {
+          print(
+              '✅ Operation successful (state: -1 with no error message) - treating as success');
           return response.data; // Return success without showing error dialog
         }
 

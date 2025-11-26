@@ -23,15 +23,18 @@ class AuthService extends ChangeNotifier {
   bool _isObscureConfirm = true;
   String? _error;
   String? _userType;
+  String? _postLoginRedirect;
 
   LoginResponse? get loginResponse => _loginResponse;
   bool get isEligible => _isEligible;
   TextEditingController get usernameController => _usernameController;
   TextEditingController get passwordController => _passwordController;
 
-  TextEditingController get currentPasswordController => _currentPasswordController;
+  TextEditingController get currentPasswordController =>
+      _currentPasswordController;
   TextEditingController get newPasswordController => _newPasswordController;
-  TextEditingController get confirmPasswordController => _confirmPasswordController;
+  TextEditingController get confirmPasswordController =>
+      _confirmPasswordController;
 
   bool get isLoading => _isLoading;
   bool get rememberMe => _rememberMe;
@@ -41,9 +44,20 @@ class AuthService extends ChangeNotifier {
   String? get userType => _userType;
 
   bool get isAuthenticated => _loginResponse != null;
+  String? get postLoginRedirect => _postLoginRedirect;
 
   // Get current user's username
   String? get currentUsername => _loginResponse?.user?.userName;
+
+  void setPostLoginRedirect(String? route) {
+    _postLoginRedirect = route;
+    notifyListeners();
+  }
+
+  void clearPostLoginRedirect() {
+    _postLoginRedirect = null;
+    notifyListeners();
+  }
 
   Future<bool> login({
     required String username,
@@ -55,7 +69,6 @@ class AuthService extends ChangeNotifier {
     notifyListeners();
 
     try {
-
       // final isDeleted = await LocalStorage.isAccountDeleted();
       // if (isDeleted) {
       //   _error = "Username or password does not exist";
@@ -79,7 +92,6 @@ class AuthService extends ChangeNotifier {
               })
             : null;
 
-
         await LocalStorage.saveUserData(
           jsonData: jsonStr,
           rememberMe: rememberMe,
@@ -87,7 +99,8 @@ class AuthService extends ChangeNotifier {
         );
       }
       _isLoading = false;
-      print("Login success, isAuthenticated: ${isAuthenticated}, token: ${_loginResponse?.token}");
+      print(
+          "Login success, isAuthenticated: ${isAuthenticated}, token: ${_loginResponse?.token}");
       notifyListeners();
       return true;
     } catch (e) {
@@ -141,7 +154,8 @@ class AuthService extends ChangeNotifier {
       } else if (e.toString().contains('RequestException')) {
         _error = e.toString().replaceFirst('RequestException: ', '');
       } else {
-        _error = 'Registration failed. Please check your information and try again.';
+        _error =
+            'Registration failed. Please check your information and try again.';
       }
       _loginResponse = null;
       _isLoading = false;
@@ -190,7 +204,6 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-
   Future<Map<String, String>?> getSavedCredentials() async {
     return await LocalStorage.getCredentials();
   }
@@ -222,7 +235,7 @@ class AuthService extends ChangeNotifier {
       // TODO: Implement API call to send password recovery SMS
       // For now, simulate API call
       await Future.delayed(const Duration(seconds: 2));
-      
+
       _isLoading = false;
       notifyListeners();
       return true;
@@ -243,7 +256,7 @@ class AuthService extends ChangeNotifier {
       // TODO: Implement API call to verify OTP
       // For now, simulate API call (accept any 6-digit code)
       await Future.delayed(const Duration(seconds: 1));
-      
+
       _isLoading = false;
       notifyListeners();
       return true;
@@ -268,7 +281,7 @@ class AuthService extends ChangeNotifier {
       // TODO: Implement API call to reset password
       // For now, simulate API call
       await Future.delayed(const Duration(seconds: 2));
-      
+
       _isLoading = false;
       notifyListeners();
       return true;
@@ -279,7 +292,6 @@ class AuthService extends ChangeNotifier {
       return false;
     }
   }
-
 
   @override
   void dispose() {

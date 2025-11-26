@@ -17,7 +17,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _otpController = TextEditingController();
   final TextEditingController _newPasswordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   bool _isLoading = false;
   bool _isObscureNewPassword = true;
   bool _isObscureConfirmPassword = true;
@@ -95,7 +96,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   }
 
   Future<void> _resetPassword() async {
-    if (_newPasswordController.text.isEmpty || _confirmPasswordController.text.isEmpty) {
+    if (_newPasswordController.text.isEmpty ||
+        _confirmPasswordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please fill all password fields')),
       );
@@ -165,7 +167,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         margin: EdgeInsets.only(right: index < 2 ? 8 : 0),
                         height: 4,
                         decoration: BoxDecoration(
-                          color: index <= _currentStep ? kLightPrimary : kLightPlatinum300,
+                          color: index <= _currentStep
+                              ? kLightPrimary
+                              : kLightPlatinum300,
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -173,14 +177,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   }),
                 ),
               ),
-              
+
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 20),
-                      
                       if (_currentStep == 0) _buildPhoneStep(),
                       if (_currentStep == 1) _buildOTPStep(),
                       if (_currentStep == 2) _buildPasswordStep(),
@@ -211,9 +214,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           fontSize: 16,
           color: kLightPlatinum500,
         ),
-        
         const SizedBox(height: 48),
-        
         PhoneInputField(
           label: "phone_number",
           hintText: "enter_your_phone_number",
@@ -223,9 +224,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             _phoneController.text = cleanPhone;
           },
         ),
-        
         const SizedBox(height: 32),
-        
         Container(
           width: double.infinity,
           height: 56,
@@ -279,18 +278,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           fontSize: 16,
           color: kLightPlatinum500,
         ),
-        
         const SizedBox(height: 48),
-        
         CustomUserTextFormField(
           title: "Verification Code",
           hintText: "Enter 6-digit code",
           controller: _otpController,
           keyboard: TextInputType.number,
         ),
-        
         const SizedBox(height: 16),
-        
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -312,9 +307,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             ),
           ],
         ),
-        
         const SizedBox(height: 32),
-        
         Row(
           children: [
             Expanded(
@@ -366,7 +359,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         )
                       : GlobalText(
@@ -400,9 +394,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           fontSize: 16,
           color: kLightPlatinum500,
         ),
-        
         const SizedBox(height: 48),
-        
         CustomUserTextFormField(
           title: "new_password",
           hintText: "enter_new_password",
@@ -416,9 +408,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             color: kLightPasswordEyeIcon,
           ),
         ),
-        
         const SizedBox(height: 20),
-        
         CustomUserTextFormField(
           title: "confirm_password",
           hintText: "enter_confirm_password",
@@ -426,15 +416,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           controller: _confirmPasswordController,
           suffix: IconButton(
             icon: Icon(
-              _isObscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+              _isObscureConfirmPassword
+                  ? Icons.visibility_off
+                  : Icons.visibility,
             ),
             onPressed: _setObscureConfirmPassword,
             color: kLightPasswordEyeIcon,
           ),
         ),
-        
         const SizedBox(height: 32),
-        
         Row(
           children: [
             Expanded(
@@ -486,7 +476,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           width: 20,
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
-                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
                           ),
                         )
                       : GlobalText(
@@ -513,4 +504,3 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     super.dispose();
   }
 }
-
